@@ -219,6 +219,7 @@
   .p1 .snap-card{ padding:30px 14px; } .p1 .prem-card{ padding:27px 12px; }
   .p3 table.fill tbody td{ padding:9.5px 6px; font-size:13.5px; }
   .p3 table.fill thead th{ padding:12px 6px; font-size:12px; }
+  .p4 .section-gap{ margin-top:14px; } .p4 .about-box{ margin-top:16px; } .p4 .sign-block{ margin-top:10px; }
 
 </style>
 </head>
@@ -227,7 +228,8 @@
 <div class="version-bar screen-only">
   <label for="verSelect">Viewing</label>
   <select id="verSelect">
-    <option value="1" selected>Version 1 — September 22, 2026 (current)</option>
+    <option value="2" selected>Version 2 — September 24, 2026 (current)</option>
+    <option value="1">Version 1 — September 22, 2026</option>
   </select>
 </div>
 
@@ -240,7 +242,497 @@
      move the `hidden` attribute onto the older block so only the newest
      renders in the PDF.
      ============================================================ -->
-<div class="doc-version" data-v="1" data-label="Version 1 — September 22, 2026">
+<div class="doc-version" data-v="2" data-label="Version 2 — September 24, 2026">
+<!-- ==================== PAGE 1 ==================== -->
+<div class="page p1">
+  <div class="title-row">
+    <div>
+      <h1 class="doc-title">Insurance Renewal Summary</h1>
+      <div class="property-line">Townhomes at Charles Park Condominium Trust · West Roxbury, MA 02132 · 18 Residential Units · 09/30/2026 – 09/30/2027</div>
+    </div>
+    <div class="ver-badge"><span class="vb-num">Version 2</span><span class="vb-date">September 24, 2026</span></div>
+  </div>
+
+  <div class="assessment-box">
+    <div class="overline">Executive Summary</div>
+    <p>The association is insured with <b>Travelers</b> through Guardian Insurance on a property and liability package with a separate umbrella. Travelers’ renewal is <b>$33,738</b>, up <b>$1,935</b> or <b>6.1%</b>. The same agency quoted <b>The Hartford</b> at <b>$24,953</b>, <b>$8,785</b> below the Travelers renewal; a second agency took the account to market and its indications came back higher. Both options insure the buildings at <b>$15,499,426</b> on a <b>$5,000</b> deductible. The Hartford option adds employment practices liability and a limited cyber cover, and insures equipment breakdown to the full building limit. It carries a <b>$4,000,000</b> umbrella against <b>$5,000,000</b> and a <b>$500,000</b> per-claim limit on trustee protection (D&amp;O) against <b>$1,000,000</b>. Its trustee protection starts <b>September 30, 2026</b>; Travelers covers prior acts without limit. On price the data points toward The Hartford; on liability limits it points toward Travelers. The by-laws set a fidelity bond floor of <b>$156,628</b>: The Hartford option carries <b>$200,000</b> that does not extend to the management company, and Travelers carries <b>$25,000</b> with a <b>$200,000</b> quote pending.</p>
+  </div>
+
+  <div class="callout co-red p1co" style="margin-top:12px;">
+    <div class="co-title">Coverages Not Carried &amp; What They Would Cost</div>
+    <div class="co-body"><span class="gap-lead">Fidelity Bond · $200,000 Covering the Management Company · Estimated $400 – $900 a year</span>The by-laws require a bond of not less than one and one-half times annual operating expenses and reserves — <b>$156,628</b> on the 2026 budget — covering trustees, volunteers and the management company. The Hartford option carries <b>$200,000</b> but does not extend to the property manager; Travelers carries <b>$25,000</b> with a <b>$200,000</b> limit requested. It pays when association funds are taken by a trustee, a volunteer or management company staff — the property policy does not respond to theft of money. Both carriers have been asked to name the management company.</div>
+  </div>
+
+  <div style="margin-top:12px;">
+    <div class="overline">Portfolio Snapshot</div>
+    <div class="snapshot-row">
+      <div class="snap-card">
+        <div class="snap-label">Building Replacement Value</div>
+        <div class="snap-value">$15,499,426</div>
+      </div>
+      <div class="snap-card">
+        <div class="snap-label">Total Insurable Value</div>
+        <div class="snap-value">$15,499,426</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:12px;">
+    <div class="overline">Total Annual Premium</div>
+    <div class="premium-row">
+      <div class="prem-card prem-current">
+        <div class="pc-label">Current</div>
+        <div class="pc-carrier">Travelers · 2025–26</div>
+        <div class="pc-value">$31,803</div>
+        <div class="pc-delta">Baseline (Expiring Policies)</div>
+      </div>
+      <div class="prem-card prem-opt">
+        <div class="pc-label">Option 1</div>
+        <div class="pc-carrier">Travelers · 2026–27</div>
+        <div class="pc-value">$33,738</div>
+        <div class="pc-delta delta-bad">↑ 6.1% · $1,935 Increase</div>
+      </div>
+      <div class="prem-card prem-opt">
+        <div class="pc-label">Option 2</div>
+        <div class="pc-carrier">The Hartford · 2026–27</div>
+        <div class="pc-value">$24,953</div>
+        <div class="pc-delta delta-good">$8,785 Less Than Option 1</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PAGE 2 ==================== -->
+<div class="page p2">
+  <h2 class="page-title">Premiums &amp; Payment Options</h2>
+
+  <div class="overline">Premium by Line of Coverage</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:37%;">Policy</th>
+        <th style="width:21%;">Current</th>
+        <th style="width:21%;">Option 1</th>
+        <th style="width:21%;">Option 2</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Property &amp; Liability Package</td>
+        <td>$29,678</td>
+        <td class="bad">$31,363</td>
+        <td class="good">$22,795</td>
+      </tr>
+      <tr>
+        <td>Umbrella</td>
+        <td>$2,125</td>
+        <td class="bad">$2,375</td>
+        <td class="good">$1,908</td>
+      </tr>
+      <tr>
+        <td>Directors &amp; Officers</td>
+        <td>In Package</td>
+        <td>In Package</td>
+        <td>$250</td>
+      </tr>
+      <tr>
+        <td>Employment Practices Liability</td>
+        <td class="bad">Not Included</td>
+        <td class="bad">Not Included</td>
+        <td class="good">Included</td>
+      </tr>
+      <tr>
+        <td>Crime</td>
+        <td>In Package</td>
+        <td>In Package</td>
+        <td>In Package</td>
+      </tr>
+      <tr class="total-row">
+        <td>Total Annual Premium</td>
+        <td>$31,803</td>
+        <td class="bad">$33,738</td>
+        <td class="good">$24,953</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="section-gap">
+    <div class="overline">Payment Options</div>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:28%;">Policy</th>
+          <th style="width:24%;">Plan 1</th>
+          <th style="width:26%;">Plan 2</th>
+          <th style="width:22%;">Paid To</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Option 1 — Travelers Package &amp; Umbrella</td>
+          <td>Pay in Full<br>$33,738</td>
+          <td>Monthly AutoPay<br><span class="bad">Terms Not Confirmed</span></td>
+          <td>Paid to Travelers directly</td>
+        </tr>
+        <tr>
+          <td>Option 2 — The Hartford Package &amp; Umbrella</td>
+          <td>Pay in Full<br>$22,723<br>Paid-in-Full Discount Applied</td>
+          <td>10-Pay Installments<br>$2,495.30 down<br>then $2,495.30 monthly<br>$5 fee per payment</td>
+          <td>Paid to The Hartford directly</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 class="page-title ded" style="margin-top:26px;">Deductibles</h2>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:37%;">Deductible</th>
+          <th style="width:21%;">Current</th>
+          <th style="width:21%;">Option 1</th>
+          <th style="width:21%;">Option 2</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>All Other Perils</td>
+          <td>$5,000</td>
+          <td>$5,000</td>
+          <td>$5,000</td>
+        </tr>
+        <tr>
+          <td>Water Damage</td>
+          <td>$5,000</td>
+          <td>$5,000</td>
+          <td>$5,000</td>
+        </tr>
+        <tr>
+          <td>Wind &amp; Hail</td>
+          <td>$5,000</td>
+          <td>$5,000</td>
+          <td>$5,000</td>
+        </tr>
+        <tr>
+          <td>Umbrella Self-Insured Retention</td>
+          <td>$5,000</td>
+          <td>$5,000</td>
+          <td class="bad">$10,000</td>
+        </tr>
+        <tr>
+          <td>Flood</td>
+          <td class="bad">Not Covered</td>
+          <td class="bad">Not Covered</td>
+          <td class="bad">Not Covered</td>
+        </tr>
+        <tr>
+          <td>Earthquake</td>
+          <td class="bad">Not Covered</td>
+          <td class="bad">Not Covered</td>
+          <td class="bad">Not Covered</td>
+        </tr>
+      </tbody>
+    </table>
+
+  <div class="section-gap">
+  <div class="overline">A.M. Best Financial Rating</div>
+  <div class="rating-row" style="max-width:620px;">
+    <div class="rating-card">
+      <div class="rc-name">Travelers</div>
+      <div class="rc-rating">A++</div>
+      <div class="rc-cat">Superior · Size XV</div>
+      <div class="rc-sub">Fidelity and Guaranty Insurance Company, a Travelers company, writes the package · rating affirmed August 2026</div>
+    </div>
+    <div class="rating-card">
+      <div class="rc-name">The Hartford</div>
+      <div class="rc-rating">A+</div>
+      <div class="rc-cat">Superior · Size XV</div>
+      <div class="rc-sub">Property and Casualty Insurance Company of Hartford writes the package · rating affirmed July 2026</div>
+    </div>
+  </div>
+  <p class="body-text scale-note" style="margin-top:8px; font-size:9.5px; color:#64748B;">A++ and A+ are Superior; A and A- are Excellent. Financial Size Category reflects policyholder surplus — XV is the highest tier. Both carriers hold the highest size category with stable outlooks.</p>
+  </div>
+</div>
+
+<!-- ==================== PAGE 3 ==================== -->
+<div class="page p3">
+  <h2 class="page-title">Coverage Limits</h2>
+
+  <table class="fill">
+    <thead>
+      <tr>
+        <th style="width:34%;">Coverage</th>
+        <th style="width:22%;">Current</th>
+        <th style="width:22%;">Option 1</th>
+        <th style="width:22%;">Option 2</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Building Limit</td>
+        <td>$14,975,292</td>
+        <td class="good">$15,499,426</td>
+        <td class="good">$15,499,426</td>
+      </tr>
+      <tr>
+        <td>Association Income</td>
+        <td>Actual Loss Sustained</td>
+        <td>Actual Loss Sustained</td>
+        <td>Actual Loss Sustained</td>
+      </tr>
+      <tr>
+        <td>General Liability</td>
+        <td>$2M Occ / $4M Agg</td>
+        <td>$2M Occ / $4M Agg</td>
+        <td>$2M Occ / $4M Agg</td>
+      </tr>
+      <tr>
+        <td>Umbrella</td>
+        <td>$5,000,000</td>
+        <td>$5,000,000</td>
+        <td class="bad">$4,000,000</td>
+      </tr>
+      <tr>
+        <td>Directors &amp; Officers</td>
+        <td>$1,000,000</td>
+        <td>$1,000,000</td>
+        <td class="bad">$500,000 Per Claim</td>
+      </tr>
+      <tr>
+        <td>Directors &amp; Officers — Prior Acts</td>
+        <td>Covered</td>
+        <td>Covered</td>
+        <td class="bad">Not Covered</td>
+      </tr>
+      <tr>
+        <td>Employment Practices Liability</td>
+        <td class="bad">Not Included</td>
+        <td class="bad">Not Included</td>
+        <td class="good">$25,000</td>
+      </tr>
+      <tr>
+        <td>Employee Theft</td>
+        <td>$25,000</td>
+        <td>$25,000</td>
+        <td class="good">$200,000</td>
+      </tr>
+      <tr>
+        <td>Theft by Management Company</td>
+        <td>Included</td>
+        <td>Included</td>
+        <td class="bad">Excluded</td>
+      </tr>
+      <tr>
+        <td>Forgery &amp; Alteration</td>
+        <td>$25,000</td>
+        <td>$25,000</td>
+        <td class="good">$100,000</td>
+      </tr>
+      <tr>
+        <td>Funds Transfer Fraud</td>
+        <td class="bad">Not Included</td>
+        <td class="bad">Not Included</td>
+        <td class="good">$50,000</td>
+      </tr>
+      <tr>
+        <td>Workers Compensation</td>
+        <td class="bad">Not Included</td>
+        <td class="bad">Not Included</td>
+        <td class="bad">Not Included</td>
+      </tr>
+      <tr>
+        <td>Cyber</td>
+        <td class="bad">Not Included</td>
+        <td class="bad">Not Included</td>
+        <td class="good">$25,000 Malware Only</td>
+      </tr>
+      <tr>
+        <td>Water Damage</td>
+        <td class="good">Building Limit</td>
+        <td class="good">Building Limit</td>
+        <td class="good">Building Limit</td>
+      </tr>
+      <tr>
+        <td>Wind &amp; Hail</td>
+        <td class="good">Building Limit</td>
+        <td class="good">Building Limit</td>
+        <td class="good">Building Limit</td>
+      </tr>
+      <tr>
+        <td>Earthquake</td>
+        <td class="bad">Not Included</td>
+        <td class="bad">Not Included</td>
+        <td class="bad">Not Included</td>
+      </tr>
+      <tr>
+        <td>Flood</td>
+        <td class="bad">Not Included</td>
+        <td class="bad">Not Included</td>
+        <td class="bad">Not Included</td>
+      </tr>
+      <tr>
+        <td>Equipment Breakdown</td>
+        <td>$100,000</td>
+        <td>$100,000</td>
+        <td class="good">Building Limit</td>
+      </tr>
+      <tr>
+        <td>Ordinance or Law</td>
+        <td>$35,000 Maximum</td>
+        <td>$35,000 Maximum</td>
+        <td class="good">$50,000 Maximum</td>
+      </tr>
+      <tr>
+        <td>Water Backup &amp; Sewer Overflow</td>
+        <td>$100,000</td>
+        <td>$100,000</td>
+        <td class="good">Building Limit</td>
+      </tr>
+      <tr>
+        <td>Inflation Guard</td>
+        <td>2% Annual Increase</td>
+        <td>2% Annual Increase</td>
+        <td class="bad">Not Included</td>
+      </tr>
+      <tr>
+        <td>Hired &amp; Non-Owned Auto</td>
+        <td class="bad">Not Included</td>
+        <td class="bad">Not Included</td>
+        <td class="bad">Not Included</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ==================== PAGE 4 ==================== -->
+<div class="page p4">
+  <h2 class="page-title">Binding Selection</h2>
+  <p class="body-text">Mark one choice per row. Anything left unmarked is treated as declined.</p>
+
+  <div class="overline" style="margin-top:14px;">The Renewal</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:46%;">Program</th>
+        <th style="width:27%;">Premium</th>
+        <th style="width:27%;">Decision</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Option 1 — Travelers Package &amp; Umbrella</td>
+        <td>$33,738</td>
+        <td class="decide"><span class="opt" data-g="renewal">Bind</span><span class="opt-sep">/</span><span class="opt" data-g="renewal">Decline</span></td>
+      </tr>
+      <tr>
+        <td>Option 2 — The Hartford Package &amp; Umbrella</td>
+        <td>$24,953</td>
+        <td class="decide"><span class="opt" data-g="renewal">Bind</span><span class="opt-sep">/</span><span class="opt" data-g="renewal">Decline</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="section-gap">
+    <div class="overline">Payment Option</div>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:46%;">Option</th>
+          <th style="width:27%;">Terms</th>
+          <th style="width:27%;">Selection</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Option 1 — Pay in Full</td>
+          <td>$33,738</td>
+          <td class="decide"><span class="opt" data-g="pay">Select</span></td>
+        </tr>
+        <tr>
+          <td>Option 1 — Monthly AutoPay</td>
+          <td class="bad">Terms Not Confirmed</td>
+          <td class="decide"><span class="opt" data-g="pay">Select</span></td>
+        </tr>
+        <tr>
+          <td>Option 2 — Pay in Full</td>
+          <td>$22,723 with paid-in-full discount</td>
+          <td class="decide"><span class="opt" data-g="pay">Select</span></td>
+        </tr>
+        <tr>
+          <td>Option 2 — 10-Pay Installments</td>
+          <td>$2,495.30 down, then $2,495.30 monthly</td>
+          <td class="decide"><span class="opt" data-g="pay">Select</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-gap">
+    <div class="overline">Coverages Not Currently Carried</div>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:34%;">Coverage</th>
+          <th style="width:22%;">Limit</th>
+          <th style="width:22%;">Est. Premium</th>
+          <th style="width:22%;">Decision</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Fidelity Bond — Management Company Covered</td>
+          <td>$200,000</td>
+          <td>$400 – $900</td>
+          <td class="decide"><span class="opt" data-g="bond">Quote</span><span class="opt-sep">/</span><span class="opt" data-g="bond">Decline</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="sign-block">
+    <div class="sign-row">
+      <div class="sign-field">
+        <div class="sign-line sig-wrap"><canvas id="sigPad" class="screen-only"></canvas><img id="sigPrint" class="print-only" alt=""></div>
+        <div class="sign-label">Accepted by (signature)<span class="sig-clear screen-only" id="sigClear">clear</span></div>
+      </div>
+      <div class="sign-field">
+        <div class="sign-line editable" contenteditable="true" data-ph="Type name &amp; title" id="fName"></div>
+        <div class="sign-label">Name &amp; title</div>
+      </div>
+      <div class="sign-field sign-short">
+        <div class="sign-line"><input type="date" id="fDate" class="screen-only"></div>
+        <div class="sign-label">Date</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="picks screen-only" id="picks">
+    <h3>Selections Recorded</h3>
+    <div id="ledger" class="none">No selections recorded yet — the first trustee to record will appear here.</div>
+    <div class="live-row">
+      <div><b>Your current choices:</b> <span id="picksBody" class="none">nothing selected yet</span></div>
+      <label for="picksNotes">Comments</label>
+      <textarea id="picksNotes" placeholder="Anything to note about these decisions — questions, conditions, limits to revisit."></textarea>
+      <button id="recordBtn" type="button">Record my selections</button>
+      <button id="pdfBtn" type="button" class="btn-secondary">Save this page as PDF</button>
+      <div class="record-note" id="recordNote"></div>
+      <div class="send-note" id="sendLinkWrap" hidden>The automatic send did not go through. <a id="sendLink" href="#">Tap here to email your selections to info@renewflo.co</a> instead.</div>
+      <div class="send-note">Recording sends your selections and signature to RenewFlo at <b>info@renewflo.co</b>. For your own records, “Save this page as PDF” prints the summary with your selections and signature.</div>
+    </div>
+  </div>
+
+  <div class="about-box">
+  <div class="overline">About RenewFlo</div>
+  <div class="about-site">www.renewflo.co</div>
+  <p>RenewFlo is a neutral coordination service for condominium associations. We run the insurance renewal from end to end — organizing the underwriting data, engaging brokers and carriers, and turning their quotes into one clear, apples-to-apples comparison for the board.</p>
+  <p>Most boards only ever see what a single broker chooses to show them, in a format built to sell rather than to compare. Deductible changes get buried, missing coverages go unmentioned, and competing quotes never quite line up — yet the renewal is one of the largest checks an association writes each year.</p>
+  <p><b>Our model keeps us neutral by design:</b> RenewFlo is compensated by the broker whose program the board ultimately selects — never by the association. We are paid the same no matter which option wins, so our only job is making sure the data in front of the board is complete, accurate, and easy to act on.</p>
+  <div class="learn-more-wrap"><a class="learn-more" href="https://www.renewflo.co/">Learn More →</a></div>
+  <div class="disclaimer">RenewFlo LLC is a third-party neutral coordination service. RenewFlo does not sell, solicit, or negotiate insurance. This summary is provided for informational and decision-making purposes only. All coverage descriptions are derived from carrier proposal documents and renewal declarations and are believed to be accurate; however, RenewFlo makes no representations or warranties as to their completeness or accuracy. In the event of any discrepancy between this summary and the actual policy documents, the terms of the issued policy shall govern in all respects.</div>
+  </div>
+</div>
+</div>
+<div class="doc-version" data-v="1" hidden data-label="Version 1 — September 22, 2026">
 <!-- ==================== PAGE 1 ==================== -->
 <div class="page p1">
   <div class="title-row">
@@ -733,7 +1225,7 @@
 
 <script>
 (function(){
-  var LABEL={pay:'Payment option',bond:'Fidelity Bond Increase'};
+  var LABEL={pay:'Payment option'};
   var records=[];
 
   function rowName(el){ var tr=el.closest('tr'); return tr?tr.cells[0].innerText.trim():''; }
