@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>The Saybrook Renewal Summary</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+  @page { size: Letter; margin: 0.5in 0.55in 0.55in 0.55in;
+    @bottom-center { content: "Confidential — Prepared by RenewFlo · info@renewflo.co · Page " counter(page);
+      font-family:'Arial','Liberation Sans',sans-serif; font-size:9.5px; color:#8E97A8; width:100%;
+      border-top:1px solid #E9ECF2; padding-bottom:12px; padding-top:7px; vertical-align:top; } }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  .page{ page-break-after:always; } .page:last-child{ page-break-after:avoid; }
+  tr{ break-inside:avoid; } .callout{ break-inside:avoid; }
+  table{ width:100%; border-collapse:collapse; }
+
+  body{ font-family:'Arial','Liberation Sans',sans-serif; color:#3F4859; font-size:12.5px; line-height:1.5; background:#fff; }
+  .overline{ color:#2D6BD4; text-transform:uppercase; font-size:10.5px; font-weight:700; letter-spacing:1.6px; margin-bottom:7px; }
+  h1.doc-title{ font-family:'Arial','Liberation Sans',sans-serif; font-size:30px; font-weight:700; color:#141B2D; letter-spacing:-0.8px; margin-bottom:5px; }
+  .property-line{ font-size:11.5px; color:#7C8698; margin-bottom:16px; white-space:nowrap; }
+  h2.page-title{ font-family:'Arial','Liberation Sans',sans-serif; font-size:23px; font-weight:700; color:#141B2D; letter-spacing:-0.5px; margin-bottom:13px; }
+  p.body-text{ margin-bottom:7px; font-size:12.5px; } .section-gap{ margin-top:20px; }
+
+  /* tables — dense rows, everything vertically centred */
+  thead th{ background:#F1F4F9; color:#141B2D; text-transform:uppercase; font-size:11px; font-weight:700;
+            letter-spacing:0.7px; padding:8px 10px; text-align:center; vertical-align:middle; border-bottom:1px solid #DFE5EF; }
+  thead th:first-child{ text-align:left; border-radius:8px 0 0 0; } thead th:last-child{ border-radius:0 8px 0 0; }
+  thead th .th-sub{ display:block; font-size:9.5px; font-weight:400; color:#8E97A8; letter-spacing:0.2px; text-transform:none; margin-top:1px; }
+  tbody td{ padding:4px 10px; border-bottom:1px solid #EFF2F7; text-align:center; color:#141B2D; font-size:13px;
+            line-height:1.3; vertical-align:middle; }
+  tbody td:first-child{ text-align:left; font-weight:700; }
+  tbody tr.total-row td{ font-weight:700; background:#F1F4F9; border-top:1.5px solid #C9D1DF; border-bottom:none; }
+  .sub-note{ display:block; font-size:10.5px; color:#8E97A8; font-weight:400; margin-top:0; line-height:1.2; }
+  .good{color:#0F7A54!important;} .bad{color:#C7362A!important;} .pend{color:#8E97A8!important;font-style:italic;}
+  .good .sub-note,.bad .sub-note{color:#8E97A8;}
+
+  table.fill tbody td{ padding:11px 10px; font-size:14.5px; }
+  table.fill thead th{ padding:14px 10px; font-size:12.5px; }
+  .callout{ border-radius:12px; padding:15px 19px; margin-top:12px; }
+  .callout .co-title{ font-family:'Arial','Liberation Sans',sans-serif; font-size:13px; font-weight:700; text-transform:none; letter-spacing:0; margin-bottom:4px; }
+  .callout .co-body{ font-size:14px; color:#3F4859; line-height:1.48; }
+  .co-red{ background:#FEF2F1; } .co-red .co-title{ color:#C7362A; }
+  .co-yellow{ background:#FEF9EE; } .co-yellow .co-title{ color:#96690F; }
+  .co-blue{ background:#F1F6FE; } .co-blue .co-title{ color:#141B2D; }
+  .co-grey{ background:#F5F8FC; } .co-grey .co-title{ color:#141B2D; }
+
+  .assessment-box{ background:#E8F1FE; border-radius:16px; padding:24px 28px; margin:0 0 16px; }
+  .assessment-box .overline{ color:#2D6BD4; margin-bottom:7px; }
+  .assessment-box p{ color:#22304A; font-size:14px; line-height:1.55; }
+  .assessment-box b{ color:#0E1A2E; font-weight:700; }
+
+  /* cards — label carries the weight, figure dialled back */
+  .snapshot-row{ display:flex; gap:14px; margin-top:8px; }
+  .snap-card{ flex:1; background:#F5F8FC; border-radius:14px; padding:34px 14px; text-align:center; }
+  .snap-card .snap-label{ font-family:'Arial','Liberation Sans',sans-serif; font-size:13px; font-weight:700; letter-spacing:0.2px;
+                          text-transform:none; color:#5A6579; margin-bottom:4px; }
+  .snap-card .snap-value{ font-family:'Arial','Liberation Sans',sans-serif; font-size:31px; font-weight:700; color:#141B2D; letter-spacing:-1px; line-height:1.15; }
+
+  .premium-row{ display:flex; gap:14px; margin-top:8px; }
+  .prem-card{ flex:1; border-radius:14px; padding:30px 12px; text-align:center; }
+  .prem-card .pc-label{ font-family:'Arial','Liberation Sans',sans-serif; font-size:13px; font-weight:700; letter-spacing:0.2px; text-transform:none; margin-bottom:1px; }
+  .prem-card .pc-carrier{ font-size:11.5px; margin-bottom:5px; }
+  .prem-card .pc-value{ font-family:'Arial','Liberation Sans',sans-serif; font-size:31px; font-weight:700; letter-spacing:-1px; line-height:1.15; }
+  .prem-card .pc-delta{ font-size:12.5px; font-weight:700; margin-top:4px; }
+  .prem-card .pc-tag{ font-size:11.5px; margin-top:2px; }
+  .prem-current{ background:#F5F8FC; } .prem-current .pc-label,.prem-current .pc-value{ color:#141B2D; }
+  .prem-current .pc-carrier,.prem-current .pc-tag{ color:#7C8698; }
+  .prem-dark{ background:#E8F1FE; } .prem-dark .pc-label{ color:#2D6BD4; }
+  .prem-dark .pc-value{ color:#0E1A2E; } .prem-dark .pc-carrier,.prem-dark .pc-tag{ color:#5B7099; }
+  .delta-bad{ color:#C7362A; } .delta-good{ color:#0F7A54; }
+
+  /* page 4 rating cards */
+  .rating-row{ display:flex; gap:14px; margin-top:6px; }
+  .rating-card{ flex:1; background:#F5F8FC; border-radius:14px; padding:12px 14px; text-align:center; }
+  .rating-card .rc-name{ font-family:'Arial','Liberation Sans',sans-serif; font-size:13px; font-weight:700; color:#141B2D; margin-bottom:3px; }
+  .rating-card .rc-rating{ font-family:'Arial','Liberation Sans',sans-serif; font-size:31px; font-weight:700; color:#2D6BD4; letter-spacing:-1px; line-height:1.15; }
+  .rating-card .rc-cat{ font-size:12px; font-weight:700; color:#141B2D; margin-top:2px; }
+  .rating-card .rc-sub{ font-size:10.5px; color:#8E97A8; margin-top:4px; line-height:1.3; }
+
+  /* page 5 */
+  .steps-container{ background:#F5F8FC; border-radius:14px; padding:15px 18px; margin-top:6px; }
+  .step{ display:flex; margin-bottom:8px; } .step:last-child{ margin-bottom:0; }
+  .step-num{ flex:0 0 21px; height:21px; border-radius:50%; background:#2D6BD4; color:#fff; font-size:11.5px;
+             font-weight:700; text-align:center; line-height:21px; margin-right:11px; }
+  .step-text{ flex:1; font-size:12.5px; color:#3F4859; padding-top:1px; } .step-text b{ color:#141B2D; }
+
+  .about-box{ background:#E8F1FE; border-radius:14px; padding:14px 20px; margin-top:22px; }
+  .about-box .overline{ color:#2D6BD4; }
+  .about-box .about-site{ font-family:'Arial','Liberation Sans',sans-serif; font-size:17px; font-weight:700; color:#0E1A2E; margin-bottom:6px; }
+  .about-box p{ color:#22304A; font-size:11px; margin-bottom:5px; line-height:1.45; } .about-box p b{ color:#0E1A2E; }
+  .learn-more-wrap{ text-align:center; margin:9px 0 2px; }
+  .learn-more{ display:inline-block; background:#2D6BD4; color:#fff; text-transform:uppercase; font-size:10.5px;
+               font-weight:700; letter-spacing:1.2px; padding:8px 26px; border-radius:100px; text-decoration:none; }
+  .disclaimer{ border-top:1px solid #C9DBF5; margin-top:9px; padding-top:8px; font-size:8.5px; font-style:italic;
+               color:#6C7B93; line-height:1.4; }
+
+  .prem-opt{ background:#E8F1FE; } .prem-opt .pc-label{ color:#2D6BD4; }
+  .prem-opt .pc-value{ color:#0E1A2E; } .prem-opt .pc-carrier{ color:#5B7099; }
+  .gap-lead{ display:block; font-family:'Arial','Liberation Sans',sans-serif; font-size:14px; font-weight:700;
+             color:#A32A1F; margin-bottom:2px; }
+  .gap-lead-2{ margin-top:9px; }
+  td.cell-left{ text-align:left; font-weight:400; color:#3F4859; font-size:12px; line-height:1.35; }
+  td.decide{ font-weight:700; color:#2D6BD4; white-space:nowrap; }
+  .sign-block{ margin-top:14px; }
+  /* coverage table sections + collapsed not-included row */
+  tr.sec td{ text-align:left; background:#F1F4F9; color:#2D6BD4; text-transform:uppercase; font-size:10.5px; font-weight:700;
+             letter-spacing:1.4px; padding:7px 10px 5px; border-bottom:1px solid #DFE5EF; border-top:1.5px solid #C9D1DF; }
+  tr.sec td .sec-sub{ display:inline; text-transform:none; letter-spacing:0; font-weight:400; color:#8E97A8; font-size:10.5px; margin-left:10px; }
+  tr.sec:first-child td{ border-top:none; }
+  tr.notinc td.bad{ text-align:center; font-weight:400; }
+  /* selection total (page 4) */
+  .total-box{ background:#E8F1FE; border-radius:14px; padding:14px 20px; margin-top:16px; }
+  .total-box .overline{ color:#2D6BD4; margin-bottom:6px; }
+  .total-box .tb-lines{ font-size:12.5px; color:#22304A; }
+  .total-box .tb-line{ display:flex; justify-content:space-between; gap:16px; padding:3px 0; border-bottom:1px solid #C9DBF5; }
+  .total-box .tb-line span:last-child{ font-weight:700; color:#0E1A2E; white-space:nowrap; }
+  .total-box .tb-total{ display:flex; justify-content:space-between; align-items:baseline; margin-top:8px;
+                        font-family:'Arial','Liberation Sans',sans-serif; font-weight:700; color:#0E1A2E; }
+  .total-box .tb-total span:first-child{ font-size:13px; text-transform:uppercase; letter-spacing:1.2px; color:#2D6BD4; }
+  .total-box .tb-total span:last-child{ font-size:24px; letter-spacing:-0.5px; }
+  .total-box .tb-note{ font-size:11px; color:#5B7099; margin-top:4px; }
+  .total-box.empty .tb-total, .total-box.empty .tb-note{ display:none; }
+  .total-box.empty .tb-lines{ color:#7C8698; }
+  @media print { .total-box.empty{ display:none; } }
+  tr.need td:first-child{ color:#C7362A; }
+  tr.na .opt{ color:#B9C7DD; border-color:#E3E9F2; cursor:default; }
+  .record-note ul{ margin:4px 0 0 18px; }
+  .sign-row{ display:flex; gap:22px; }
+  .sign-field{ flex:1; } .sign-short{ flex:0 0 130px; }
+  .sign-line{ border-bottom:1px solid #9DA8BC; height:22px; }
+  .sign-label{ font-size:10.5px; color:#7C8698; margin-top:4px; }
+  .sign-note{ font-size:11.5px; color:#3F4859; margin-top:11px; }
+
+  /* --- clickable decisions --- */
+  .opt{ display:inline-block; padding:3px 11px; border:1px solid #B9C7DD; border-radius:100px;
+        color:#2D6BD4; font-weight:700; cursor:pointer; touch-action:manipulation; -webkit-tap-highlight-color:transparent; }
+  .opt-sep{ display:inline-block; padding:0 5px; color:#B9C7DD; }
+  .opt.selected{ background:#2D6BD4; border-color:#2D6BD4; color:#FFFFFF; }
+
+  /* --- on-screen page framing (print/PDF unaffected) --- */
+  @media screen {
+    body{ background:#EDF0F5; padding:28px 16px; }
+    .page{ width:8.5in; max-width:100%; min-height:11in; margin:0 auto 28px;
+           background:#FFFFFF; padding:0.55in 0.6in 0.6in; box-shadow:0 3px 16px rgba(15,27,45,0.13);
+           border-radius:3px; }
+    .screen-note{ width:8.5in; max-width:100%; margin:0 auto 14px; font-size:12.5px; color:#5A6579; }
+    .picks{ width:8.5in; max-width:100%; margin:0 auto 28px; background:#FFFFFF; border-radius:12px;
+            padding:16px 20px; box-shadow:0 3px 16px rgba(15,27,45,0.13); font-size:13px; color:#22304A; }
+    .picks h3{ font-family:'Arial','Liberation Sans',sans-serif; font-size:15px; color:#141B2D; margin-bottom:8px; font-weight:700; }
+    .picks li{ margin-left:18px; margin-bottom:3px; }
+    .picks .none{ color:#8E97A8; }
+  }
+
+  .sig-clear{ float:right; font-size:10px; color:#2D6BD4; cursor:pointer; text-transform:uppercase;
+              letter-spacing:0.8px; font-weight:700; }
+  @media screen {
+    .sign-line{ height:auto; min-height:40px; }
+    .sig-wrap{ position:relative; }
+    #sigPad{ display:block; width:100%; height:40px; cursor:crosshair; touch-action:none; -webkit-user-select:none; user-select:none; }
+    .editable{ min-height:40px; line-height:38px; font-size:14px; color:#141B2D; padding:0 2px;
+               outline:none; }
+    .editable:focus{ border-bottom-color:#2D6BD4; }
+    .editable:empty:before{ content:attr(data-ph); color:#AEB8C8; }
+    .picks textarea{ width:100%; margin-top:10px; min-height:74px; border:1px solid #D5DDEA;
+                     border-radius:8px; padding:9px 11px; font-family:'Arial','Liberation Sans',sans-serif; font-size:13px;
+                     color:#22304A; resize:vertical; outline:none; }
+    .picks textarea:focus{ border-color:#2D6BD4; }
+    .picks label{ display:block; margin-top:12px; font-weight:700; font-size:12.5px; color:#141B2D; }
+  }
+
+  @media screen {
+    .sign-line{ min-height:90px; }
+    #sigPad{ height:90px; }
+    .sign-short .sign-line{ min-height:90px; }
+    #fDate{ border:none; background:transparent; font-family:'Arial','Liberation Sans',sans-serif; font-size:14px;
+            color:#141B2D; outline:none; width:100%; margin-top:62px; }
+    .editable{ min-height:90px; line-height:1.3; padding:62px 2px 0; }
+    .picks{ background:#F5F8FC; border-radius:14px; padding:16px 20px; margin-top:22px; }
+    .picks h3{ font-family:'Arial','Liberation Sans',sans-serif; font-size:15px; color:#141B2D; margin-bottom:8px; font-weight:700; }
+    .picks .none{ color:#8E97A8; }
+    .ledger-entry{ background:#FFFFFF; border:1px solid #E3E9F2; border-radius:10px; padding:10px 13px;
+                   margin-bottom:8px; font-size:12.5px; color:#22304A; }
+    .ledger-entry .le-who{ font-weight:700; color:#141B2D; }
+    .ledger-entry .le-when{ color:#8E97A8; }
+    .ledger-entry ul{ margin:5px 0 0 18px; }
+    .ledger-entry .le-note{ margin-top:5px; font-style:italic; color:#4A5568; }
+    .ledger-entry img{ height:34px; display:block; margin-top:6px; }
+    .live-row{ border-top:1px solid #DDE4EE; margin-top:12px; padding-top:12px; font-size:13px; }
+    .picks label{ display:block; margin-top:10px; font-weight:700; font-size:12.5px; color:#141B2D; }
+    #recordBtn{ margin-top:10px; background:#2D6BD4; color:#fff; border:none; border-radius:100px;
+                padding:9px 22px; font-family:'Arial','Liberation Sans',sans-serif; font-size:12.5px; font-weight:700;
+                letter-spacing:0.6px; text-transform:uppercase; cursor:pointer; }
+    #recordBtn:disabled{ background:#B9C7DD; cursor:default; }
+    .record-note{ margin-top:7px; font-size:12px; color:#C7362A; } .record-note.ok{ color:#0F7A54; }
+    .send-note{ margin-top:8px; font-size:11.5px; color:#5A6579; line-height:1.4; }
+    .btn-secondary{ margin-top:10px; margin-left:8px; background:#FFFFFF; color:#2D6BD4; border:1px solid #B9C7DD; border-radius:100px;
+                    padding:8px 20px; font-family:'Arial','Liberation Sans',sans-serif; font-size:12.5px; font-weight:700; letter-spacing:0.6px;
+                    text-transform:uppercase; cursor:pointer; }
+  }
+  /* Saybrook levers — padding/size only, per rulebook §2 */
+  .p3 table.fill tbody td{ padding:4.5px 8px; font-size:12.5px; line-height:1.25; } .p3 table.fill thead th{ padding:9px 8px; font-size:11.5px; }
+  .p3 tr.sec td{ padding:5px 8px 3px; font-size:10px; } .p3 .sub-note{ font-size:9.5px; } .p3 h2.page-title{ margin-bottom:8px; }
+  .p4 .about-box p{ font-size:9.5px !important; line-height:1.28 !important; margin-bottom:2px !important; } .p4 .about-box{ padding:7px 16px !important; margin-top:6px !important; } .p4 .callout .co-body{ font-size:10.5px !important; } .p4 .section-gap{ margin-top:4px !important; } .p4 .overline{ margin-bottom:2px !important; } .p4 .learn-more{ padding:4px 18px; font-size:9.5px; } .p4 .disclaimer{ font-size:7.5px !important; } .p4 tbody td{ padding:0.5px 8px !important; font-size:11px !important; } .p4 .opt{ padding:1px 7px; font-size:11px; } .p4 thead th{ padding:3px 8px !important; }
+  .p1 .prem-card .pc-delta{ font-size:11px; } .p1 .prem-card .pc-carrier{ font-size:9.5px; white-space:nowrap; } .p1 .prem-card{ padding:18px 5px; }
+  .snap-card{ padding:20px 14px; } .prem-card{ padding:18px 8px; } .prem-card .pc-value{ font-size:27px; } .prem-card .pc-carrier{ font-size:10.5px; } .prem-card .pc-delta{ font-size:11.5px; }
+  .assessment-box{ padding:16px 22px; margin-bottom:10px; } .page .callout.co-red.p1{ padding:11px 16px; }
+  .p2 h2.page-title.ded{ margin-top:12px !important; } .p2 .rating-card .rc-sub{ font-size:9.5px; }
+  .p2 tbody td{ padding:1.5px 8px; font-size:11.5px; } .p2 thead th{ padding:4px 10px; font-size:10.5px; } .p2 h2.page-title{ font-size:18px; margin-bottom:5px; } .p2 .overline{ margin-bottom:3px; } .p2 .scale-note{ margin-top:3px !important; line-height:1.3; }
+  .p2 .callout, .p4 .callout{ padding:7px 14px; margin-top:6px; } .p2 .callout .co-body, .p4 .callout .co-body{ font-size:11.5px; line-height:1.34; }
+  .p4 tbody td{ padding:1px 8px; font-size:11.5px; } .p4 .opt{ padding:2px 8px; } .p4 thead th{ padding:4px 10px; font-size:10.5px; } .p4 .overline{ margin-bottom:3px; } .p4 h2.page-title{ margin-bottom:6px; } .p4 .about-box p{ font-size:10.5px; line-height:1.35; margin-bottom:2px; } .p4 .about-box .about-site{ margin-bottom:3px; font-size:15px; } .p4 .disclaimer{ font-size:8px; margin-top:4px !important; padding-top:4px !important; } .p4 .callout{ padding:6px 14px !important; margin-top:5px !important; } .p4 .callout .co-body{ font-size:11.5px !important; line-height:1.32 !important; } .p4 .learn-more-wrap{ margin:3px 0 0 !important; } .p4 p.body-text{ margin-bottom:2px; } .p4 .about-box{ padding:10px 20px; } .p4 .about-box p{ margin-bottom:3px; } .p4 .learn-more-wrap{ margin:5px 0 0; } .p4 .disclaimer{ margin-top:6px; padding-top:5px; } .p4 .section-gap{ margin-top:6px; } .p4 .sign-line{ height:12px; } .p4 .sign-block{ margin-top:6px !important; } .p4 .about-box{ margin-top:8px !important; padding:8px 18px !important; } .p4 .learn-more{ padding:5px 20px; } .p4 .disclaimer{ line-height:1.3; } .p4 .about-box{ margin-top:12px; } .p4 .sign-block{ margin-top:10px; } .p4 p.body-text{ margin-bottom:4px; }
+  .p2 .callout .co-title{ margin-bottom:2px; } .p2 .section-gap{ margin-top:8px; }
+  .p2 h2.page-title{ margin-bottom:8px; } .p2 .rating-card{ padding:3px 10px; } .p2 .rating-card .rc-rating{ font-size:22px; } .p2 .rating-card .rc-sub{ font-size:9px; margin-top:1px; } .p2 .rating-card .rc-name{ margin-bottom:0; } .p2 .rating-row{ margin-top:3px; } .p2 .scale-note{ margin-top:4px !important; } .p2 .rating-card .rc-rating{ font-size:26px; } .p2 .rating-card .rc-sub{ margin-top:2px; }
+  table.fill tbody td{ padding:7px 8px; font-size:13px; } table.fill thead th{ padding:9px 8px; font-size:11.5px; }
+  @media screen and (max-width: 760px) {
+    body{ padding:14px 0; }
+    .page{ width:auto; min-height:0; padding:22px 16px 26px; margin:0 12px 18px; border-radius:6px; }
+    .version-bar, .picks{ width:auto; margin-left:12px; margin-right:12px; }
+    .property-line{ white-space:normal; }
+    h1.doc-title{ font-size:24px; } h2.page-title{ font-size:20px; }
+    .snapshot-row, .premium-row, .rating-row{ flex-wrap:wrap; }
+    .snap-card, .prem-card, .rating-card{ flex:1 1 46%; min-width:140px; }
+    .prem-card .pc-value, .snap-card .snap-value{ font-size:24px; }
+    table{ display:block; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+    table thead, table tbody, table tr{ width:100%; }
+    thead th, tbody td{ white-space:nowrap; }
+    tbody td:first-child, thead th:first-child{ white-space:normal; min-width:140px; }
+    .sign-row{ flex-direction:column; gap:14px; } .sign-short{ flex:1; }
+    .callout{ padding:12px 14px; }
+    .btn-secondary{ margin-left:0; display:block; }
+  }
+  .print-only{ display:none; }
+  @media print {
+    .screen-only{ display:none !important; } .print-only[src]{ display:block; height:22px; width:auto; }
+    .opt.selected{ background:#2D6BD4 !important; color:#FFFFFF !important; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    .opt.selected::before{ content:"✓ "; }
+    .opt:not(.selected){ color:#8E97A8; border-color:#DDE4EE; }
+    .editable{ min-height:0; height:auto; padding:0 2px 2px; line-height:1.3; font-size:13px; color:#141B2D; }
+    .editable:empty:before{ content:""; }
+  }
+
+  .title-row{ display:flex; justify-content:space-between; align-items:flex-start; gap:20px; }
+  .ver-badge{ text-align:right; white-space:nowrap; padding-top:5px; }
+  .ver-badge .vb-num{ display:block; font-family:'Arial','Liberation Sans',sans-serif; font-size:12.5px; font-weight:700; color:#2D6BD4; }
+  .ver-badge .vb-date{ display:block; font-size:11px; color:#8E97A8; margin-top:1px; }
+  [hidden]{ display:none !important; }
+  @media screen {
+    .version-bar{ width:8.5in; max-width:100%; margin:0 auto 12px; display:flex; justify-content:flex-end;
+                  align-items:center; gap:9px; }
+    .version-bar label{ font-size:11.5px; text-transform:uppercase; letter-spacing:1.1px; font-weight:700;
+                        color:#7C8698; }
+    .version-bar select{ font-family:'Arial','Liberation Sans',sans-serif; font-size:13px; color:#141B2D; background:#FFFFFF;
+                         border:1px solid #D5DDEA; border-radius:100px; padding:7px 14px; outline:none;
+                         cursor:pointer; box-shadow:0 1px 4px rgba(15,27,45,0.07); }
+    .version-bar select:focus{ border-color:#2D6BD4; }
+  }
+
+  .opt.selected, .picks{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @media print {
+    .picks.has-records{ display:block !important; background:#F5F8FC; border-radius:14px; padding:14px 20px;
+                        margin-top:18px; font-size:12px; color:#22304A; page-break-inside:avoid; }
+    .picks.has-records h3{ font-family:'Arial','Liberation Sans',sans-serif; font-size:14px; color:#141B2D; margin-bottom:8px; font-weight:700; }
+    .picks.has-records .live-row, .picks.has-records .btn-secondary, .picks.has-records .send-note,
+    .picks.has-records .record-note{ display:none !important; }
+    .ledger-entry{ background:#FFFFFF; border:1px solid #E3E9F2; border-radius:10px; padding:8px 12px; margin-bottom:6px; }
+    .ledger-entry .le-who{ font-weight:700; color:#141B2D; } .ledger-entry .le-when{ color:#8E97A8; }
+    .ledger-entry ul{ margin:4px 0 0 18px; } .ledger-entry .le-note{ margin-top:4px; font-style:italic; color:#4A5568; }
+    .ledger-entry img{ height:30px; display:block; margin-top:5px; }
+    .print-date[data-v]{ display:block; font-size:14px; color:#141B2D; }
+  }
+</style>
+</head>
+<body>
+
+<div class="version-bar screen-only">
+  <label for="verSelect">Viewing</label>
+  <select id="verSelect">
+    <option value="1" selected>Version 1 — September 25, 2026 (current)</option>
+  </select>
+</div>
+
+<div class="doc-version" data-v="1" data-label="Version 1 — September 25, 2026">
+<!-- ==================== PAGE 1 ==================== -->
+<div class="page p1">
+  <div class="title-row">
+    <div>
+      <h1 class="doc-title">Insurance Renewal Summary</h1>
+      <div class="property-line">The Saybrook Condominium Trust · Brighton, MA 02135 · 30 Units · 09/30/2026 – 09/30/2027</div>
+    </div>
+    <div class="ver-badge"><span class="vb-num">Version 1</span><span class="vb-date">September 25, 2026</span></div>
+  </div>
+
+  <div class="assessment-box">
+    <div class="overline">Executive Summary</div>
+    <p>The association is insured with <b>Travelers</b> on a property and liability package, with a separate <b>PMA</b> crime policy. Travelers did not offer renewal terms following the <b>$1,600,000</b> sprinkler-failure claim of February 2026. RenewFlo placed the account with a specialty brokerage whose market is accounts carrying open large losses, and two programs came back. <b>Option 1</b> insures the full building value on one property policy for <b>$91,723</b>, up <b>$57,649</b>, with a <b>$25,000</b> deductible. The same policy at the <b>$10,000</b> deductible the Trust requires is <b>Option 1B</b> at <b>$130,598</b> — $38,875 more for $15,000 of deductible. <b>Option 2</b> splits the building value across a primary and an excess property policy for <b>$104,459</b> with a <b>$100,000</b> deductible. All three add <b>trustee protection (D&amp;O)</b>, not carried before, and raise the <b>fidelity bond</b> to <b>$350,000</b>, the level the Trust requires; an umbrella and earthquake coverage are available as add-ons. Surplus-lines pricing follows the loss history: as the open claims close and loss-free years accumulate, the account becomes eligible for standard-market carriers again and the premium moves down with it.</p>
+  </div>
+
+  <div class="callout co-red p1" style="margin-top:10px;">
+    <div class="co-title">Coverages Not Carried &amp; What They Would Cost</div>
+    <div class="co-body"><span class="gap-lead">Cyber · Estimated $800 – $1,500 a year</span>Assessments are billed and banked electronically and no policy responds to a breach of owner data, a fraudulent payment instruction or the cost of restoring records. The crime policy covers stolen funds only.</div>
+  </div>
+
+  <div style="margin-top:12px;">
+    <div class="overline">Portfolio Snapshot</div>
+    <div class="snapshot-row">
+      <div class="snap-card">
+        <div class="snap-label">Building Replacement Value</div>
+        <div class="snap-value">$18,223,974</div>
+      </div>
+      <div class="snap-card">
+        <div class="snap-label">Total Insurable Value</div>
+        <div class="snap-value">$18,453,974</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:12px;">
+    <div class="overline">Total Annual Premium</div>
+    <div class="premium-row">
+      <div class="prem-card prem-current">
+        <div class="pc-label">Current</div>
+        <div class="pc-carrier">Travelers &amp; PMA · 2025–26</div>
+        <div class="pc-value">$34,074</div>
+        <div class="pc-delta">Baseline (Expiring Policies)</div>
+      </div>
+      <div class="prem-card prem-opt">
+        <div class="pc-label">Option 1</div>
+        <div class="pc-carrier">Curotech · $25,000 Deductible</div>
+        <div class="pc-value">$91,723</div>
+        <div class="pc-delta delta-bad">↑ 169.2% · $57,649 Increase</div>
+      </div>
+      <div class="prem-card prem-opt">
+        <div class="pc-label">Option 1B</div>
+        <div class="pc-carrier">Curotech · $10,000 Deductible</div>
+        <div class="pc-value">$130,598</div>
+        <div class="pc-delta delta-bad">+$38,875 vs. Option 1</div>
+      </div>
+      <div class="prem-card prem-opt">
+        <div class="pc-label">Option 2</div>
+        <div class="pc-carrier">Munich Re &amp; Kinsale · $100,000 Deductible</div>
+        <div class="pc-value">$104,459</div>
+        <div class="pc-delta delta-bad">+$12,736 vs. Option 1</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PAGE 2 ==================== -->
+<div class="page p2">
+  <h2 class="page-title">Premiums</h2>
+
+  <div class="overline">Premium by Line of Coverage</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:28%;">Policy</th>
+        <th style="width:18%;">Current</th>
+        <th style="width:18%;">Option 1<span class="th-sub">$25,000 deductible</span></th>
+        <th style="width:18%;">Option 1B<span class="th-sub">$10,000 deductible</span></th>
+        <th style="width:18%;">Option 2<span class="th-sub">$100,000 deductible</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Property &amp; Liability</td><td>$33,734</td><td class="bad">$89,597</td><td class="bad">$128,472</td><td class="bad">$88,833</td></tr>
+      <tr><td>Excess Property</td><td>In Package</td><td>In Package</td><td>In Package</td><td class="bad">$13,500</td></tr>
+      <tr><td>Directors &amp; Officers</td><td class="bad">Excluded</td><td>$1,510</td><td>$1,510</td><td>$1,510</td></tr>
+      <tr><td>Crime ($350,000 Fidelity Bond)</td><td>$340</td><td class="bad">$616</td><td class="bad">$616</td><td class="bad">$616</td></tr>
+      <tr class="total-row"><td>Total Annual Premium</td><td>$34,074</td><td class="bad">$91,723</td><td class="bad">$130,598</td><td class="bad">$104,459</td></tr>
+      <tr><td>Umbrella · Optional Add-On</td><td class="bad">Not Included</td><td>$1,563 – $4,708</td><td>$1,563 – $4,708</td><td>$1,563 – $4,708</td></tr>
+      <tr><td>Earthquake · Optional Add-On</td><td>In Package</td><td>$4,844</td><td>$4,844</td><td>$4,844</td></tr>
+      <tr><td>Terrorism · Optional Add-On</td><td class="bad">Not Confirmed</td><td>$4,329</td><td>$4,329</td><td>$4,643</td></tr>
+    </tbody>
+  </table>
+
+
+  <h2 class="page-title ded" style="margin-top:8px;">Deductibles</h2>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:28%;">Deductible</th>
+          <th style="width:18%;">Current</th>
+          <th style="width:18%;">Option 1</th>
+          <th style="width:18%;">Option 1B</th>
+          <th style="width:18%;">Option 2</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>All Other Perils</td><td>$10,000</td><td class="bad">$25,000</td><td>$10,000</td><td class="bad">$100,000</td></tr>
+        <tr><td>Water Damage</td><td>$10,000</td><td class="bad">$25,000 Per Unit · $50,000 Minimum</td><td class="bad">$10,000 Per Unit</td><td class="bad">$100,000</td></tr>
+        <tr><td>Wind &amp; Hail</td><td>$10,000</td><td class="bad">1% (~$184,540)</td><td class="bad">1% (~$184,540)</td><td class="bad">$100,000</td></tr>
+        <tr><td>Earthquake (add-on)</td><td>5% (~$906,879)</td><td class="good">$100,000</td><td class="good">$100,000</td><td class="good">$100,000</td></tr>
+      </tbody>
+    </table>
+
+  <div class="callout co-red">
+    <div class="co-title">The Trust's $10,000 deductible cap is out of step with the market</div>
+    <div class="co-body">Section 5.8.3 of the Declaration of Trust caps the property deductible at <b>$10,000</b>. Curotech will honor it only as Option 1B — <b>$38,875</b> more premium each year for <b>$15,000</b> less deductible, 2.6 times the protection it buys. Option 2 cannot meet the cap. The underwriter's position is that with the open <b>$1,600,000</b> claim and the 2024 water loss, a lower deductible adds exposure to small recurring losses. The data points toward amending Section 5.8.3 (75% of the beneficial interest) and binding Option 1 at <b>$25,000</b>; the same section already lets the trustees assess a deductible to the unit where the loss occurred.</div>
+  </div>
+
+  <div class="callout co-blue">
+    <div class="co-title">How the per-unit water deductible works</div>
+    <div class="co-body">Option 1 applies <b>$25,000</b> to each unit damaged (floor <b>$50,000</b> per event); Option 1B applies <b>$10,000</b> per unit. A leak reaching four units carries <b>$100,000</b> under Option 1 — the figure Option 2 applies to any loss — and <b>$40,000</b> under Option 1B. Deductibles assessed to owners are recoverable under their HO-6 loss-assessment coverage.</div>
+  </div>
+
+  <div class="section-gap">
+  <div class="overline">A.M. Best Financial Rating</div>
+  <div class="rating-row">
+    <div class="rating-card">
+      <div class="rc-name">Curotech Program</div>
+      <div class="rc-rating">A-</div>
+      <div class="rc-cat">Excellent · Sizes X – XV</div>
+      <div class="rc-sub">Lowest of five insurers on Options 1 and 1B (Fortegra, Emerald Bay, Argo Re, Lloyd's, Concert)</div>
+    </div>
+    <div class="rating-card">
+      <div class="rc-name">Munich Re</div>
+      <div class="rc-rating">A+</div>
+      <div class="rc-cat">Superior · Size XV</div>
+      <div class="rc-sub">Bridgeway Insurance Company · Option 2 primary · affirmed July 2026</div>
+    </div>
+    <div class="rating-card">
+      <div class="rc-name">Kinsale</div>
+      <div class="rc-rating">A</div>
+      <div class="rc-cat">Excellent · Size XIV</div>
+      <div class="rc-sub">Kinsale Insurance Company · Option 2 excess · affirmed August 2026</div>
+    </div>
+  </div>
+  <p class="body-text scale-note" style="margin-top:8px; font-size:9.5px; color:#64748B;">A++ and A+ are Superior; A and A- are Excellent. Financial Size Category reflects policyholder surplus — XV is the highest tier. All property insurers here are surplus lines, outside the state guaranty fund.</p>
+  </div>
+</div>
+
+<!-- ==================== PAGE 3 ==================== -->
+<div class="page p3">
+  <h2 class="page-title">Coverage Limits</h2>
+
+  <table class="fill">
+    <thead>
+      <tr>
+        <th style="width:24%;">Coverage</th>
+        <th style="width:19%;">Current</th>
+        <th style="width:19%;">Option 1</th>
+        <th style="width:19%;">Option 1B</th>
+        <th style="width:19%;">Option 2</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="sec"><td colspan="5">Property<span class="sec-sub">Building and contents · Option 2 layers a $10,000,000 primary policy with excess above it</span></td></tr>
+      <tr><td>Building Limit</td><td>$18,137,574</td><td class="good">$18,223,974</td><td class="good">$18,223,974</td><td class="good">$18,223,974</td></tr>
+      <tr><td>Association Income</td><td>$86,400</td><td class="good">$230,000</td><td class="good">$230,000</td><td class="good">$230,000</td></tr>
+      <tr><td>Water Damage</td><td class="good">Building Limit</td><td class="good">Building Limit</td><td class="good">Building Limit</td><td class="good">Building Limit</td></tr>
+      <tr><td>Wind &amp; Hail</td><td class="good">Building Limit</td><td class="good">Building Limit</td><td class="good">Building Limit</td><td class="good">Building Limit</td></tr>
+      <tr><td>Equipment Breakdown</td><td class="good">Building Limit</td><td class="good">Building Limit</td><td class="good">Building Limit</td><td>$10,000,000</td></tr>
+      <tr><td>Ordinance or Law A<span class="sub-note">Undamaged Portion</span></td><td class="bad">Not Confirmed</td><td>Included</td><td>Included</td><td>Included</td></tr>
+      <tr><td>Ordinance or Law B<span class="sub-note">Demolition</span></td><td>$1,000,000</td><td class="bad">$1,000,000 Shared B &amp; C</td><td class="bad">$1,000,000 Shared B &amp; C</td><td class="bad">$250,000</td></tr>
+      <tr><td>Ordinance or Law C<span class="sub-note">Increased Cost of Construction</span></td><td>$1,000,000</td><td class="bad">$1,000,000 Shared B &amp; C</td><td class="bad">$1,000,000 Shared B &amp; C</td><td class="bad">$250,000</td></tr>
+      <tr><td>Water Backup &amp; Sewer Overflow</td><td>$100,000</td><td class="bad">$50,000</td><td class="bad">$50,000</td><td class="bad">$50,000</td></tr>
+      <tr><td>Roof Valuation</td><td>Replacement Cost</td><td class="bad">Actual Cash Value at 10 Years</td><td class="bad">Actual Cash Value at 10 Years</td><td class="bad">Actual Cash Value at 15 Years</td></tr>
+      <tr><td>Inflation Guard</td><td>3% Annual Increase</td><td class="bad">Not Included</td><td class="bad">Not Included</td><td class="bad">Not Included</td></tr>
+      <tr><td>Earthquake</td><td>$5,000,000</td><td>Optional · $5,000,000</td><td>Optional · $5,000,000</td><td>Optional · $5,000,000</td></tr>
+      <tr class="notinc"><td>Not Included<span class="sub-note">on any option</span></td><td colspan="4" class="bad">Flood</td></tr>
+      <tr class="sec"><td colspan="5">Liability<span class="sec-sub">Claims against the association and its trustees</span></td></tr>
+      <tr><td>General Liability</td><td>$1M Occ / $2M Agg</td><td>$1M Occ / $2M Agg</td><td>$1M Occ / $2M Agg</td><td>$1M Occ / $2M Agg</td></tr>
+      <tr><td>Umbrella</td><td class="bad">Not Included</td><td>Optional · Up to $5,000,000</td><td>Optional · Up to $5,000,000</td><td>Optional · Up to $5,000,000</td></tr>
+      <tr><td>Directors &amp; Officers</td><td class="bad">Not Included</td><td class="good">$1,000,000</td><td class="good">$1,000,000</td><td class="good">$1,000,000</td></tr>
+      <tr><td>Fire Damage to Rented Premises</td><td>$300,000</td><td class="bad">$100,000</td><td class="bad">$100,000</td><td class="bad">$100,000</td></tr>
+      <tr><td>Hired &amp; Non-Owned Auto</td><td>Included</td><td>Included</td><td>Included</td><td>Included</td></tr>
+      <tr class="notinc"><td>Not Included<span class="sub-note">on any option</span></td><td colspan="4" class="bad">Workers Compensation</td></tr>
+      <tr class="sec"><td colspan="5">Crime &amp; Cyber<span class="sec-sub">Standalone policy — PMA expiring, Cincinnati on every option</span></td></tr>
+      <tr><td>Employee Dishonesty</td><td>$100,000</td><td class="good">$350,000</td><td class="good">$350,000</td><td class="good">$350,000</td></tr>
+      <tr><td>Forgery &amp; Alteration</td><td>$25,000</td><td class="good">$350,000</td><td class="good">$350,000</td><td class="good">$350,000</td></tr>
+      <tr><td>Computer Fraud</td><td class="bad">Not Confirmed</td><td class="good">$350,000</td><td class="good">$350,000</td><td class="good">$350,000</td></tr>
+      <tr><td>Funds Transfer Fraud</td><td class="bad">Not Confirmed</td><td class="good">$350,000</td><td class="good">$350,000</td><td class="good">$350,000</td></tr>
+      <tr class="notinc"><td>Not Included<span class="sub-note">on any option</span></td><td colspan="4" class="bad">Cyber</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ==================== PAGE 4 ==================== -->
+<div class="page p4">
+  <h2 class="page-title">Binding Selection</h2>
+  <p class="body-text">Mark one choice per row.</p>
+
+  <div class="overline" style="margin-top:8px;">The Renewal</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:46%;">Program</th>
+        <th style="width:27%;">Premium</th>
+        <th style="width:27%;">Decision</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr data-opt="1" data-premium="91723"><td>Option 1 — Curotech · $25,000 Deductible</td><td>$91,723</td><td class="decide"><span class="opt" data-g="renewal">Bind</span><span class="opt-sep">/</span><span class="opt" data-g="renewal">Decline</span></td></tr>
+      <tr data-opt="1B" data-premium="130598"><td>Option 1B — Curotech · $10,000 Deductible</td><td>$130,598</td><td class="decide"><span class="opt" data-g="renewal">Bind</span><span class="opt-sep">/</span><span class="opt" data-g="renewal">Decline</span></td></tr>
+      <tr data-opt="2" data-premium="104459"><td>Option 2 — Munich Re &amp; Kinsale · $100,000 Deductible</td><td>$104,459</td><td class="decide"><span class="opt" data-g="renewal">Bind</span><span class="opt-sep">/</span><span class="opt" data-g="renewal">Decline</span></td></tr>
+      <tr data-addon-premium="4844"><td>Earthquake Add-On — Great American · $5,000,000</td><td>$4,844</td><td class="decide"><span class="opt" data-g="eq">Add</span><span class="opt-sep">/</span><span class="opt" data-g="eq">Decline</span></td></tr>
+      <tr data-addon-premium="4329" data-addon-premium-2="4643"><td>Terrorism Add-On</td><td>$4,329 (Option 1 / 1B) · $4,643 (Option 2)</td><td class="decide"><span class="opt" data-g="tria">Add</span><span class="opt-sep">/</span><span class="opt" data-g="tria">Decline</span></td></tr>
+    </tbody>
+  </table>
+  <div class="callout co-yellow" style="margin-top:8px;">
+    <div class="co-title">Terrorism</div>
+    <div class="co-body">Optional at <b>$4,329</b> (Option 1 or 1B) or <b>$4,643</b> (Option 2), excluded from the totals above. It responds only to an event the U.S. Treasury certifies as terrorism under TRIA: the September 11 attacks qualified; the Boston Marathon bombing was not certified; active-shooter events do not qualify. The data points toward declining the add-on.</div>
+  </div>
+
+
+  <div class="section-gap">
+    <div class="overline">Umbrella · Optional Add-On</div>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:40%;">Carrier &amp; Limit</th>
+          <th style="width:30%;">Premium</th>
+          <th style="width:30%;">Selection</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-umb="1"><td>Penn-America · $1,000,000 to $5,000,000</td><td>$1,563 · $2,368 · $3,148 · $3,928 · $4,708</td><td class="decide"><span class="opt" data-g="umb" data-premium="1563">1M</span> <span class="opt" data-g="umb" data-premium="2368">2M</span> <span class="opt" data-g="umb" data-premium="3148">3M</span> <span class="opt" data-g="umb" data-premium="3928">4M</span> <span class="opt" data-g="umb" data-premium="4708">5M</span> <span class="opt" data-g="umb" data-premium="0">Decline</span></td></tr>
+        <tr data-umb="1"><td>Capitol Specialty · $5,000,000 · excludes water-damage liability</td><td>$4,510</td><td class="decide"><span class="opt" data-g="umb" data-premium="4510">5M</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-gap">
+    <div class="overline">Payment Option</div>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:46%;">Option</th>
+          <th style="width:27%;">Terms</th>
+          <th style="width:27%;">Selection</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-opt="1" data-plan-total="91723" data-plan-charge="0"><td>Option 1 — Pay in Full</td><td>$91,723 at binding</td><td class="decide"><span class="opt" data-g="pay">Select</span></td></tr>
+        <tr data-opt="1"><td>Option 1 — Premium Finance Agreement</td><td>Terms quoted on request</td><td class="decide"><span class="opt" data-g="pay">Select</span></td></tr>
+        <tr data-opt="1B" data-plan-total="130598" data-plan-charge="0"><td>Option 1B — Pay in Full</td><td>$130,598 at binding</td><td class="decide"><span class="opt" data-g="pay">Select</span></td></tr>
+        <tr data-opt="1B"><td>Option 1B — Premium Finance Agreement</td><td>Terms quoted on request</td><td class="decide"><span class="opt" data-g="pay">Select</span></td></tr>
+        <tr data-opt="2" data-plan-total="104459" data-plan-charge="0"><td>Option 2 — Pay in Full</td><td>$104,459 at binding</td><td class="decide"><span class="opt" data-g="pay">Select</span></td></tr>
+        <tr data-opt="2"><td>Option 2 — Premium Finance Agreement</td><td>Terms quoted on request</td><td class="decide"><span class="opt" data-g="pay">Select</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-gap">
+    <div class="overline">Coverages Not Currently Carried</div>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:34%;">Coverage</th>
+          <th style="width:22%;">Limit</th>
+          <th style="width:22%;">Est. Premium</th>
+          <th style="width:22%;">Decision</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Cyber</td>
+          <td>$1,000,000</td>
+          <td>$800 – $1,500</td>
+          <td class="decide"><span class="opt" data-g="cyber">Quote</span><span class="opt-sep">/</span><span class="opt" data-g="cyber">Decline</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="total-box empty" id="totalBox">
+    <div class="overline">Your Selection Total</div>
+    <div class="tb-lines" id="totalLines">Your total appears here once a program and a payment plan are selected.</div>
+    <div class="tb-total"><span>Total</span><span id="totalAmt">—</span></div>
+    <div class="tb-note" id="totalNote"></div>
+  </div>
+
+  <div class="sign-block">
+    <div class="sign-row">
+      <div class="sign-field">
+        <div class="sign-line sig-wrap"><canvas id="sigPad" class="screen-only"></canvas><img id="sigPrint" class="print-only" alt=""></div>
+        <div class="sign-label">Accepted by (signature)<span class="sig-clear screen-only" id="sigClear">clear</span></div>
+      </div>
+      <div class="sign-field">
+        <div class="sign-line editable" contenteditable="true" data-ph="Type name &amp; title" id="fName"></div>
+        <div class="sign-label">Name &amp; title</div>
+      </div>
+      <div class="sign-field sign-short">
+        <div class="sign-line"><input type="date" id="fDate" class="screen-only"><span id="datePrint" class="print-only print-date"></span></div>
+        <div class="sign-label">Date</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="picks screen-only" id="picks">
+    <h3>Selections Recorded</h3>
+    <div id="ledger" class="none">No selections recorded yet — the first trustee to record will appear here.</div>
+    <div class="live-row">
+      <div><b>Your current choices:</b> <span id="picksBody" class="none">nothing selected yet</span></div>
+      <label for="picksNotes">Comments</label>
+      <textarea id="picksNotes" placeholder="Anything to note about these decisions — questions, conditions, limits to revisit."></textarea>
+      <button id="recordBtn" type="button">Record my selections</button>
+      <button id="pdfBtn" type="button" class="btn-secondary">Save this page as PDF</button>
+      <div class="record-note" id="recordNote"></div>
+      <div class="send-note" id="sendLinkWrap" hidden>The automatic send did not go through. <a id="sendLink" href="#">Tap here to email your selections to info@renewflo.co</a> instead.</div>
+      <div class="send-note" id="clearAll" hidden><a href="#">Clear the form for the next trustee</a> — your selections above stay recorded and have been sent.</div>
+      <div class="send-note">Recording sends your selections and signature to RenewFlo at <b>info@renewflo.co</b>. For your own records, “Save this page as PDF” prints the summary with your selections and signature.</div>
+    </div>
+  </div>
+
+  <div class="about-box">
+  <div class="overline">About RenewFlo</div>
+  <div class="about-site">www.renewflo.co</div>
+  <p>RenewFlo is a neutral coordination service for condominium associations. We run the insurance renewal from end to end — organizing the underwriting data, engaging brokers and carriers, and turning their quotes into one clear, apples-to-apples comparison for the board.</p>
+  <p>Most boards only ever see what a single broker chooses to show them, in a format built to sell rather than to compare. Deductible changes get buried, missing coverages go unmentioned, and competing quotes never quite line up — yet the renewal is one of the largest checks an association writes each year.</p>
+  <p><b>Our model keeps us neutral by design:</b> RenewFlo is compensated by the broker whose program the board ultimately selects — never by the association. We are paid the same no matter which option wins, so our only job is making sure the data in front of the board is complete, accurate, and easy to act on.</p>
+  <div class="learn-more-wrap"><a class="learn-more" href="https://www.renewflo.co/">Learn More →</a></div>
+  <div class="disclaimer">RenewFlo LLC is a third-party neutral coordination service. RenewFlo does not sell, solicit, or negotiate insurance. This summary is provided for informational and decision-making purposes only. All coverage descriptions are derived from carrier proposal documents and renewal declarations and are believed to be accurate; however, RenewFlo makes no representations or warranties as to their completeness or accuracy. In the event of any discrepancy between this summary and the actual policy documents, the terms of the issued policy shall govern in all respects.</div>
+  </div>
+</div>
+</div>
+
+<script>
+(function(){
+  var LABEL={pay:'Payment option',bond:'Fidelity Bond Increase',cyber:'Cyber',tria:'Terrorism Add-On',eq:'Earthquake Add-On'};
+  var records=[];
+
+  function rowName(el){ var tr=el.closest('tr'); return tr?tr.cells[0].innerText.trim():''; }
+
+  function currentPicks(){
+    var out=[], seen={};
+    document.querySelectorAll('.opt.selected').forEach(function(o){
+      var g=o.dataset.g; var key=(g==='renewal')?rowName(o):g; if(seen[key]) return; seen[key]=1;
+      var name=(g==='pay'||g==='renewal')?rowName(o):(g==='umb'?'Umbrella — '+rowName(o):(LABEL[g]||rowName(o)));
+      out.push({name:name, choice:o.innerText.trim()});
+    });
+    return out;
+  }
+
+  function renderLive(){
+    var p=currentPicks(), b=document.getElementById('picksBody');
+    if(p.length){ b.className='';
+      b.innerHTML=p.map(function(x){return x.name+' — <b>'+x.choice+'</b>';}).join(' · '); }
+    else { b.className='none'; b.textContent='nothing selected yet'; }
+  }
+
+  function fmtDate(v){
+    if(!v) return '';
+    var p=v.split('-'); return p.length===3 ? p[1]+'/'+p[2]+'/'+p[0] : v;
+  }
+
+  function renderLedger(){
+    var l=document.getElementById('ledger');
+    if(!records.length){ l.className='none';
+      l.textContent='No selections recorded yet — the first trustee to record will appear here.'; return; }
+    l.className='';
+    l.innerHTML=records.map(function(r){
+      return '<div class="ledger-entry">'+
+        '<span class="le-who">'+r.who+'</span> <span class="le-when">· '+r.when+(r.ver&&DOC_VER&&r.ver!==DOC_VER.label?' · '+r.ver:'')+'</span>'+
+        '<ul>'+r.picks.map(function(x){return '<li>'+x.name+' — <b>'+x.choice+'</b></li>';}).join('')+'</ul>'+
+        (r.note?'<div class="le-note">“'+r.note+'”</div>':'')+
+        (r.sig?'<img src="'+r.sig+'" alt="signature">':'')+
+      '</div>';
+    }).join('');
+  }
+
+  // ---- selection model ----
+  var V=document.querySelector('.doc-version:not([hidden])')||document;
+  function money(n){ return '$'+Math.round(n).toLocaleString('en-US'); }
+  function programRows(){ return [].slice.call(V.querySelectorAll('tr[data-premium]')); }
+  function planRows(){ return [].slice.call(V.querySelectorAll('tr[data-plan-total], tr[data-opt]:not([data-premium])')); }
+  function addonRows(){ return [].slice.call(V.querySelectorAll('tr[data-addon-premium]')); }
+  function umbRows(){ return [].slice.call(V.querySelectorAll('tr[data-umb]')); }
+  function choice(tr){ var o=tr.querySelector('.opt.selected'); return o?o.innerText.trim():''; }
+  function state(){
+    var st={bound:null, undecided:[], plan:null, planMismatch:false, addons:[], umb:null};
+    programRows().forEach(function(tr){ var ch=choice(tr); if(!ch) st.undecided.push(tr); else if(ch==='Bind') st.bound=tr; });
+    planRows().forEach(function(tr){ if(choice(tr)) st.plan=tr; });
+    if(st.plan && st.bound && st.plan.dataset.opt!==st.bound.dataset.opt) st.planMismatch=true;
+    addonRows().forEach(function(tr){ var ch=choice(tr); if(ch==='Add'||ch==='Quote') st.addons.push({tr:tr, ch:ch}); });
+    umbRows().forEach(function(tr){ var o=tr.querySelector('.opt.selected'); if(o) st.umb={tr:tr, o:o}; });
+    return st;
+  }
+  function addonPremium(tr,st){ var k='addonPremium'+(st.bound?st.bound.dataset.opt:''); return +(tr.dataset[k]||tr.dataset.addonPremium); }
+  function totalInfo(){
+    var st=state(), lines=[], sum=0, total=null, note='';
+    if(!st.bound) return null;
+    sum+= +st.bound.dataset.premium; lines.push([st.bound.cells[0].innerText.trim(), money(st.bound.dataset.premium)]);
+    st.addons.forEach(function(a){ var n=a.tr.cells[0].innerText.trim();
+      if(a.ch==='Add'){ var ap=addonPremium(a.tr,st); sum+=ap; lines.push([n, money(ap)]); }
+      else lines.push([n+' — quote requested', 'not included']); });
+    if(st.umb && st.umb.o.innerText.trim()!=='Decline'){ var up=+st.umb.o.dataset.premium; sum+=up;
+      lines.push(['Umbrella — '+st.umb.tr.cells[0].innerText.trim().split(' · ')[0]+' · $'+st.umb.o.innerText.trim(), money(up)]); }
+    if(st.plan && !st.planMismatch){
+      var pn=st.plan.cells[0].innerText.trim();
+      if(st.plan.dataset.planTotal){ total=sum; var ch=+st.plan.dataset.planCharge||0; total+=ch;
+        lines.push([pn, ch>0?'+ '+money(ch)+' '+(st.plan.dataset.planNote||'financing charges'):(ch<0?'− '+money(-ch)+' '+(st.plan.dataset.planNote||'discount'):'no financing charges')]);
+        note= ch>0 ? 'Includes '+money(ch)+' in '+(st.plan.dataset.planNote||'financing charges')+'.' : (ch<0 ? 'Includes the '+(st.plan.dataset.planNote||'discount')+'.' : 'Paid in full — no financing charges.'); }
+      else { total=sum; lines.push([pn,'terms not confirmed']); note='Excludes financing charges — '+pn+' terms are not confirmed.'; }
+    } else { total=sum; note= st.planMismatch ? 'The payment plan selected is not for the bound program.' : 'Select a payment plan to confirm the total. Financing charges not included.'; }
+    return {lines:lines, total:total, note:note, plan:(st.plan&&!st.planMismatch)?st.plan.cells[0].innerText.trim():''};
+  }
+  function renderTotal(){
+    var box=document.getElementById('totalBox'); if(!box) return;
+    var t=totalInfo();
+    if(!t){ box.classList.add('empty'); document.getElementById('totalLines').textContent='Your total appears here once a program and a payment plan are selected.'; return; }
+    box.classList.remove('empty');
+    document.getElementById('totalLines').innerHTML=t.lines.map(function(l){ return '<div class="tb-line"><span>'+l[0]+'</span><span>'+l[1]+'</span></div>'; }).join('');
+    document.getElementById('totalAmt').textContent=money(t.total);
+    document.getElementById('totalNote').textContent=t.note;
+  }
+  function totalPick(){ var t=totalInfo(); if(!t) return null;
+    return {name:'Total', choice: money(t.total)+(t.plan?' — '+t.plan:'')+(t.note?' ('+t.note.replace(/\.$/,'')+')':'')}; }
+  function syncPlans(){
+    var st=state();
+    planRows().forEach(function(tr){ var na= st.bound && tr.dataset.opt!==st.bound.dataset.opt;
+      tr.classList.toggle('na', !!na); if(na) tr.querySelectorAll('.opt').forEach(function(x){x.classList.remove('selected');}); });
+  }
+  function validate(){
+    var st=state(), errs=[];
+    [].slice.call(V.querySelectorAll('tr.need')).forEach(function(tr){ tr.classList.remove('need'); });
+    st.undecided.forEach(function(tr){ tr.classList.add('need'); errs.push(tr.cells[0].innerText.trim()+' — mark Bind or Decline'); });
+    if(programRows().length && !st.bound) errs.push('Bind one program');
+    if(st.bound && !st.plan) errs.push('Select a payment plan');
+    if(st.planMismatch) errs.push('Select a payment plan for the bound program');
+    addonRows().concat([].slice.call(V.querySelectorAll('tr:has(.opt[data-g="cyber"])'))).forEach(function(tr){
+      if(!choice(tr)){ tr.classList.add('need'); errs.push(tr.cells[0].innerText.trim()+' — make a decision'); } });
+    if(umbRows().length && !st.umb){ umbRows().forEach(function(tr){ tr.classList.add('need'); }); errs.push('Umbrella — pick a limit or Decline'); }
+    return errs;
+  }
+
+  document.querySelectorAll('.opt').forEach(function(o){
+    o.addEventListener('click',function(){
+      var g=o.dataset.g;
+      if(o.closest('tr') && o.closest('tr').classList.contains('na')) return;
+      if(g==='pay'||g==='umb'){
+        document.querySelectorAll('.opt[data-g="'+g+'"]').forEach(function(x){x.classList.remove('selected');});
+        o.classList.add('selected');
+        if(g==='umb') umbRows().forEach(function(tr){ tr.classList.remove('need'); });
+      } else if(g==='renewal'){
+        var tr=o.closest('tr'), was=o.classList.contains('selected');
+        tr.querySelectorAll('.opt[data-g="renewal"]').forEach(function(x){x.classList.remove('selected');});
+        if(!was){ o.classList.add('selected');
+          if(o.innerText.trim()==='Bind'){ programRows().forEach(function(r){ if(r!==tr){ var b=r.querySelector('.opt.selected'); if(b&&b.innerText.trim()==='Bind') b.classList.remove('selected'); } }); } }
+      } else {
+        var was=o.classList.contains('selected');
+        document.querySelectorAll('.opt[data-g="'+g+'"]').forEach(function(x){x.classList.remove('selected');});
+        if(!was) o.classList.add('selected');
+      }
+      if(o.closest('tr')) o.closest('tr').classList.remove('need');
+      syncPlans(); renderTotal(); renderLive();
+    });
+  });
+
+  // ---- signature pad ----
+  var c=document.getElementById('sigPad'), ctx=null, inked=false;
+  if(c){
+    function size(){
+      var r=c.getBoundingClientRect(), d=window.devicePixelRatio||1;
+      var keep=inked?c.toDataURL():null;
+      c.width=r.width*d; c.height=r.height*d; ctx=c.getContext('2d');
+      ctx.scale(d,d); ctx.lineWidth=1.8; ctx.lineCap='round'; ctx.lineJoin='round'; ctx.strokeStyle='#141B2D';
+      if(keep){ var i=new Image(); i.onload=function(){ ctx.drawImage(i,0,0,r.width,r.height); }; i.src=keep; }
+    }
+    size(); window.addEventListener('resize',size);
+    var drawing=false;
+    function pt(e){ var r=c.getBoundingClientRect(); return [e.clientX-r.left, e.clientY-r.top]; }
+    c.addEventListener('pointerdown',function(e){ drawing=true; inked=true; c.setPointerCapture(e.pointerId);
+      var p=pt(e); ctx.beginPath(); ctx.moveTo(p[0],p[1]); });
+    c.addEventListener('pointermove',function(e){ if(!drawing) return; var p=pt(e);
+      ctx.lineTo(p[0],p[1]); ctx.stroke(); });
+    c.addEventListener('pointerup',function(){ drawing=false; var im=document.getElementById('sigPrint'); if(im&&inked) im.src=c.toDataURL(); });
+    document.getElementById('sigClear').addEventListener('click',function(){
+      ctx.clearRect(0,0,c.width,c.height); inked=false; var im=document.getElementById('sigPrint'); if(im) im.removeAttribute('src'); });
+  }
+
+  // ---- today's date by default ----
+  var d=document.getElementById('fDate');
+  if(d && !d.value){ var n=new Date(), m=('0'+(n.getMonth()+1)).slice(-2), day=('0'+n.getDate()).slice(-2);
+    d.value=n.getFullYear()+'-'+m+'-'+day; }
+
+  // ---- record ----
+  document.getElementById('recordBtn').addEventListener('click',function(){
+    var who=(document.getElementById('fName').innerText||'').trim();
+    var picks=currentPicks();
+    var note=document.getElementById('picksNotes');
+    var msg=document.getElementById('recordNote');
+    var errs=validate();
+    if(errs.length){ msg.className='record-note'; msg.innerHTML='Before recording:<ul>'+errs.map(function(e){return '<li>'+e+'</li>';}).join('')+'</ul>'; return; }
+    if(!who){ msg.className='record-note'; msg.textContent='Add a name and title above before recording.'; return; }
+    var tp=totalPick(); if(tp) picks.push(tp);
+    msg.className='record-note'; msg.textContent='Sending your selections to RenewFlo…';
+    var rec={who:who, when:fmtDate(d?d.value:'')||'no date', picks:picks,
+             note:(note.value||'').trim(), sig: inked?c.toDataURL():null};
+    records.push(rec);
+    renderLedger();
+    sendToRenewFlo(rec);
+    var cl=document.getElementById('clearAll'); if(cl) cl.hidden=false;
+  });
+  var clearBtn=document.getElementById('clearAll');
+  if(clearBtn) clearBtn.addEventListener('click',function(e){
+    e.preventDefault();
+    document.querySelectorAll('.opt.selected').forEach(function(x){x.classList.remove('selected');});
+    document.getElementById('fName').innerHTML='';
+    document.getElementById('picksNotes').value='';
+    if(c && ctx){ ctx.clearRect(0,0,c.width,c.height); inked=false; var im=document.getElementById('sigPrint'); if(im) im.removeAttribute('src'); }
+    document.getElementById('recordNote').textContent='';
+    var w=document.getElementById('sendLinkWrap'); if(w) w.hidden=true;
+    clearBtn.hidden=true; syncPlans(); renderTotal(); renderLive();
+  });
+
+  // ---- email the selections to RenewFlo (mailto — no server needed) ----
+  var DOC_TITLE=(document.querySelector('.property-line')||{}).innerText||document.title;
+  var DOC_VER=(document.querySelector('.doc-version:not([hidden])')||{}).dataset;
+  var W3F_KEY='8c2c1639-73ce-43c4-9569-d2f7a1593889';
+  function overview(r){
+    var lines=[
+      'Binding selections — '+DOC_TITLE,
+      'Document: '+(DOC_VER&&DOC_VER.label?DOC_VER.label:'Version 1'),
+      '',
+      'Recorded by: '+r.who,
+      'Date: '+r.when,
+      '',
+      'Selections:'
+    ].concat(r.picks.map(function(x){ return '  • '+x.name+' — '+x.choice; }));
+    if(r.note) lines=lines.concat(['','Comments:',r.note]);
+    lines=lines.concat(['','Signature: '+(r.sig?'signed on screen (image attached below)':'not signed')]);
+    return lines.join('\n');
+  }
+  function sendToRenewFlo(r){
+    var msg=document.getElementById('recordNote');
+    var subj='Binding selections — '+DOC_TITLE.split(' · ')[0]+' — '+r.who;
+    var body=overview(r);
+    var a=document.getElementById('sendLink'), w=document.getElementById('sendLinkWrap');
+    if(a){ a.href='mailto:info@renewflo.co?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body); }
+    function fail(){ msg.className='record-note'; msg.textContent='Your selections are recorded on this page but could not be sent automatically.'; if(w) w.hidden=false; }
+    if(!window.fetch || location.protocol==='file:'){ fail(); return; }
+    var payload={ access_key:W3F_KEY, subject:subj, from_name:'RenewFlo Renewal Summary',
+      name:r.who, property:DOC_TITLE, document:(DOC_VER&&DOC_VER.label)||'Version 1', date:r.when,
+      selections:r.picks.map(function(x){ return x.name+' — '+x.choice; }).join('\n'),
+      comments:r.note||'(none)', message:body, signature_png:(r.sig||'not signed'), botcheck:'' };
+    fetch('https://api.web3forms.com/submit',{ method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'}, body:JSON.stringify(payload) })
+      .then(function(res){ return res.json(); })
+      .then(function(j){ if(j&&j.success){ msg.className='record-note ok'; msg.textContent='Sent — RenewFlo has your selections.'; if(w) w.hidden=true; } else { fail(); } })
+      .catch(fail);
+  }
+  var pdfBtn=document.getElementById('pdfBtn');
+  if(pdfBtn) pdfBtn.addEventListener('click',function(){ window.print(); });
+
+
+  // ---- print-only date text follows the date input ----
+  var dp=document.getElementById('datePrint');
+  function syncDate(){ if(dp&&d){ var v=fmtDate(d.value); dp.textContent=v; if(v) dp.setAttribute('data-v',v); else dp.removeAttribute('data-v'); } }
+  if(d){ d.addEventListener('change',syncDate); d.addEventListener('input',syncDate); } syncDate();
+
+  // ---- persist selections (Supabase, RLS: anon insert + select only) ----
+  var SB_URL='https://rwjmxmoopkrcgtyzithb.supabase.co', SB_KEY='sb_publishable_33Lj7GSQiy3gXsNuiZx3zA_HuZSxw3c', SB_PROP='saybrook-2026';
+  var SB_H={ 'apikey':SB_KEY, 'Authorization':'Bearer '+SB_KEY, 'Content-Type':'application/json' };
+  function markLedger(){ var p=document.getElementById('picks'); if(p) p.classList.toggle('has-records', records.length>0); }
+  var _renderLedger=renderLedger; renderLedger=function(){ _renderLedger(); markLedger(); };
+  function loadRecords(){
+    if(!window.fetch || location.protocol==='file:') return;
+    fetch(SB_URL+'/rest/v1/selections?select=who,signed_date,picks,note,signature,version,created_at&property=eq.'+encodeURIComponent(SB_PROP)+'&order=created_at.asc',{headers:SB_H})
+      .then(function(r){ return r.ok ? r.json() : []; })
+      .then(function(rows){
+        if(!rows||!rows.length) return;
+        var have=records.length;
+        rows.forEach(function(x){ records.push({who:x.who, when:x.signed_date||'no date', picks:x.picks||[], note:x.note||'', sig:x.signature||null, ver:x.version||''}); });
+        if(have){ records=records.slice(have).concat(records.slice(0,have)); }
+        renderLedger();
+      }).catch(function(){});
+  }
+  var _send=sendToRenewFlo; sendToRenewFlo=function(r){
+    _send(r);
+    if(!window.fetch || location.protocol==='file:') return;
+    var row={ property:SB_PROP, version:(DOC_VER&&DOC_VER.label)||'Version 1', who:r.who, signed_date:r.when,
+              picks:r.picks, note:r.note||null, signature:r.sig||null };
+    fetch(SB_URL+'/rest/v1/selections',{method:'POST', headers:Object.assign({'Prefer':'return=minimal'},SB_H), body:JSON.stringify(row)}).catch(function(){});
+  };
+
+  renderLive(); renderLedger(); renderTotal(); loadRecords();
+})();
+
+(function(){
+  var sel=document.getElementById('verSelect'); if(!sel) return;
+  var versions=[].slice.call(document.querySelectorAll('.doc-version'));
+  sel.innerHTML='';
+  versions.sort(function(a,b){ return (+b.dataset.v)-(+a.dataset.v); });
+  versions.forEach(function(v,i){
+    var o=document.createElement('option');
+    o.value=v.dataset.v;
+    o.textContent=v.dataset.label + (i===0?' (current)':'');
+    sel.appendChild(o);
+  });
+  function show(v){
+    versions.forEach(function(d){ d.hidden = (d.dataset.v !== v); });
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+  sel.addEventListener('change',function(){ show(sel.value); });
+  show(sel.value);
+})();
+</script>
+</body>
+</html>
