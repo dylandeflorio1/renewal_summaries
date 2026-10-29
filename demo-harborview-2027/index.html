@@ -224,7 +224,11 @@
 .rv .rv-docmsg.ok{color:var(--rv-good)}
 .rv .rv-docmsg.bad{color:var(--rv-bad)}
 .rv label.rv-btn{cursor:pointer}
-.rv label.rv-askconfirm .rv-hint{color:var(--rv-blue);font-weight:700}
+.rv label.rv-askconfirm{position:relative}
+.rv label.rv-askconfirm .rv-q{padding-right:118px}
+.rv label.rv-askconfirm .rv-hint,.rv .rv-confirmpill{font-size:11px;font-weight:700;color:var(--rv-blue);background:var(--rv-blue-soft);border-radius:100px;padding:2px 9px;white-space:nowrap;line-height:1.5}
+.rv label.rv-askconfirm .rv-hint{position:absolute;top:0;right:0}
+.rv .rv-confirmnote{font-size:13px;color:var(--rv-body);background:var(--rv-blue-soft);border-radius:10px;padding:10px 14px}
 .rv label.rv-askconfirm .rv-ynb[aria-pressed="false"]{border-color:var(--rv-blue)}
 .rv label.rv-askconfirm input,.rv label.rv-askconfirm select,.rv label.rv-askconfirm textarea{border-color:var(--rv-blue);background:#F5F9FF}
 .rv .rv-yn{display:inline-flex;gap:6px;flex-wrap:wrap}
@@ -442,7 +446,7 @@ function rvToConfig(j){
       var ask = (j.confirm || []).indexOf(f.key) >= 0;
       return { section: f.section, key: f.key, label: f.label, req: !!f.required, help: f.help || "", type: TYPE[f.type],
         options: f.options || [], when: f.show_when || [], wide: !!WIDE[f.key], value: (j.values || {})[f.key] || "",
-        hint: ask ? "Please confirm this answer. Correct it if it's wrong, or leave it as is." : "" };
+        hint: ask ? "Please confirm" : "" };
     }),
     confirmKeys: (j.confirm || []).reduce(function(m, k){ m[k] = 1; return m; }, {}),
     verify: rv.verify || [{ label: "Unit counts", sum: ["units_owner_occupied","units_tenant_occupied","units_vacant","units_under_construction"], equals: "total_number_of_units_overall" }],
@@ -497,6 +501,13 @@ function rvBoot(C){
     t.innerHTML = '<option value="">Choose…</option><option>Property manager</option><option>Assistant property manager</option><option>Accounting</option><option>Other</option>';
     t.value = "Property manager";
     sub.querySelector("#rv-submitOnly").textContent = "Submit building details";
+  }
+  /* answers RenewFlo asked them to confirm: one explanation above the list */
+  if (C.confirmKeys && Object.keys(C.confirmKeys).length){
+    var cn = document.createElement("p");
+    cn.className = "rv-confirmnote";
+    cn.innerHTML = 'Answers marked <span class="rv-confirmpill">Please confirm</span> were filled in from the association\'s documents. Check them, and correct anything that\'s wrong; if an answer is right, leave it as is.';
+    var sf = root.querySelector("#rv-sovFields"); sf.parentNode.insertBefore(cn, sf);
   }
 
   var $ = function(s){ return root.querySelector(s); };
