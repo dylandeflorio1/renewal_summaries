@@ -224,6 +224,18 @@
 .rv .rv-docmsg.ok{color:var(--rv-good)}
 .rv .rv-docmsg.bad{color:var(--rv-bad)}
 .rv label.rv-btn{cursor:pointer}
+.rv label.rv-askconfirm .rv-hint{color:var(--rv-blue);font-weight:700}
+.rv label.rv-askconfirm .rv-ynb[aria-pressed="false"]{border-color:var(--rv-blue)}
+.rv label.rv-askconfirm input,.rv label.rv-askconfirm select,.rv label.rv-askconfirm textarea{border-color:var(--rv-blue);background:#F5F9FF}
+.rv .rv-yn{display:inline-flex;gap:6px;flex-wrap:wrap}
+.rv .rv-ynb{font:inherit;font-size:13px;font-weight:700;min-width:52px;padding:7px 14px;border-radius:8px;border:1px solid var(--rv-line);background:#F4F6FA;color:#6B7486;cursor:pointer}
+.rv .rv-ynb:hover{border-color:#B9C4D6}
+.rv .rv-ynb[data-v="Yes"][aria-pressed="true"]{background:#2E8B57;border-color:#2E8B57;color:#fff}
+.rv .rv-ynb[data-v="No"][aria-pressed="true"]{background:#E0334C;border-color:#E0334C;color:#fff}
+.rv .rv-ynb[data-v="N/A"][aria-pressed="true"]{background:#5E687C;border-color:#5E687C;color:#fff}
+.rv label.rv-needed .rv-ynb[aria-pressed="false"]{border-color:var(--rv-warn);background:#FFFCF6}
+.rv .rv-pmnote{display:flex;flex-direction:column;gap:6px}
+.rv .rv-pmnote textarea{min-height:110px}
 </style>
 </head>
 <body>
@@ -402,9 +414,12 @@ function rvToConfig(j){
     deductible: rv.deductible || { current: "" },
     coverages: covs,
     sov: (j.fields || []).map(function(f){
+      var ask = (j.confirm || []).indexOf(f.key) >= 0;
       return { section: f.section, key: f.key, label: f.label, req: !!f.required, help: f.help || "", type: TYPE[f.type],
-        options: f.options || [], when: f.show_when || [], wide: !!WIDE[f.key], value: (j.values || {})[f.key] || "" };
+        options: f.options || [], when: f.show_when || [], wide: !!WIDE[f.key], value: (j.values || {})[f.key] || "",
+        hint: ask ? "Please confirm this answer. Correct it if it's wrong, or leave it as is." : "" };
     }),
+    confirmKeys: (j.confirm || []).reduce(function(m, k){ m[k] = 1; return m; }, {}),
     verify: rv.verify || [{ label: "Unit counts", sum: ["units_owner_occupied","units_tenant_occupied","units_vacant","units_under_construction"], equals: "total_number_of_units_overall" }],
     documents: (j.documents || []).map(function(d){ return { id: d.id, name: d.name, have: d.status !== "needed" }; }),
     agreementUrl: rv.agreement_url || "", npn: rv.npn || "", draftTerms: !!rv.draft_terms,
@@ -446,6 +461,13 @@ function rvBoot(C){
     sub.querySelector(".rv-overline").textContent = "Step 2";
     sub.querySelector("h2").textContent = "Send to RenewFlo";
     sub.querySelector(".rv-muted").textContent = "Add your name and title, then submit. Several people at your company can use this link; each submission adds to what's already here.";
+    var noteWrap = document.createElement("label");
+    noteWrap.setAttribute("for", "rv-pmNote");
+    noteWrap.className = "rv-pmnote";
+    noteWrap.innerHTML = '<span class="rv-q">Anything else we should know?</span>' +
+      '<span class="rv-hint">Context about the property or the trustees that the questions above don\'t cover: board dynamics, who decides, recent or upcoming projects, past issues with insurers, deadlines. Only RenewFlo sees this.</span>' +
+      '<textarea id="rv-pmNote" rows="5" placeholder="For example: the board president makes insurance decisions; the roof is being replaced next spring; the last carrier non-renewed after the 2023 water claim."></textarea>';
+    sub.insertBefore(noteWrap, sub.querySelector(".rv-grid"));
     var t = root.querySelector("#rv-subTitle");
     t.innerHTML = '<option value="">Choose…</option><option>Property manager</option><option>Assistant property manager</option><option>Accounting</option><option>Other</option>';
     t.value = "Property manager";
@@ -528,7 +550,8 @@ function rvBoot(C){
     }).filter(Boolean);
     var confirm = {}; issues.forEach(function(r){ r.sum.concat([r.equals]).forEach(function(k){ confirm[k] = 1; }); });
     var unconfirmed = live.filter(function(f){ return confirm[f.key] && blank.indexOf(f) < 0; });
-    var missing = blank.concat(unconfirmed), total = live.length, have = total - missing.length;
+    var toConfirm = live.filter(function(f){ return C.confirmKeys && C.confirmKeys[f.key] && blank.indexOf(f) < 0 && unconfirmed.indexOf(f) < 0; });
+    var missing = blank.concat(unconfirmed, toConfirm), total = live.length, have = total - missing.length;
     return { missing: missing, blank: blank, issues: issues, have: have, total: total, ratio: have / total };
   }
 
@@ -570,14 +593,22 @@ function rvBoot(C){
         C.sov.filter(function(f){ return f.section === sec; }).map(function(f){
           var id = fid(f), hint = f.hint ? '<span class="rv-hint">' + esc(f.hint) + '</span>' : "", ctl;
           var help = f.help ? '<button type="button" class="rv-help" aria-label="What this means" aria-describedby="' + id + '-tip">?</button><span class="rv-tip" role="tooltip" id="' + id + '-tip">' + esc(f.help) + '</span>' : "";
-          if (f.type === "yesno") ctl = '<select id="' + id + '" name="' + esc(f.label) + '"><option value="">Choose…</option><option>Yes</option><option>No</option><option>N/A</option><option>Not sure</option></select>';
+          if (f.type === "yesno") ctl = '<input type="hidden" id="' + id + '" name="' + esc(f.label) + '"><span class="rv-yn" role="group" aria-label="' + esc(f.label) + '" data-for="' + id + '">' +
+            ["Yes", "No", "N/A"].map(function(o){ return '<button type="button" class="rv-ynb" data-v="' + o + '" aria-pressed="false">' + o + '</button>'; }).join("") + '</span>';
           else if (f.type === "select") ctl = '<select id="' + id + '" name="' + esc(f.label) + '"><option value="">Choose…</option>' + f.options.map(function(o){ return '<option>' + esc(o) + '</option>'; }).join("") + '<option>Not sure</option></select>';
           else if (f.type === "textarea") ctl = '<textarea id="' + id + '" name="' + esc(f.label) + '"></textarea>';
           else ctl = '<input id="' + id + '" name="' + esc(f.label) + '">';
-          return '<label for="' + id + '"' + (f.wide ? ' class="rv-wide"' : "") + '><span class="rv-q">' + esc(f.label) + (f.req ? '<span class="rv-req" aria-label="required">*</span>' : "") + help + '</span>' + hint + ctl + '</label>';
+          return '<label for="' + id + '"' + ((f.wide || f.hint) ? ' class="' + (f.wide ? "rv-wide " : "") + (f.hint ? "rv-askconfirm" : "") + '"' : "") + '><span class="rv-q">' + esc(f.label) + (f.req ? '<span class="rv-req" aria-label="required">*</span>' : "") + help + '</span>' + hint + ctl + '</label>';
         }).join("") + '</div></details>';
     }).join("");
     C.sov.forEach(function(f){ var el = $("#" + fid(f)); if (el && f.value) el.value = f.value; });
+    syncYN();
+  }
+  function syncYN(){
+    [].forEach.call(root.querySelectorAll(".rv-yn"), function(g){
+      var v = (document.getElementById(g.dataset.for) || {}).value || "";
+      [].forEach.call(g.querySelectorAll(".rv-ynb"), function(b){ b.setAttribute("aria-pressed", b.dataset.v === v ? "true" : "false"); });
+    });
   }
 
   var inset = {};
@@ -759,6 +790,8 @@ function rvBoot(C){
   }
   function postRecord(extra){
     var body = { k: RV_KEY, action: "submit", answers: buildingData(), coverage: C.mode === "pm" ? null : coverageData() };
+    if (C.mode === "pm" && $("#rv-pmNote")) body.note = $("#rv-pmNote").value.trim();
+    body.confirmed = C.sov.filter(function(f){ return C.confirmKeys[f.key] && applies(f); }).map(function(f){ return f.key; });
     for (var x in extra) body[x] = extra[x];
     return fetch(RV_API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
       .then(function(r){ return r.json().then(function(j){ if (!r.ok){ var e = new Error(j.error || "Not saved."); e.server = true; throw e; } return j; }); });
@@ -816,6 +849,16 @@ function rvBoot(C){
 
   /* ---------- events ---------- */
   root.addEventListener("click", function(e){
+    var yb = e.target.closest(".rv-ynb");
+    if (yb){
+      e.preventDefault();
+      var g = yb.closest(".rv-yn"), input = document.getElementById(g.dataset.for);
+      input.value = input.value === yb.dataset.v ? "" : yb.dataset.v;
+      syncYN();
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+      input.dispatchEvent(new Event("change", { bubbles: true }));
+      return;
+    }
     var o = e.target.closest("[data-rv-open-loa]");
     if (o){ e.preventDefault(); var d = $("#rv-loa"); d.open = true; d.scrollIntoView({ block: "start" }); return; }
     var g = e.target.closest("[data-rv-go]"); if (!g) return;
@@ -850,6 +893,7 @@ function rvBoot(C){
     if (!name){ err.textContent = "Add your name so the other trustees know who submitted."; err.hidden = false; $("#rv-subName").focus(); return; }
     err.hidden = true;
     var data = reviewData(); data["#Submitted by"] = ""; data["Name"] = name; data["Title"] = $("#rv-subTitle").value;
+    if (C.mode === "pm" && $("#rv-pmNote") && $("#rv-pmNote").value.trim()){ data["#Other context from the property manager"] = ""; data["Note"] = $("#rv-pmNote").value.trim(); }
     $("#rv-submitOnly").disabled = true;
     deliver(C.mode === "pm" ? "Building details" : "Insurance Review", data, $("#rv-submitDone"), null,
       postRecord({ who: name, title: $("#rv-subTitle").value }));
