@@ -49,7 +49,10 @@
   .foot{text-align:center;color:var(--faint);font-size:11.5px;margin-top:6px}
   .err{background:var(--bad-soft);border-radius:10px;padding:14px 16px;color:var(--ink)}
   @media print{ body{background:#fff;padding:0} .sheet{box-shadow:none;margin:0 0 12px;padding:0;width:auto} .noprint{display:none !important} }
+  .btns{display:flex;gap:8px;flex-wrap:wrap}
+  .btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
 </head>
 <body>
 <main id="app">
@@ -141,7 +144,7 @@
       '<div class="sheet">' + (a.is_demo ? '<div class="demo"><b>Demo.</b> Fake association and fake data, for testing the RenewFlo workflow. Nothing here is real.</div>' : "") +
       '<div class="titlerow"><div><p class="over">Statement of Values</p><h1>' + esc(a.name) + '</h1>' +
       '<p class="sub">' + esc(a.address) + ' · ' + esc(a.units) + ' Residential Units · Renews ' + esc(dt(a.renewal_date)) + '</p></div>' +
-      '<button class="btn noprint" type="button" id="printBtn">Print or save as PDF</button></div>' +
+      '<div class="btns noprint"><button class="btn primary" type="button" id="xlsxBtn">Download SOV (Excel)</button><button class="btn" type="button" id="printBtn">Print or save as PDF</button></div></div>' +
       '<div class="share">Shared with ' + esc(j.recipient || "you") + ' by RenewFlo. Read-only' + (j.expires_at ? '; this link expires ' + esc(dt(j.expires_at)) : "") + '.</div>' +
       overview + '</div><div class="sheet">' +
       '<div class="top"><div class="card"><span>Total Insurable Value</span><b>' + esc(v("total_insurable_value_tiv") || "—") + '</b></div><div class="card"><span>Current annual premium</span><b>' + esc(v("current_expiring_premium") || "—") + '</b></div></div>' +
@@ -149,6 +152,86 @@
       loss + detail + docHtml +
       '<p class="foot">Prepared by RenewFlo LLC · info@renewflo.co · renewflo.co</p>';
     var pb = document.getElementById("printBtn"); if (pb) pb.addEventListener("click", function(){ window.print(); });
+    var xb = document.getElementById("xlsxBtn");
+    if (xb) xb.addEventListener("click", function(){
+      if (!window.XLSX){ xb.textContent = "Excel download unavailable — reload the page"; return; }
+      try { downloadXlsx(j, v, applies, secs, claims); } catch (e) { console.error(e); xb.textContent = "Couldn't build the file — reload and try again"; }
+    });
+  }
+
+  /* ---------- Excel SOV: one tab per section, RenewFlo formatting ---------- */
+  function downloadXlsx(j, v, applies, secs, claims){
+    var a = j.association, year = String(new Date().getFullYear());
+    var C = { band: "1E5BF5", sec: "2563EB", sub: "3B82F6", ink: "15171E", stripe: "F4F8FC", line: "D9E2F0", red: "C7362A", redSoft: "FBE7E5", muted: "6B7486" };
+    var font = function(o){ var f = { name: "Calibri", sz: 11, color: { rgb: C.ink } }; for (var k in o) f[k] = o[k]; return f; };
+    var border = { bottom: { style: "thin", color: { rgb: C.line } } };
+    var ST = {
+      title: { font: font({ sz: 16, bold: true, color: { rgb: "FFFFFF" } }), fill: { fgColor: { rgb: C.band } }, alignment: { vertical: "center" } },
+      subtitle: { font: font({ color: { rgb: "FFFFFF" } }), fill: { fgColor: { rgb: C.band } } },
+      head: { font: font({ bold: true, color: { rgb: "FFFFFF" } }), fill: { fgColor: { rgb: C.sec } }, alignment: { horizontal: "center", vertical: "center", wrapText: true } },
+      headL: { font: font({ bold: true, color: { rgb: "FFFFFF" } }), fill: { fgColor: { rgb: C.sec } }, alignment: { vertical: "center" } },
+      sub: { font: font({ bold: true, color: { rgb: "FFFFFF" } }), fill: { fgColor: { rgb: C.sub } } },
+      label: function(i){ return { font: font({}), fill: { fgColor: { rgb: i % 2 ? C.stripe : "FFFFFF" } }, alignment: { vertical: "center", wrapText: true }, border: border }; },
+      val: function(i){ return { font: font({}), fill: { fgColor: { rgb: i % 2 ? C.stripe : "FFFFFF" } }, alignment: { horizontal: "center", vertical: "center", wrapText: true }, border: border }; },
+      nc: { font: font({ bold: true, color: { rgb: C.red } }), fill: { fgColor: { rgb: C.redSoft } }, alignment: { horizontal: "center", vertical: "center" }, border: border },
+      note: { font: font({ italic: true, sz: 9, color: { rgb: C.muted } }) }
+    };
+    var wb = XLSX.utils.book_new();
+    function sheet(name, width){
+      var rows = [], merges = [], heights = [];
+      var add = function(cells, style, h){ rows.push(cells.map(function(c, i){ return { v: c == null ? "" : String(c), t: "s", s: typeof style === "function" ? style(i) : (Array.isArray(style) ? style[i] : style) }; })); if (h) heights[rows.length - 1] = { hpt: h }; return rows.length - 1; };
+      var r0 = add([a.name + " — Statement of Values"].concat(new Array(width - 1).fill("")), ST.title, 26); merges.push({ s: { r: r0, c: 0 }, e: { r: r0, c: width - 1 } });
+      var r1 = add([a.address + " · " + a.units + " units · Renews " + dt(a.renewal_date)].concat(new Array(width - 1).fill("")), ST.subtitle); merges.push({ s: { r: r1, c: 0 }, e: { r: r1, c: width - 1 } });
+      add(new Array(width).fill(""), {});
+      return { name: name, rows: rows, merges: merges, heights: heights, add: add, width: width };
+    }
+    function finish(sh, cols){
+      var ws = XLSX.utils.aoa_to_sheet(sh.rows.map(function(r){ return r.map(function(c){ return c.v; }); }));
+      sh.rows.forEach(function(r, ri){ r.forEach(function(c, ci){ var ref = XLSX.utils.encode_cell({ r: ri, c: ci }); if (ws[ref]) ws[ref].s = c.s; }); });
+      ws["!merges"] = sh.merges; ws["!cols"] = cols.map(function(w){ return { wch: w }; }); ws["!rows"] = sh.heights;
+      XLSX.utils.book_append_sheet(wb, ws, sh.name.replace(/[\\\/\?\*\[\]:]/g, "").slice(0, 31));
+    }
+    function fieldRows(sh, fs){
+      sh.add(["Field", year], [ST.headL, ST.head]);
+      fs.forEach(function(f, i){ sh.add([f.label, v(f.key)], function(c){ return c === 0 ? ST.label(i) : ST.val(i); }); });
+    }
+    secs.forEach(function(sec){
+      var fs = j.fields.filter(function(f){ return f.section === sec && !IN_SCHED[f.key] && !/^sched_/.test(f.key) && applies(f); });
+      if (/^Insurance Coverage/.test(sec)){
+        var sh = sheet(sec, 6);
+        sh.add(["Total Insurable Value (TIV)", v("total_insurable_value_tiv"), "", "", "", ""], function(c){ return c < 2 ? (c ? ST.val(0) : ST.label(0)) : {}; });
+        sh.add(["Premium total", v("current_expiring_premium"), "", "", "", ""], function(c){ return c < 2 ? (c ? ST.val(1) : ST.label(1)) : {}; });
+        sh.add(["", "", "", "", "", ""], {});
+        sh.add(["Coverage", "Carrier", "Policy #", "Premium", "Deductible", "Amount of coverage"], function(c){ return c ? ST.head : ST.headL; });
+        var group = null, i = 0;
+        SCHED.forEach(function(r){
+          if (r[6] !== group){ group = r[6]; var gr = sh.add([group, "", "", "", "", ""], ST.sub); sh.merges.push({ s: { r: gr, c: 0 }, e: { r: gr, c: 5 } }); i = 0; }
+          var car = v(r[1]);
+          if (/^not carried$/i.test(car)){ var nr = sh.add([r[0], "Not Carried", "", "", "", ""], function(c){ return c ? ST.nc : ST.label(i); }); sh.merges.push({ s: { r: nr, c: 1 }, e: { r: nr, c: 5 } }); }
+          else {
+            var lim = v(r[5]); if (r[5] === "limit_general_liability" && v("general_aggregate_limit")) lim = (lim ? lim + " · " : "") + "Aggregate " + v("general_aggregate_limit");
+            sh.add([r[0], car, v(r[2]), v(r[3]), v(r[4]), lim], function(c){ return c ? ST.val(i) : ST.label(i); });
+          }
+          i++;
+        });
+        if (fs.length){ sh.add(["", "", "", "", "", ""], {}); sh.add(["Field", year, "", "", "", ""], function(c){ return c === 0 ? ST.headL : c === 1 ? ST.head : {}; });
+          fs.forEach(function(f, k){ sh.add([f.label, v(f.key), "", "", "", ""], function(c){ return c === 0 ? ST.label(k) : c === 1 ? ST.val(k) : {}; }); }); }
+        sh.add(["", "", "", "", "", ""], {});
+        var lh = sh.add(["Loss history", "", "", "", "", ""], ST.sub); sh.merges.push({ s: { r: lh, c: 0 }, e: { r: lh, c: 5 } });
+        sh.add(["Date of loss", "What happened", "", "Amount", "Status", "Resolution"], function(c){ return c ? ST.head : ST.headL; });
+        if (!claims.length) sh.add(["No claims on file", "", "", "", "", ""], ST.note);
+        claims.forEach(function(c, k){
+          var rr = sh.add([dt(c.date_of_loss), c.description, "", c.amount != null ? "$" + Number(c.amount).toLocaleString("en-US") : "", c.status === "closed" ? "Closed" : c.status === "denied" ? "Denied" : "Open", c.resolution || ""], function(x){ return x ? ST.val(k) : ST.label(k); });
+          sh.merges.push({ s: { r: rr, c: 1 }, e: { r: rr, c: 2 } });
+        });
+        finish(sh, [34, 28, 22, 14, 16, 30]);
+      } else {
+        if (!fs.length) return;
+        var s2 = sheet(sec, 2); fieldRows(s2, fs); finish(s2, [62, 36]);
+      }
+    });
+    var fname = a.name.replace(/[^A-Za-z0-9]+/g, "_").replace(/^_|_$/g, "") + "_SOV_" + year + ".xlsx";
+    XLSX.writeFile(wb, fname);
   }
 
   if (!K){ fail("This link is missing its access code."); return; }
