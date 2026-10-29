@@ -40,8 +40,8 @@
   td.nc{color:var(--bad);font-weight:700;text-align:center;background:var(--bad-soft)}
   td.blank{color:var(--faint)}
   .kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:0 28px}
-  .kv div{display:flex;justify-content:space-between;gap:14px;padding:7px 0;border-bottom:1px solid var(--line)}
-  .kv dt{color:var(--body)} .kv dd{color:var(--ink);font-weight:700;text-align:right;min-width:0;overflow-wrap:anywhere}
+  .kv div{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:16px;align-items:baseline;padding:7px 0;border-bottom:1px solid var(--line)}
+  .kv dt{color:var(--body)} .kv dd{color:var(--ink);font-weight:700;text-align:right;min-width:0;overflow-wrap:break-word;word-break:normal}
   .kv dd.blank{color:var(--faint);font-weight:400}
   .docs{display:grid;gap:8px}
   .docs a{display:flex;justify-content:space-between;align-items:center;gap:12px;border:1px solid var(--line);border-radius:10px;padding:10px 14px;color:var(--ink);text-decoration:none;font-weight:700}
@@ -113,14 +113,17 @@
     }).join("");
 
     var secs = []; (j.fields || []).forEach(function(f){ if (secs.indexOf(f.section) < 0) secs.push(f.section); });
-    var detail = secs.map(function(sec){
+    var sectionHtml = {};
+    secs.forEach(function(sec){
       var fs = j.fields.filter(function(f){ return f.section === sec && !IN_SCHED[f.key] && !/^sched_/.test(f.key) && applies(f); });
-      if (!fs.length) return "";
-      return '<div class="sheet"><h2>' + esc(sec) + '</h2><dl class="kv">' + fs.map(function(f){
+      if (!fs.length) return;
+      sectionHtml[sec] = '<h2>' + esc(sec) + '</h2><dl class="kv">' + fs.map(function(f){
         var x = v(f.key);
         return '<div><dt>' + esc(f.label) + '</dt><dd' + (x ? "" : ' class="blank"') + '>' + (x ? esc(x) : "—") + '</dd></div>';
-      }).join("") + '</dl></div>';
-    }).join("");
+      }).join("") + '</dl>';
+    });
+    var overview = sectionHtml["Account Overview"] || "";
+    var detail = secs.filter(function(sec){ return sec !== "Account Overview" && sectionHtml[sec]; }).map(function(sec){ return '<div class="sheet">' + sectionHtml[sec] + '</div>'; }).join("");
 
     var claims = (j.claims || []);
     var loss = '<div class="sheet"><h2>Loss history</h2>' + (claims.length
@@ -140,6 +143,7 @@
       '<p class="sub">' + esc(a.address) + ' · ' + esc(a.units) + ' Residential Units · Renews ' + esc(dt(a.renewal_date)) + '</p></div>' +
       '<button class="btn noprint" type="button" id="printBtn">Print or save as PDF</button></div>' +
       '<div class="share">Shared with ' + esc(j.recipient || "you") + ' by RenewFlo. Read-only' + (j.expires_at ? '; this link expires ' + esc(dt(j.expires_at)) : "") + '.</div>' +
+      overview + '</div><div class="sheet">' +
       '<div class="top"><div class="card"><span>Total Insurable Value</span><b>' + esc(v("total_insurable_value_tiv") || "—") + '</b></div><div class="card"><span>Current annual premium</span><b>' + esc(v("current_expiring_premium") || "—") + '</b></div></div>' +
       '<h2>Current coverage</h2><div class="tbl"><table><thead><tr><th>Coverage</th><th>Carrier</th><th>Policy #</th><th>Premium</th><th>Deductible</th><th>Amount of coverage</th></tr></thead><tbody>' + sched + '</tbody></table></div></div>' +
       loss + detail + docHtml +
