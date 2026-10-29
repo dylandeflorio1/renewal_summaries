@@ -113,7 +113,8 @@
       if (r[6] !== group){ group = r[6]; band = '<tr class="band"><td colspan="6"><b>' + esc(group) + '</b></td></tr>'; }
       var car = v(r[1]);
       var c = function(k){ var x = v(k); return x ? '<td>' + esc(x) + '</td>' : '<td class="blank">—</td>'; };
-      var lim = r[5] === "limit_general_liability" && v("general_aggregate_limit") ? '<td>' + esc(v(r[5]) || "—") + '<br><span class="sub">Aggregate ' + esc(v("general_aggregate_limit")) + '</span></td>' : c(r[5]);
+      /* General Liability shows its own "Occ / Agg" limit; the separate aggregate field only fills in when that's blank */
+      var lim = r[5] === "limit_general_liability" && !v(r[5]) && v("general_aggregate_limit") ? '<td>' + esc(v("general_aggregate_limit")) + ' Agg</td>' : c(r[5]);
       return band + '<tr><td>' + esc(r[0]) + '</td>' + (nc(car) ? '<td colspan="5" class="nc">Not Carried</td>' : c(r[1]) + c(r[2]) + c(r[3]) + c(r[4]) + lim) + '</tr>';
     }).join("");
 
@@ -217,7 +218,7 @@
           var car = v(r[1]);
           if (/^not carried$/i.test(car)){ var nr = sh.add([r[0], "Not Carried", "", "", "", ""], function(c){ return c ? ST.nc : ST.label(i); }); sh.merges.push({ s: { r: nr, c: 1 }, e: { r: nr, c: 5 } }); }
           else {
-            var lim = v(r[5]); if (r[5] === "limit_general_liability" && v("general_aggregate_limit")) lim = (lim ? lim + " · " : "") + "Aggregate " + v("general_aggregate_limit");
+            var lim = v(r[5]); if (r[5] === "limit_general_liability" && !lim && v("general_aggregate_limit")) lim = v("general_aggregate_limit") + " Agg";
             sh.add([r[0], car, v(r[2]), v(r[3]), v(r[4]), lim], function(c){ return c ? ST.val(i) : ST.label(i); });
           }
           i++;
