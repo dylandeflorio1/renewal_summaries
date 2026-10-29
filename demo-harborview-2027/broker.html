@@ -45,7 +45,9 @@
   .kv dd.blank{color:var(--faint);font-weight:400}
   .docs{display:grid;gap:8px}
   .docs a{display:flex;justify-content:space-between;align-items:center;gap:12px;border:1px solid var(--line);border-radius:10px;padding:10px 14px;color:var(--ink);text-decoration:none;font-weight:700}
-  .docs a:hover{border-color:var(--blue)} .docs a span{color:var(--blue);font-size:12px}
+  .docs a:hover{border-color:var(--blue)} .docs a > span:last-child{color:var(--blue);font-size:12px}
+  .docs a .dn{color:var(--ink)} .docs a em{font-style:normal;color:var(--muted);font-weight:400}
+  h3.doccat{font-size:13px;text-transform:uppercase;letter-spacing:1px;color:var(--blue);margin:8px 0 2px}
   .foot{text-align:center;color:var(--faint);font-size:11.5px;margin-top:6px}
   .err{background:var(--bad-soft);border-radius:10px;padding:14px 16px;color:var(--ink)}
   @media print{ body{background:#fff;padding:0} .sheet{box-shadow:none;margin:0 0 12px;padding:0;width:auto} .noprint{display:none !important} }
@@ -137,7 +139,13 @@
 
     var docs = (j.documents || []);
     var docHtml = '<div class="sheet"><h2>Documents</h2>' + (docs.length
-      ? '<p class="sub">Download links stay valid for 30 minutes after this page opens. Reload the page for fresh links.</p><div class="docs">' + docs.map(function(d){ return d.url ? '<a href="' + esc(d.url) + '" target="_blank" rel="noopener">' + esc(d.name) + '<span>Download</span></a>' : ""; }).join("") + '</div>'
+      ? '<p class="sub">Download links stay valid for 30 minutes after this page opens. Reload the page for fresh links.</p>' +
+        ["Condo Documents", "Financials", "Insurance Documents", "Inspections", "Other"].map(function(cat){
+          var ds = docs.filter(function(d){ return d.url && (d.category || "Other") === cat; });
+          if (!ds.length) return "";
+          ds.sort(function(x, y){ return (x.subfolder || "").localeCompare(y.subfolder || "") || x.name.localeCompare(y.name); });
+          return '<h3 class="doccat">' + esc(cat) + '</h3><div class="docs">' + ds.map(function(d){ return '<a href="' + esc(d.url) + '" target="_blank" rel="noopener"><span class="dn">' + (d.subfolder ? '<em>' + esc(d.subfolder) + ' / </em>' : "") + esc(d.name) + '</span><span>Download</span></a>'; }).join("") + '</div>';
+        }).join("")
       : '<p class="sub">No documents have been shared on this link yet.</p>') + '</div>';
 
     app.innerHTML =
