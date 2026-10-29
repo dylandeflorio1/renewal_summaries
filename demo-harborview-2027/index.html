@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Insurance Review · RenewFlo</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Lato',sans-serif;color:#3F4859;font-size:12.5px;line-height:1.5;background:#EDF0F5;padding-block:28px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  [hidden]{display:none !important}
+  .version-bar{width:8.5in;max-width:100%;margin:0 auto 12px;display:flex;justify-content:flex-end;align-items:center;gap:9px}
+  .version-bar label{font-size:11.5px;text-transform:uppercase;letter-spacing:1.1px;font-weight:700;color:#7C8698}
+  .version-bar select{font-family:'Lato',sans-serif;font-size:13px;color:#141B2D;background:#FFFFFF;border:1px solid #D5DDEA;border-radius:100px;padding:7px 14px;outline:none;cursor:pointer;box-shadow:0 1px 4px rgba(15,27,45,0.07);max-width:100%}
+  .version-bar select:focus-visible{border-color:#2D6BD4}
+  /* stand-in for the generated renewal summary */
+  .page{background:#fff;width:8.5in;max-width:100%;margin:0 auto 28px;padding:44px 52px;border-radius:4px;box-shadow:0 2px 14px rgba(15,27,45,.08)}
+  @media (max-width:820px){.page{padding:24px 16px}}
+  .title-row{display:flex;justify-content:space-between;align-items:flex-start;gap:20px}
+  .doc-title{font-family:Arial,'Liberation Sans',sans-serif;font-size:23px;font-weight:600;color:#141B2D}
+  .property-line{font-size:11.5px;color:#7C8698;margin:4px 0 16px}
+  .ver-badge{text-align:right;white-space:nowrap}
+  .ver-badge b{display:block;font-family:Arial,sans-serif;font-size:12.5px;font-weight:600;color:#2D6BD4}
+  .ver-badge span{display:block;font-size:11px;color:#8E97A8}
+  .assessment-box{background:#E8F1FE;border-radius:16px;padding:20px 24px;margin-bottom:16px}
+  .assessment-box p{color:#22304A;font-size:14px}
+  .overline{color:#2D6BD4;text-transform:uppercase;font-size:10.5px;font-weight:700;letter-spacing:1.6px;margin-bottom:6px}
+  .tbl{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{background:#F1F4F9;color:#141B2D;text-transform:uppercase;font-size:11px;padding:10px;text-align:center}
+  th:first-child,td:first-child{text-align:left}
+  td{padding:10px;border-bottom:1px solid #E6EBF3;text-align:center;white-space:nowrap}
+  td.tbd{color:#8E97A8;font-style:italic}
+  .placeholder{margin-top:14px;font-size:12px;color:#A86400;background:#FDF1DC;border-radius:8px;padding:8px 12px}
+/* ===== Insurance Review block — scoped under .rv so it sits beside renewal summary versions without touching them ===== */
+.rv{
+  --rv-ink:#141B2D; --rv-body:#3F4859; --rv-muted:#7C8698; --rv-faint:#8E97A8; --rv-line:#D5DDEA; --rv-soft:#F1F4F9;
+  --rv-blue:#2D6BD4; --rv-blue-soft:#E8F1FE; --rv-bg:#EDF0F5;
+  --rv-good:#0F7A54; --rv-good-soft:#E3F5EC; --rv-warn:#A86400; --rv-warn-soft:#FDF1DC; --rv-bad:#C7362A; --rv-bad-soft:#FBE7E5;
+  --rv-paper:#FFFFFF; --rv-pen:#13235E;
+  font-family:'Lato',Arial,sans-serif; color:var(--rv-body); font-size:14px; line-height:1.55;
+}
+.rv *{box-sizing:border-box}
+.rv p{margin:0}
+.rv h1,.rv h2,.rv h3{font-family:'Arial','Liberation Sans',sans-serif;color:var(--rv-ink);margin:0;text-wrap:balance}
+.rv h1{font-size:23px;font-weight:600;letter-spacing:-.4px;line-height:1.25}
+.rv h2{font-size:19px;font-weight:600;letter-spacing:-.3px}
+.rv h3{font-size:14.5px;font-weight:700}
+.rv .rv-overline{color:var(--rv-blue);text-transform:uppercase;font-size:10.5px;font-weight:700;letter-spacing:1.6px}
+.rv .rv-muted{color:var(--rv-muted)}
+.rv .rv-note{font-size:12px;color:var(--rv-muted)}
+.rv .rv-tnum{font-variant-numeric:tabular-nums}
+
+.rv .rv-page{background:#fff;width:8.5in;max-width:100%;margin:0 auto 28px;padding:44px 52px;border-radius:4px;box-shadow:0 2px 14px rgba(15,27,45,.08);display:flex;flex-direction:column;gap:22px}
+@media (max-width:820px){.rv .rv-page{width:auto;padding:24px 16px 28px;margin:0 12px 18px;border-radius:6px}}
+
+.rv .rv-sample{background:var(--rv-warn-soft);border:1px solid var(--rv-warn);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--rv-ink)}
+.rv .rv-titlerow{display:flex;justify-content:space-between;align-items:flex-start;gap:20px}
+.rv .rv-titlerow > div:first-child{display:flex;flex-direction:column;gap:6px;min-width:0}
+.rv .rv-property{font-size:11.5px;color:var(--rv-muted)}
+.rv .rv-badge{text-align:right;white-space:nowrap;padding-top:4px}
+.rv .rv-badge b{display:block;font-family:'Arial','Liberation Sans',sans-serif;font-size:12.5px;font-weight:600;color:var(--rv-blue)}
+.rv .rv-badge span{display:block;font-size:11px;color:var(--rv-faint)}
+@media (max-width:560px){.rv .rv-titlerow{flex-direction:column;gap:8px}.rv .rv-badge{text-align:left}}
+
+/* score */
+.rv .rv-scorebox{background:var(--rv-blue-soft);border-radius:16px;padding:22px 26px;display:flex;flex-direction:column;gap:14px}
+.rv .rv-scorehead{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px}
+.rv .rv-band{font-family:'Arial','Liberation Sans',sans-serif;font-weight:700;font-size:21px}
+.rv .rv-bandtext{color:#22304A;font-size:14px}
+.rv .rv-score{display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:center}
+.rv .rv-dial{width:128px;height:128px;position:relative}
+.rv .rv-dial svg{width:100%;height:100%;transform:rotate(-90deg)}
+.rv .rv-dial .rv-num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.rv .rv-dial strong{font-family:'Arial','Liberation Sans',sans-serif;font-size:32px;line-height:1;color:var(--rv-ink)}
+.rv .rv-dial span{font-size:11px;color:var(--rv-muted)}
+.rv .rv-chips{display:flex;flex-direction:column;gap:5px;min-width:0}
+.rv .rv-chiprow{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:13.5px;color:var(--rv-ink);border-top:1px solid #CFDDF5;padding-top:5px}
+.rv .rv-chiprow:first-child{border-top:0;padding-top:0}
+@media (max-width:560px){.rv .rv-score{grid-template-columns:1fr;justify-items:start}.rv .rv-chips{width:100%}}
+.rv .rv-pill{font-size:11.5px;font-weight:700;letter-spacing:.3px;padding:3px 10px;border-radius:100px;white-space:nowrap;font-variant-numeric:tabular-nums;min-width:54px;text-align:center}
+.rv .rv-pill.good{background:var(--rv-good-soft);color:var(--rv-good)}
+.rv .rv-pill.warn{background:var(--rv-warn-soft);color:var(--rv-warn)}
+.rv .rv-pill.bad{background:var(--rv-bad-soft);color:var(--rv-bad)}
+
+/* drivers + benchmark */
+.rv .rv-drivers{display:flex;flex-direction:column;gap:12px;margin:0;padding:0;list-style:none}
+.rv .rv-drivers li{display:grid;grid-template-columns:120px 1fr;gap:14px}
+.rv .rv-drivers .rv-tag{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--rv-blue);padding-top:2px}
+@media (max-width:560px){.rv .rv-drivers li{grid-template-columns:1fr;gap:2px}}
+.rv .rv-bench{display:flex;flex-direction:column;gap:6px;border-top:1px solid var(--rv-line);padding-top:16px}
+.rv .rv-track{position:relative;height:34px;margin-top:26px}
+.rv .rv-rail{position:absolute;left:0;right:0;top:14px;height:6px;border-radius:3px;background:var(--rv-soft)}
+.rv .rv-range{position:absolute;top:14px;height:6px;border-radius:3px;background:#B9CDF2}
+.rv .rv-marker{position:absolute;top:6px;width:2px;height:22px;transform:translateX(-1px)}
+.rv .rv-marker.you{background:var(--rv-blue);width:3px}
+.rv .rv-marker.med{background:var(--rv-faint)}
+.rv .rv-marker em{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);font-style:normal;font-size:12px;font-weight:700;white-space:nowrap}
+.rv .rv-marker.you em{color:var(--rv-blue)}
+.rv .rv-marker.med em{color:var(--rv-muted);bottom:auto;top:26px}
+.rv .rv-ends{display:flex;justify-content:space-between;font-size:11.5px;color:var(--rv-muted);margin-top:16px}
+.rv .rv-benchnote{text-align:center;font-size:12px;color:var(--rv-muted)}
+
+/* checks */
+.rv .rv-check{border-top:1px solid var(--rv-line);padding-top:16px;display:flex;flex-direction:column;gap:6px}
+.rv .rv-check:first-child{border-top:0;padding-top:0}
+.rv .rv-checkhead{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.rv .rv-fix{font-size:13px;color:var(--rv-muted)}
+.rv .rv-fix b{color:var(--rv-ink)}
+.rv .rv-meter{height:8px;border-radius:4px;background:var(--rv-soft);overflow:hidden;max-width:360px}
+.rv .rv-meter span{display:block;height:100%;border-radius:4px}
+.rv .rv-missing{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.rv .rv-need{font-family:inherit;font-weight:700;font-size:12px;padding:4px 11px;border-radius:100px;border:1px dashed var(--rv-warn);background:var(--rv-warn-soft);color:var(--rv-ink);cursor:pointer}
+.rv .rv-need:hover{border-style:solid}
+
+/* forms */
+.rv form{display:flex;flex-direction:column;gap:16px}
+.rv .rv-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:560px){.rv .rv-grid{grid-template-columns:1fr}}
+.rv label{display:flex;flex-direction:column;gap:5px;font-size:12.5px;font-weight:700;color:var(--rv-ink);min-width:0}
+.rv label .rv-hint{font-weight:400;color:var(--rv-muted)}
+.rv label.rv-wide{grid-column:1/-1}
+.rv input,.rv select,.rv textarea{font:inherit;font-size:14px;font-weight:400;color:var(--rv-ink);background:#fff;border:1px solid var(--rv-line);border-radius:8px;padding:9px 11px;width:100%}
+.rv textarea{min-height:76px;resize:vertical}
+.rv label.rv-needed input,.rv label.rv-needed select,.rv label.rv-needed textarea{border-color:var(--rv-warn);background:#FFFCF6}
+.rv input:focus-visible,.rv select:focus-visible,.rv textarea:focus-visible,.rv button:focus-visible,.rv a:focus-visible,.rv summary:focus-visible{outline:2px solid var(--rv-blue);outline-offset:2px}
+.rv .rv-checkin{flex-direction:row;align-items:flex-start;gap:10px;font-weight:400;font-size:13.5px;color:var(--rv-body)}
+.rv .rv-checkin input{width:auto;margin-top:3px}
+.rv .rv-sovlist{display:flex;flex-direction:column;gap:10px}
+.rv .rv-sec{border:1px solid var(--rv-line);border-radius:10px;background:#fff}
+.rv .rv-sec summary{padding:12px 14px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:13px;font-weight:700;color:var(--rv-ink);text-transform:uppercase;letter-spacing:.8px}
+.rv .rv-sec .rv-grid{padding:2px 14px 16px}
+.rv .rv-secstat{font-size:11.5px;font-weight:700;text-transform:none;letter-spacing:0}
+.rv .rv-secstat.miss{color:var(--rv-warn)}
+.rv .rv-secstat.ok{color:var(--rv-good)}
+.rv .rv-onlymissing .rv-sec label:not(.rv-inset){display:none}
+.rv .rv-onlymissing .rv-sec:not(:has(label.rv-inset)){display:none}
+.rv .rv-onlymissing .rv-sec summary{pointer-events:none}
+.rv .rv-alldone{border:1px solid var(--rv-good);background:var(--rv-good-soft);border-radius:10px;padding:12px 14px;font-size:13.5px;color:var(--rv-ink)}
+.rv .rv-btnrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.rv .rv-btn{font-family:inherit;font-weight:700;font-size:14px;border-radius:100px;padding:11px 22px;border:1px solid var(--rv-blue);cursor:pointer;text-decoration:none;display:inline-flex}
+.rv .rv-primary{background:var(--rv-blue);color:#fff}
+.rv .rv-primary:hover{background:#2560C2}
+.rv .rv-ghost{background:#fff;color:var(--rv-blue);border-color:#B9C7DD}
+
+/* terms, exhibit, signature */
+.rv .rv-terms{margin:0;padding:0;list-style:none;display:flex;flex-direction:column}
+.rv .rv-terms li{display:grid;grid-template-columns:160px 1fr;gap:14px;font-size:13px;border-top:1px solid var(--rv-line);padding:9px 0}
+.rv .rv-terms li span:first-child{font-weight:700;color:var(--rv-ink)}
+@media (max-width:560px){.rv .rv-terms li{grid-template-columns:1fr;gap:2px}}
+.rv .rv-draft{background:var(--rv-blue-soft);border-radius:10px;padding:10px 14px;font-size:13px;color:#22304A}
+.rv .rv-exhibit{border:1px solid var(--rv-line);border-radius:10px;background:#FAFBFD}
+.rv .rv-exhibit summary{cursor:pointer;padding:12px 14px;font-weight:700;font-size:13.5px;color:var(--rv-blue)}
+.rv .rv-exhibit[open] summary{border-bottom:1px solid var(--rv-line)}
+.rv .rv-letter{padding:20px 22px;display:flex;flex-direction:column;gap:11px;font-size:13px;max-width:68ch;color:var(--rv-body)}
+.rv .rv-letter h3{text-align:center;letter-spacing:1.4px;text-transform:uppercase;font-size:12.5px}
+.rv .rv-letter ol{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:3px}
+.rv .rv-fill{font-weight:700;color:var(--rv-ink);border-bottom:1px solid #9DA8BC}
+.rv .rv-fill.blank{color:var(--rv-faint);font-weight:400}
+.rv .rv-sigline{display:inline-block;min-width:220px;border-bottom:1px solid #9DA8BC;min-height:30px;vertical-align:bottom}
+.rv .rv-sigline img{height:46px;display:block}
+.rv .rv-sigblock{display:flex;flex-direction:column;gap:6px}
+.rv .rv-sighead{display:flex;justify-content:space-between;align-items:center}
+.rv .rv-linkbtn{background:none;border:0;padding:4px 2px;color:var(--rv-blue);font:inherit;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:1px;cursor:pointer}
+.rv .rv-sigpad{position:relative;height:150px;border:1px solid var(--rv-line);border-radius:10px;background:var(--rv-paper);overflow:hidden}
+.rv .rv-sigpad.error{border-color:var(--rv-bad)}
+.rv .rv-sigpad canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:crosshair;-webkit-user-select:none;user-select:none}
+.rv .rv-sigpad::after{content:"";position:absolute;left:36px;right:20px;bottom:34px;border-bottom:1px solid #9DA8BC;pointer-events:none}
+.rv .rv-sigx{position:absolute;left:16px;bottom:30px;color:#9DA8BC;font-size:13px;pointer-events:none}
+.rv .rv-sigph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--rv-faint);font-size:13px;pointer-events:none;padding-bottom:30px}
+.rv .rv-error{font-size:12.5px;color:var(--rv-bad)}
+.rv .rv-done{border:1px solid var(--rv-good);background:var(--rv-good-soft);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.rv .rv-done pre{white-space:pre-wrap;word-break:break-word;font-size:12px;background:#fff;border:1px solid var(--rv-line);border-radius:8px;padding:10px;margin:0;max-height:240px;overflow:auto}
+.rv .rv-addr{font-weight:700;user-select:all}
+.rv .rv-foot{font-size:11.5px;color:var(--rv-muted);text-align:center}
+.rv .rv-foot a{color:var(--rv-blue)}
+@media (prefers-reduced-motion:no-preference){.rv .rv-dial circle.val{transition:stroke-dashoffset .8s ease}}
+@media print{.rv .rv-page{box-shadow:none;margin:0;padding:0;width:auto}.rv .rv-btnrow,.rv .rv-sighead button{display:none}}
+.rv .rv-overline + .rv-drivers{margin-top:12px}
+
+/* missing-only view: just the questions, no section headers */
+.rv .rv-onlymissing{gap:14px}
+.rv .rv-onlymissing .rv-sec{border:0;background:none;border-radius:0}
+.rv .rv-onlymissing .rv-sec summary{display:none}
+.rv .rv-onlymissing .rv-sec .rv-grid{padding:0}
+.rv .rv-verify{border:1px solid var(--rv-warn);background:var(--rv-warn-soft);border-radius:10px;padding:10px 14px;font-size:13px;color:var(--rv-ink)}
+/* "?" help */
+.rv label{position:relative}
+.rv .rv-q{display:inline-flex;align-items:center;gap:6px}
+.rv .rv-help{width:18px;height:18px;flex:0 0 18px;border-radius:50%;border:1px solid #B9C7DD;background:#fff;color:var(--rv-blue);font:700 11px/1 'Lato',Arial,sans-serif;padding:0;cursor:help;display:inline-flex;align-items:center;justify-content:center}
+.rv .rv-help:hover,.rv .rv-help:focus-visible{background:var(--rv-blue);border-color:var(--rv-blue);color:#fff}
+.rv .rv-tip{position:absolute;left:0;right:0;bottom:calc(100% + 6px);z-index:5;background:var(--rv-ink);color:#fff;font-weight:400;font-size:12.5px;line-height:1.45;padding:9px 12px;border-radius:8px;box-shadow:0 4px 14px rgba(15,27,45,.18);opacity:0;visibility:hidden;transition:opacity .12s;pointer-events:none}
+.rv .rv-help:hover + .rv-tip,.rv .rv-help:focus + .rv-tip{opacity:1;visibility:visible}
+
+/* Step 2: coverage choices */
+.rv .rv-covlist{display:flex;flex-direction:column;border-top:1px solid var(--rv-line)}
+.rv .rv-covrow{display:grid;grid-template-columns:1fr auto;gap:10px 18px;align-items:center;padding:13px 0;border-bottom:1px solid var(--rv-line)}
+.rv #rv-covRows{display:contents}
+.rv .rv-covname{display:flex;flex-direction:column;gap:2px;min-width:0;font-weight:700;color:var(--rv-ink);font-size:14px;position:relative}
+.rv .rv-covnow{font-weight:400;font-size:12.5px;color:var(--rv-muted)}
+.rv .rv-covnow.none{color:var(--rv-warn)}
+.rv .rv-covname .rv-tip{right:auto;width:min(340px,calc(100vw - 48px))}
+.rv .rv-seg{display:inline-flex;border:1px solid #B9C7DD;border-radius:100px;overflow:hidden;background:#fff}
+.rv .rv-seg input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+.rv .rv-seg label{flex-direction:row;font-size:12.5px;font-weight:700;color:var(--rv-blue);padding:7px 14px;cursor:pointer;border-left:1px solid #B9C7DD;white-space:nowrap;position:static}
+.rv .rv-seg label:first-of-type{border-left:0}
+.rv .rv-seg input:checked + label{background:var(--rv-blue);color:#fff}
+.rv .rv-seg input:focus-visible + label{outline:2px solid var(--rv-blue);outline-offset:-2px}
+@media (max-width:620px){.rv .rv-covrow{grid-template-columns:1fr}.rv .rv-seg{justify-self:start;flex-wrap:wrap}}
+
+.rv .rv-status{background:var(--rv-good-soft);border:1px solid #BFE3D0;border-radius:10px;padding:10px 14px;font-size:13px;color:var(--rv-ink)}
+.rv .rv-status b{font-weight:700}
+
+.rv .rv-docs{display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--rv-line);padding-top:16px}
+.rv .rv-docrow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--rv-line)}
+.rv .rv-docrow span{font-size:13.5px;color:var(--rv-ink);min-width:0}
+.rv .rv-docrow .rv-btn{padding:7px 16px;font-size:13px;flex:0 0 auto}
+@media (max-width:520px){.rv .rv-docrow{flex-direction:column;align-items:flex-start}}
+
+.rv label.rv-na{display:none !important}
+.rv .rv-req{color:var(--rv-bad);margin-left:2px}
+.rv .rv-docmsg{font-size:12px;font-weight:400;color:var(--rv-muted)}
+.rv .rv-docmsg.ok{color:var(--rv-good)}
+.rv .rv-docmsg.bad{color:var(--rv-bad)}
+.rv label.rv-btn{cursor:pointer}
+</style>
+</head>
+<body>
+<div class="version-bar">
+  <label for="verSelect">Viewing</label>
+  <select id="verSelect"></select>
+</div>
+<div class="doc-version" data-v="1" data-quotes="no" data-label="Version 1 — October 29, 2026">
+<div class="page">
+  <div class="title-row">
+    <div><h1 class="doc-title">Insurance Renewal Summary</h1>
+    <div class="property-line">Harborview Condominium Trust · Boston, MA 02210 · 40 Residential Units · 03/01/2027 – 03/01/2028</div></div>
+    <div class="ver-badge"><b>Version 1</b><span>October 29, 2026</span></div>
+  </div>
+  <div class="assessment-box"><p class="overline">Where things stand</p><p>Your current coverage is summarized below. Quotes from other insurers are in progress and will appear in the next version.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Policy</th><th>Current</th><th>Quote A</th><th>Quote B</th></tr></thead>
+    <tbody>
+      <tr><td>Package (property &amp; liability)</td><td>$52,980</td><td class="tbd">TBD</td><td class="tbd">TBD</td></tr>
+      <tr><td>Umbrella</td><td>$7,240</td><td class="tbd">TBD</td><td class="tbd">TBD</td></tr>
+      <tr><td>Directors &amp; Officers</td><td>$2,150</td><td class="tbd">TBD</td><td class="tbd">TBD</td></tr>
+      <tr><td>Crime</td><td>$1,420</td><td class="tbd">TBD</td><td class="tbd">TBD</td></tr>
+      <tr><td>Workers Compensation</td><td>$2,400</td><td class="tbd">TBD</td><td class="tbd">TBD</td></tr>
+      <tr><td><b>Total</b></td><td><b>$66,190</b></td><td class="tbd">TBD</td><td class="tbd">TBD</td></tr>
+    </tbody></table></div>
+  <p class="placeholder">Demo stand-in for Version 1 of the renewal summary. In a real run, the four-page summary built from the record goes here, and each new version is added to the dropdown above.</p>
+</div>
+</div>
+<!-- ==================== INSURANCE REVIEW (pinned in the dropdown) ==================== -->
+<div class="doc-version rv" data-v="review" data-kind="review" data-label="Insurance Review">
+
+<div class="rv-page">
+  <div class="rv-sample" id="rv-sample" hidden><b>Demo.</b> Fake association and fake data, for testing the RenewFlo workflow. Nothing here is real.</div>
+  <div class="rv-sample" id="rv-linkerr" hidden></div>
+  <div class="rv-titlerow">
+    <div>
+      <p class="rv-overline">Insurance Review</p>
+      <h1>What's driving your premium, and what can your board do about it?</h1>
+      <p class="rv-property" id="rv-property"></p>
+    </div>
+    <div class="rv-badge"><b>Insurance Review</b><span id="rv-prepared"></span></div>
+  </div>
+  <p class="rv-status" id="rv-status" role="status" hidden></p>
+
+  <div class="rv-scorebox" aria-label="Review score">
+    <div class="rv-scorehead">
+      <p class="rv-band" id="rv-band"></p>
+      <p class="rv-bandtext" id="rv-bandText"></p>
+    </div>
+    <div class="rv-score">
+      <div class="rv-dial" id="rv-dial"></div>
+      <div class="rv-chips" id="rv-chips"></div>
+    </div>
+  </div>
+
+  <div>
+    <p class="rv-overline">What's driving your premium</p>
+    <ul class="rv-drivers" id="rv-drivers"></ul>
+  </div>
+  <div class="rv-bench">
+    <h3>Premium per unit vs. similar properties</h3>
+    <div class="rv-track" id="rv-track"></div>
+    <div class="rv-ends rv-tnum" id="rv-ends"></div>
+    <p class="rv-benchnote">Based on similar properties RenewFlo works with in your area.</p>
+  </div>
+</div>
+
+<div class="rv-page">
+  <div>
+    <p class="rv-overline">The six checks</p>
+    <h2>Where your coverage stands</h2>
+  </div>
+  <div id="rv-checks"></div>
+  <p class="rv-note">Each check flags gaps based on the documents provided. It is not legal advice, and it does not confirm compliance.</p>
+</div>
+
+<div class="rv-page">
+  <div style="display:flex;flex-direction:column;gap:6px">
+    <p class="rv-overline">Step 1</p>
+    <h2>Coverage Review</h2>
+    <p class="rv-muted">Tell us which changes to explore at this renewal. Nothing changes until the board approves it; these choices tell us what to quote.</p>
+  </div>
+  <form id="rv-covForm" novalidate>
+    <div class="rv-covlist">
+      <div class="rv-covrow" id="rv-dedRow"></div>
+      <div id="rv-covRows"></div>
+    </div>
+    <label for="rv-covNote">Anything else you'd like us to look at? <textarea id="rv-covNote" name="Other requests" placeholder="For example: a higher liability limit, or a quote for the parking garage"></textarea></label>
+  </form>
+</div>
+
+<div class="rv-page">
+  <div style="display:flex;flex-direction:column;gap:6px">
+    <p class="rv-overline">Step 2</p>
+    <h2>Confirm your building details</h2>
+    <p class="rv-muted">The more complete your building details, the more insurers may be able to quote you, and the better your premium can be. Details we don't have can't be used in your favor. We filled in what we found; correct anything that's wrong and add what's missing.</p>
+  </div>
+  <form id="rv-infoForm" novalidate>
+    <label class="rv-checkin" for="rv-onlyMissing"><input id="rv-onlyMissing" type="checkbox" checked> Show only what's missing</label>
+    <p class="rv-verify" id="rv-verifyNote" role="status" hidden></p>
+    <p class="rv-alldone" id="rv-allDone" hidden>Every detail is filled in. Uncheck the box above to review everything.</p>
+    <div id="rv-sovFields" class="rv-sovlist"></div>
+    <div class="rv-docs" id="rv-docs" hidden>
+      <p class="rv-overline">Documents we still need</p>
+      <div id="rv-docList"></div>
+    </div>
+  </form>
+</div>
+
+<div class="rv-page" id="rv-secSign">
+  <div style="display:flex;flex-direction:column;gap:6px">
+    <p class="rv-overline">Step 3</p>
+    <h2>Have RenewFlo run this renewal</h2>
+    <p class="rv-muted">Sign below to have RenewFlo run your renewal, at no cost to the association.</p>
+  </div>
+  <p class="rv-draft" id="rv-draftNote" hidden>Draft terms, pending legal review. Do not sign until RenewFlo sends the final version.</p>
+  <ul class="rv-terms" id="rv-terms"></ul>
+  <p class="rv-note" id="rv-fullAgreement"></p>
+  <details class="rv-exhibit" id="rv-loa">
+    <summary>Read Exhibit A: Letter of Authorization</summary>
+    <div class="rv-letter" id="rv-loaBody"></div>
+  </details>
+  <form id="rv-signForm" novalidate>
+    <div class="rv-grid">
+      <label for="rv-s_name">Full name <input id="rv-s_name" name="Signer name" autocomplete="name" required></label>
+      <label for="rv-s_title">Title
+        <select id="rv-s_title" name="Title" required>
+          <option value="">Choose…</option>
+          <option>President</option><option>Treasurer</option><option>Secretary</option><option>Trustee</option>
+        </select>
+      </label>
+      <label for="rv-s_email">Email <input id="rv-s_email" name="Signer email" type="email" autocomplete="email" required></label>
+      <label for="rv-s_vote">Date the board approved this <input id="rv-s_vote" name="Board vote date" type="date" required></label>
+    </div>
+    <p class="rv-note">You sign as a trustee of the association, not individually.</p>
+    <div class="rv-sigblock">
+      <div class="rv-sighead"><span class="rv-note">Signature</span><button type="button" class="rv-linkbtn" id="rv-sigClear">Clear</button></div>
+      <div class="rv-sigpad">
+        <canvas id="rv-sigPad" role="img" aria-label="Signature pad. Draw your signature with a finger, stylus or mouse."></canvas>
+        <span class="rv-sigph" id="rv-sigPh" aria-hidden="true">Sign here with your finger or mouse</span>
+        <span class="rv-sigx" aria-hidden="true">✕</span>
+      </div>
+    </div>
+    <label class="rv-checkin" for="rv-s_auth"><input id="rv-s_auth" type="checkbox" required> I am authorized by the board to sign this agreement for the association.</label>
+    <label class="rv-checkin" for="rv-s_loa"><input id="rv-s_loa" type="checkbox" required> I have read and also sign the <a href="#rv-loa" data-rv-open-loa>Letter of Authorization (Exhibit A)</a> for the association.</label>
+    <label class="rv-checkin" for="rv-s_esign"><input id="rv-s_esign" type="checkbox" required> I agree that my signature drawn above is my electronic signature.</label>
+    <p class="rv-error" id="rv-signError" role="alert" hidden></p>
+    <div class="rv-btnrow"><button type="submit" class="rv-btn rv-primary">Sign and submit</button></div>
+    <div id="rv-signDone" hidden></div>
+  </form>
+</div>
+
+<div class="rv-page" id="rv-secSubmit" hidden>
+  <div style="display:flex;flex-direction:column;gap:6px">
+    <p class="rv-overline">Step 3</p>
+    <h2>Submit your review</h2>
+    <p class="rv-muted">Send us your coverage choices and building details. Other trustees who open this link will see your answers.</p>
+  </div>
+  <div class="rv-grid">
+    <label for="rv-subName">Your name <input id="rv-subName" autocomplete="name"></label>
+    <label for="rv-subTitle">Title
+      <select id="rv-subTitle"><option value="">Choose…</option><option>President</option><option>Treasurer</option><option>Secretary</option><option>Trustee</option><option>Property manager</option></select>
+    </label>
+  </div>
+  <p class="rv-error" id="rv-subError" role="alert" hidden></p>
+  <div class="rv-btnrow"><button type="button" class="rv-btn rv-primary" id="rv-submitOnly">Submit</button></div>
+  <div id="rv-submitDone" hidden></div>
+</div>
+
+<p class="rv-foot">Prepared by RenewFlo LLC, a licensed property and casualty broker · <span class="rv-addr">info@renewflo.co</span> · <a href="https://renewflo.co" target="_blank" rel="noopener">renewflo.co</a></p>
+</div>
+
+<script>
+/* ===== Insurance Review — every value comes from the association's record, through its private link ===== */
+var RV_API = "https://rwjmxmoopkrcgtyzithb.supabase.co/functions/v1/renewflo-link";
+var RV_KEY = (location.search.match(/[?&]k=([0-9a-fA-F]{24,64})/) || [])[1] || "";
+var RV_W3F = "8c2c1639-73ce-43c4-9569-d2f7a1593889";   /* same Web3Forms key as the renewal summaries */
+function rvLinkError(msg){
+  var root = document.querySelector(".rv"); if (!root) return;
+  [].forEach.call(root.querySelectorAll(".rv-page, .rv-status"), function(p){ p.hidden = true; });
+  var first = root.querySelector(".rv-page"); if (first){ first.hidden = false; [].forEach.call(first.children, function(c){ c.hidden = c.id !== "rv-linkerr"; }); }
+  var e = document.getElementById("rv-linkerr");
+  if (e){ e.hidden = false; e.innerHTML = "<b>" + msg + "</b> Ask RenewFlo for a new link at info@renewflo.co."; }
+}
+function rvToConfig(j){
+  var a = j.association || {}, rv = j.review || {}, isPm = j.role === "pm", carried = j.carried || {};
+  var TYPE = { yesno: "yesno", picklist: "select" };
+  var WIDE = { mailing_address: 1, pm_mailing_address: 1, loss_description_large_loss: 1, amenities_present_describe: 1, pet_size_breed_restrictions: 1, list_of_commercial_occupants: 1 };
+  var covs = isPm
+    ? Object.keys(carried).map(function(k){ return { key: k, carried: carried[k] }; })
+    : (rv.coverages || []).map(function(c){ var o = {}; for (var x in c) o[x] = c[x]; if (c.key in carried) o.carried = carried[c.key]; if (!o.carried) o.current = "Not carried"; return o; });
+  var today = new Date().toISOString().slice(0, 10);
+  return {
+    mode: j.role, demo: !!a.is_demo,
+    association: a.name, address: a.address, units: a.units, renewalDate: a.renewal_date,
+    preparedDate: rv.prepared_date || today,
+    showAgreement: !isPm && !!a.agreement_required,
+    drivers: rv.drivers || [],
+    benchmark: rv.benchmark || { you: 1, median: 1, low: 1, high: 1 },
+    checks: (rv.checks && rv.checks.length) ? rv.checks : [{ name: "Building data", type: "sov" }],
+    deductible: rv.deductible || { current: "" },
+    coverages: covs,
+    sov: (j.fields || []).map(function(f){
+      return { section: f.section, key: f.key, label: f.label, req: !!f.required, help: f.help || "", type: TYPE[f.type],
+        options: f.options || [], when: f.show_when || [], wide: !!WIDE[f.key], value: (j.values || {})[f.key] || "" };
+    }),
+    verify: rv.verify || [{ label: "Unit counts", sum: ["units_owner_occupied","units_tenant_occupied","units_vacant","units_under_construction"], equals: "total_number_of_units_overall" }],
+    documents: (j.documents || []).map(function(d){ return { id: d.id, name: d.name, have: d.status !== "needed" }; }),
+    agreementUrl: rv.agreement_url || "", npn: rv.npn || "", draftTerms: !!rv.draft_terms,
+    w3fKey: RV_W3F, notifyEmail: "info@renewflo.co",
+    status: j.status || null, coverageChoices: j.coverage || null
+  };
+}
+(function(){
+  if (!RV_KEY){ rvLinkError("This link is missing its access code."); return; }
+  fetch(RV_API + "?k=" + RV_KEY, { cache: "no-store" })
+    .then(function(r){ return r.json().then(function(j){ return { ok: r.ok, j: j }; }); })
+    .then(function(res){
+      if (!res.ok || !res.j || (res.j.role !== "trustee" && res.j.role !== "pm")){ rvLinkError((res.j && res.j.error) || "This link isn't valid or has expired."); return; }
+      rvBoot(rvToConfig(res.j));
+    })
+    .catch(function(){ rvLinkError("We couldn't load your association's details. Check your connection and reload the page."); });
+})();
+
+
+function rvBoot(C){
+  var root = document.querySelector(".rv");
+  if (!root) return;
+  /* PM link: building details and documents only. No score, checks, Coverage Review or agreement. */
+  if (C.mode === "pm"){
+    var pages = root.querySelectorAll(".rv-page");
+    root.querySelector(".rv-scorebox").hidden = true;
+    root.querySelector("#rv-drivers").parentNode.hidden = true;
+    root.querySelector(".rv-bench").hidden = true;
+    if (pages[1]) pages[1].hidden = true;   /* the six checks */
+    if (pages[2]) pages[2].hidden = true;   /* Coverage Review */
+    root.querySelector(".rv-titlerow .rv-overline").textContent = "Building details";
+    root.querySelector(".rv-titlerow h1").textContent = "Help us finish " + C.association + "'s building details.";
+    root.querySelector(".rv-badge b").textContent = "Building details";
+    var step2 = root.querySelector("#rv-infoForm").closest(".rv-page");
+    step2.querySelector(".rv-overline").textContent = "Step 1";
+    step2.querySelector("h2").textContent = "Fill in what you know";
+    step2.querySelector(".rv-muted").textContent = "We filled in what we found in the association's documents. Fill in what you know. Leave anything you're not sure about, and we'll ask the trustees.";
+    var sub = root.querySelector("#rv-secSubmit");
+    sub.querySelector(".rv-overline").textContent = "Step 2";
+    sub.querySelector("h2").textContent = "Send to RenewFlo";
+    sub.querySelector(".rv-muted").textContent = "Add your name and title, then submit. Several people at your company can use this link; each submission adds to what's already here.";
+    var t = root.querySelector("#rv-subTitle");
+    t.innerHTML = '<option value="">Choose…</option><option>Property manager</option><option>Assistant property manager</option><option>Accounting</option><option>Other</option>';
+    t.value = "Property manager";
+    sub.querySelector("#rv-submitOnly").textContent = "Submit building details";
+  }
+
+  var $ = function(s){ return root.querySelector(s); };
+  var esc = function(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); };
+  var MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  var longDate = function(iso){ if(!iso) return ""; var p = iso.split("-").map(Number); return MONTHS[p[1]-1] + " " + p[2] + ", " + p[0]; };
+  var slashDate = function(iso){ if(!iso) return ""; var p = iso.split("-"); return p[1] + "/" + p[2] + "/" + p[0]; };
+  var usd = function(n){ return "$" + Math.round(n).toLocaleString("en-US"); };
+  var fid = function(f){ return "rv-sov_" + f.key; };
+  var isMissing = function(v){ v = (v || "").trim(); return !v || /^(unknown|not sure|\?)$/i.test(v); };
+  var ratioTone = function(r){ return r >= 1 ? "good" : r >= 0.5 ? "warn" : "bad"; };
+  var TERMS = [
+    ["Role", "RenewFlo represents the association in its insurance renewal and works only for the association.", "We'll continue to represent you each year to ensure you have full transparency over your insurance."],
+    ["Cost", "No fee. The association can add RenewFlo as a second broker on its account, paid out of the same commission already built into your premium. There's no additional charge."],
+    ["Brokers", "RenewFlo is paid the same share no matter which broker is on your account, so we only change or add a broker when it benefits the association. We work with brokers who specialize in condominiums, have strong service teams and meet our performance reviews."],
+    ["Your approval", "Nothing is bound or coverage changed without the board's written approval. Email is fine."],
+    ["Term", "We continue to represent the association every year, building a history of each renewal that stays with the association even as trustees change."]
+  ];
+
+  var COVER_HELP = {
+    deductible: "The amount the association pays toward each claim before insurance pays. A higher deductible lowers the premium, but the association, or the unit owner responsible for the damage, pays more when there's a claim. Lenders cap how high it can go.",
+    earthquake: "Pays to repair the building after earthquake damage, which standard condo policies exclude. Earthquakes are rare in Massachusetts, but older brick buildings are the most exposed. The deductible is usually a percentage of the building's value.",
+    flood: "Covers damage from rising water, such as storm surge, an overflowing river or heavy rain pooling at ground level. Standard condo policies exclude flood. Lenders require it when the building is in a high-risk flood zone.",
+    umbrella: "Extra liability protection on top of the association's general liability, for a serious injury lawsuit. For example, someone badly hurt falling on icy common steps.",
+    dno: "Protects trustees personally if they're sued over board decisions, such as a special assessment, enforcing a rule or a contract dispute. Many governing documents require it.",
+    crime: "Covers theft of association money by a trustee, an employee or the property manager, such as someone taking reserve funds. Lenders and many governing documents require it.",
+    wc: "Covers medical bills and lost wages if someone working for the association is hurt on the job. Required in Massachusetts if the association has employees, and it protects the association if an uninsured worker is injured on site.",
+    cyber: "Covers costs if the association's data or accounts are hacked, such as owners' personal or payment information being exposed, ransomware, or association money stolen through a fake payment or wire request.",
+    hnoa: "Covers the association's liability if a trustee, volunteer or employee causes a car accident while driving their own or a rented car on association business, such as running an errand for the building.",
+    eb: "Covers sudden mechanical or electrical breakdown of building systems, such as boilers, elevators, electrical panels and heating equipment, which standard property coverage often excludes."
+  };
+  var helpBtn = function(id, text){ return '<button type="button" class="rv-help" aria-label="What this covers" aria-describedby="' + id + '-tip">?</button><span class="rv-tip" role="tooltip" id="' + id + '-tip">' + esc(text) + '</span>'; };
+  function choice(name, opts){
+    return '<div class="rv-seg" role="radiogroup">' + opts.map(function(o, i){
+      var id = name + "-" + i;
+      return '<input type="radio" id="' + id + '" name="' + esc(name) + '" value="' + esc(o) + '"><label for="' + id + '">' + esc(o) + '</label>';
+    }).join("") + '</div>';
+  }
+  function buildCoverage(){
+    $("#rv-dedRow").innerHTML =
+      '<div class="rv-covname"><span class="rv-q">Deductible' + helpBtn("rv-cov-ded", COVER_HELP.deductible) + '</span><span class="rv-covnow">Now: ' + esc(C.deductible.current) + '</span></div>' +
+      choice("Deductible", ["Keep current", "Show higher options", "Show lower options"]);
+    $("#rv-covRows").innerHTML = C.coverages.map(function(c){
+      return '<div class="rv-covrow"><div class="rv-covname"><span class="rv-q">' + esc(c.name) + helpBtn("rv-cov-" + c.key, COVER_HELP[c.key] || "") + '</span>' +
+        '<span class="rv-covnow' + (c.carried ? "" : " none") + '">' + esc(c.current) + '</span></div>' +
+        choice(c.name, c.options || (c.carried ? ["Keep", "Remove"] : ["Quote it", "No thanks"])) + '</div>';
+    }).join("");
+  }
+
+  /* the dropdown reads this label */
+  root.dataset.label = "Insurance Review — " + longDate(C.preparedDate);
+
+  /* ---------- building data ---------- */
+  /* Conditional questions: a field with "when" only applies (shows, counts, sends) when every condition holds.
+     { key, is: "Yes" } = that answer equals "Yes";  { key, gt: 0 } = that number is above 0;
+     { cov: "flood" } = the association carries that coverage (premium, limit and deductible questions). */
+  var fval = function(k){ var el = $("#rv-sov_" + k); return el ? el.value.trim() : ""; };
+  function applies(f){
+    return (f.when || []).every(function(w){
+      if (w.cov) return C.coverages.some(function(c){ return c.key === w.cov && c.carried; });   /* only for coverage the association carries */
+      var v = fval(w.key);
+      if (w.is != null) return v === w.is;
+      if (w.gt != null) return v !== "" && !isNaN(Number(v)) && Number(v) > w.gt;
+      return true;
+    });
+  }
+  function sovStatus(){
+    var val = fval;
+    var live = C.sov.filter(applies);
+    var blank = live.filter(function(f){ return isMissing(val(f.key)); });
+    var issues = (C.verify || []).map(function(r){
+      var keys = r.sum.concat([r.equals]);
+      if (keys.some(function(k){ return isMissing(val(k)) || isNaN(Number(val(k))); })) return null;
+      var got = r.sum.reduce(function(a,k){ return a + Number(val(k)); }, 0), want = Number(val(r.equals));
+      return got === want ? null : { label: r.label, sum: r.sum, equals: r.equals, got: got, want: want };
+    }).filter(Boolean);
+    var confirm = {}; issues.forEach(function(r){ r.sum.concat([r.equals]).forEach(function(k){ confirm[k] = 1; }); });
+    var unconfirmed = live.filter(function(f){ return confirm[f.key] && blank.indexOf(f) < 0; });
+    var missing = blank.concat(unconfirmed), total = live.length, have = total - missing.length;
+    return { missing: missing, blank: blank, issues: issues, have: have, total: total, ratio: have / total };
+  }
+
+  function evaluate(k){
+    if (k.type === "premium"){
+      var b = C.benchmark, pct = (b.you / b.median - 1) * 100, r = Math.round(pct), above = r > 0;
+      return Object.assign({}, k, { tone: above ? "bad" : "good",
+        pill: (r > 0 ? "+" : r < 0 ? "−" : "") + Math.abs(r) + "%",
+        points: above ? Math.max(0, 1 - pct / 50) : 1,
+        finding: r === 0 ? "In line with the median of similar properties in your area."
+          : Math.abs(r) + "% " + (above ? "above" : "below") + " the median of similar properties in your area (" + usd(b.you) + " vs. " + usd(b.median) + " per unit).",
+        fix: above ? k.fix : "No action needed." });
+    }
+    if (k.type === "sov"){
+      var d = sovStatus(), tone = ratioTone(d.ratio);
+      var bar = tone === "good" ? "var(--rv-good)" : tone === "warn" ? "var(--rv-warn)" : "var(--rv-bad)";
+      return Object.assign({}, k, { tone: tone, pill: d.have + "/" + d.total, points: d.ratio,
+        finding: d.have + " of " + d.total + " building details on file and verified." +
+          (d.missing.length ? " " + d.missing.length + (d.missing.length === 1 ? " is" : " are") + " missing or need confirming." : ""),
+        fix: d.missing.length ? "Fill in the missing details in Step 2 below." : "No action needed.",
+        extra: '<div class="rv-meter" role="img" aria-label="' + d.have + ' of ' + d.total + ' details on file"><span style="width:' + (d.ratio*100).toFixed(0) + '%;background:' + bar + '"></span></div>' });
+    }
+    if (k.type === "passfail") return Object.assign({}, k, { tone: k.pass ? "good" : "bad", pill: k.pass ? "PASS" : "FAIL", points: k.pass ? 1 : 0 });
+    if (k.type === "ratio"){ var q = k.have / k.total; return Object.assign({}, k, { tone: ratioTone(q), pill: k.have + "/" + k.total, points: q }); }
+    return Object.assign({}, k, { tone: "warn", pill: "—", points: 0 });
+  }
+
+  function bandOf(score){
+    if (score >= 90) return ["Well Protected", "Your coverage is in great shape. We'll confirm it stays that way at renewal."];
+    if (score >= 75) return ["On Track", "Your coverage is solid, with a few improvements worth making at renewal."];
+    if (score >= 55) return ["Room to Improve", "There are gaps worth fixing before your renewal, and some may be costing you money."];
+    return ["Needs Attention", "Several areas need attention before your renewal. You can address them in the steps below."];
+  }
+
+  function buildSovForm(){
+    var sections = []; C.sov.forEach(function(f){ if (sections.indexOf(f.section) < 0) sections.push(f.section); });
+    $("#rv-sovFields").innerHTML = sections.map(function(sec){
+      return '<details class="rv-sec"><summary><span>' + esc(sec) + '</span><span class="rv-secstat" data-rv-secstat="' + esc(sec) + '"></span></summary><div class="rv-grid">' +
+        C.sov.filter(function(f){ return f.section === sec; }).map(function(f){
+          var id = fid(f), hint = f.hint ? '<span class="rv-hint">' + esc(f.hint) + '</span>' : "", ctl;
+          var help = f.help ? '<button type="button" class="rv-help" aria-label="What this means" aria-describedby="' + id + '-tip">?</button><span class="rv-tip" role="tooltip" id="' + id + '-tip">' + esc(f.help) + '</span>' : "";
+          if (f.type === "yesno") ctl = '<select id="' + id + '" name="' + esc(f.label) + '"><option value="">Choose…</option><option>Yes</option><option>No</option><option>N/A</option><option>Not sure</option></select>';
+          else if (f.type === "select") ctl = '<select id="' + id + '" name="' + esc(f.label) + '"><option value="">Choose…</option>' + f.options.map(function(o){ return '<option>' + esc(o) + '</option>'; }).join("") + '<option>Not sure</option></select>';
+          else if (f.type === "textarea") ctl = '<textarea id="' + id + '" name="' + esc(f.label) + '"></textarea>';
+          else ctl = '<input id="' + id + '" name="' + esc(f.label) + '">';
+          return '<label for="' + id + '"' + (f.wide ? ' class="rv-wide"' : "") + '><span class="rv-q">' + esc(f.label) + (f.req ? '<span class="rv-req" aria-label="required">*</span>' : "") + help + '</span>' + hint + ctl + '</label>';
+        }).join("") + '</div></details>';
+    }).join("");
+    C.sov.forEach(function(f){ var el = $("#" + fid(f)); if (el && f.value) el.value = f.value; });
+  }
+
+  var inset = {};
+  function applyView(){
+    var only = $("#rv-onlyMissing").checked, box = $("#rv-sovFields");
+    box.classList.toggle("rv-onlymissing", only);
+    if (only){ inset = {}; sovStatus().missing.forEach(function(f){ inset[fid(f)] = 1; }); }
+    syncApplies();
+    C.sov.forEach(function(f){ var el = $("#" + fid(f)), lab = el && el.closest("label"); if (lab) lab.classList.toggle("rv-inset", !!inset[fid(f)]); });
+    [].forEach.call(box.querySelectorAll("details"), function(d){ d.open = only; });
+    $("#rv-allDone").hidden = !(only && Object.keys(inset).length === 0);
+  }
+
+  /* hide questions that don't apply; a question that newly applies (say, pools set to 1) joins the missing-only list */
+  var wasLive = {};
+  function syncApplies(){
+    var only = $("#rv-onlyMissing").checked;
+    C.sov.forEach(function(f){
+      var id = fid(f), el = $("#" + id), lab = el && el.closest("label"); if (!lab) return;
+      var on = applies(f);
+      if (on && wasLive[id] === false && only && isMissing(el.value)){ inset[id] = 1; lab.classList.add("rv-inset"); }
+      wasLive[id] = on;
+      lab.classList.toggle("rv-na", !on);
+    });
+  }
+
+  function renderScore(){
+    syncApplies();
+    var checks = C.checks.map(evaluate);
+    /* Score = weighted average of the scored sections (premium comparison is context only).
+       Each section scores 0–100%: building data and insurer access by their ratio, PASS = 100%, FAIL = 0%. */
+    var scored = checks.filter(function(k){ return k.type !== "premium"; });
+    var wsum = scored.reduce(function(s,k){ return s + (k.weight || 1); }, 0);
+    var score = Math.round(scored.reduce(function(s,k){ return s + k.points * (k.weight || 1); }, 0) / wsum * 100);
+    var band = bandOf(score), r = 54, circ = 2 * Math.PI * r;
+    var col = score >= 75 ? "var(--rv-good)" : score >= 55 ? "var(--rv-warn)" : "var(--rv-bad)";
+    $("#rv-dial").innerHTML =
+      '<svg viewBox="0 0 132 132" role="img" aria-label="Score ' + score + ' out of 100">' +
+      '<circle cx="66" cy="66" r="' + r + '" fill="none" stroke="#D3DEF2" stroke-width="12"/>' +
+      '<circle class="val" cx="66" cy="66" r="' + r + '" fill="none" stroke="' + col + '" stroke-width="12" stroke-linecap="round" stroke-dasharray="' + circ + '" stroke-dashoffset="' + (circ * (1 - score/100)) + '"/></svg>' +
+      '<div class="rv-num"><strong class="rv-tnum">' + score + '</strong><span>out of 100</span></div>';
+    $("#rv-band").textContent = band[0]; $("#rv-band").style.color = col;
+    $("#rv-bandText").textContent = band[1];
+    $("#rv-chips").innerHTML = checks.map(function(k){ return '<div class="rv-chiprow"><span>' + esc(k.name) + '</span><span class="rv-pill ' + k.tone + '">' + esc(k.pill) + '</span></div>'; }).join("");
+    $("#rv-checks").innerHTML = checks.map(function(k){
+      return '<div class="rv-check"><div class="rv-checkhead"><h3>' + esc(k.name) + '</h3><span class="rv-pill ' + k.tone + '">' + esc(k.pill) + '</span></div>' +
+        '<p>' + esc(k.finding) + '</p>' + (k.extra || "") + '</div>';
+    }).join("");
+    var st = sovStatus(), miss = {}; st.missing.forEach(function(f){ miss[fid(f)] = 1; });
+    var note = $("#rv-verifyNote");
+    note.hidden = !st.issues.length;
+    note.textContent = st.issues.map(function(r){ return r.label + " don't add up: the parts total " + r.got + ", but the overall count is " + r.want + ". Please correct the highlighted counts."; }).join(" ");
+    C.sov.forEach(function(f){ var el = $("#" + fid(f)), lab = el && el.closest("label"); if (lab) lab.classList.toggle("rv-needed", !!miss[fid(f)]); });
+    [].forEach.call(root.querySelectorAll("[data-rv-secstat]"), function(el){
+      var n = C.sov.filter(function(f){ return f.section === el.dataset.rvSecstat && applies(f) && miss[fid(f)]; }).length;
+      el.textContent = n ? n + " missing" : "Complete";
+      el.className = "rv-secstat " + (n ? "miss" : "ok");
+    });
+  }
+
+  /* ---------- Exhibit A ---------- */
+  var sig = { drawn: false, dataUrl: "" };
+  function renderLetter(){
+    var today = longDate(new Date().toISOString().slice(0,10));
+    var fill = function(v, ph){ return v ? '<span class="rv-fill">' + esc(v) + '</span>' : '<span class="rv-fill blank">' + esc(ph) + '</span>'; };
+    var name = $("#rv-s_name").value.trim(), vote = $("#rv-s_vote").value;
+    $("#rv-loaBody").innerHTML =
+      '<h3>Letter of Authorization</h3>' +
+      '<p>Date: ' + fill(today) + '</p>' +
+      '<p>To the insurers, insurance brokers, agents and property manager of the Association named below:</p>' +
+      '<p>The Trustees of ' + fill(C.association) + ' (the "Association") have elected RenewFlo LLC, a licensed insurance producer (National Producer Number ' + fill(C.npn, "on file") + '), as the Association\'s insurance representative, effective ' + fill(today) + '.</p>' +
+      '<p>RenewFlo is authorized to act on the Association\'s behalf to:</p>' +
+      '<ol><li>request and receive the Association\'s policies, quotations, loss runs, statements of values and claim history;</li>' +
+      '<li>complete and sign the Association\'s insurance applications;</li>' +
+      '<li>designate the Association\'s broker of record and sign broker-of-record letters; and</li>' +
+      '<li>bind coverage once the Board of Trustees approves in writing, which may be by email.</li></ol>' +
+      '<p>Please provide RenewFlo with the information it requests and work with RenewFlo as you would with the Association. You may rely on this letter until you receive written notice from the Association revoking it. Questions may be directed to info@renewflo.co.</p>' +
+      '<p>The Board of Trustees authorizes RenewFlo, and the Trustee signing below is authorized to execute this letter on the Association\'s behalf.</p>' +
+      '<p>By the Association, acting by its Trustee solely as Trustee and not individually:</p>' +
+      '<p>Signature: <span class="rv-sigline">' + (sig.dataUrl ? '<img src="' + sig.dataUrl + '" alt="Drawn signature">' : "") + '</span></p>' +
+      '<p>Name: ' + fill(name, "your name") + '</p>' +
+      '<p>Date: ' + fill(today) + '</p>';
+  }
+
+  /* ---------- sending to RenewFlo (Web3Forms, same as the renewal summaries) ---------- */
+  function collect(form){
+    var out = {};
+    [].forEach.call(form.querySelectorAll("input[name],select[name],textarea[name]"), function(el){ out[el.name] = el.value.trim(); });
+    return out;
+  }
+  function recordText(kind, data){
+    var lines = [kind + " — " + C.association, "Document: " + root.dataset.label, "Submitted " + new Date().toLocaleString("en-US"), ""];
+    Object.keys(data).forEach(function(k){
+      if (k.charAt(0) === "#") lines.push("", k.slice(1).toUpperCase());   /* section header */
+      else lines.push(k + ": " + (data[k] || "—"));
+    });
+    return lines.join("\n");
+  }
+  function deliver(kind, data, box, sigPng, rec){
+    var text = recordText(kind, data);
+    var show = function(ok){
+      var mail = "mailto:" + C.notifyEmail + "?subject=" + encodeURIComponent(kind + " — " + C.association) + "&body=" + encodeURIComponent(text);
+      box.innerHTML = ok
+        ? '<div class="rv-done"><h3>Sent</h3><p>RenewFlo has your ' + esc(kind.toLowerCase()) + '. ' + (C.mode === "pm" ? "Anyone else at your company who opens this link will see your answers." : "Other trustees who open this link will see your answers.") + ' We\'ll follow up by email.</p></div>'
+        : '<div class="rv-done"><h3>One more step: send this to RenewFlo</h3><p>This couldn\'t be sent automatically. Email the record below to <span class="rv-addr">' + esc(C.notifyEmail) + '</span>.</p>' +
+          '<pre id="' + box.id + 'Rec">' + esc(text) + '</pre>' +
+          '<div class="rv-btnrow"><button type="button" class="rv-btn rv-primary" data-rv-copy="' + box.id + 'Rec">Copy record</button><a class="rv-btn rv-ghost" href="' + mail + '">Open email</a></div></div>';
+      box.hidden = false;
+      var cb = box.querySelector("[data-rv-copy]");
+      if (cb) cb.addEventListener("click", function(){
+        var pre = document.getElementById(cb.dataset.rvCopy);
+        var sel = function(){ var rg = document.createRange(); rg.selectNodeContents(pre); var s = getSelection(); s.removeAllRanges(); s.addRange(rg); cb.textContent = "Selected — press Copy"; };
+        if (navigator.clipboard) navigator.clipboard.writeText(pre.textContent).then(function(){ cb.textContent = "Copied"; }, sel); else sel();
+      });
+    };
+    var payload = { access_key: C.w3fKey, subject: kind + " — " + C.association, from_name: "RenewFlo " + (C.mode === "pm" ? "PM link" : "Insurance Review"),
+      property: C.association, document: root.dataset.label, message: text, signature_png: sigPng || "not signed", botcheck: "" };
+    var notify = function(){
+      if (!C.w3fKey || !window.fetch) return Promise.resolve(false);
+      return fetch("https://api.web3forms.com/submit", { method: "POST", headers: { "Content-Type": "application/json", "Accept": "application/json" }, body: JSON.stringify(payload) })
+        .then(function(res){ return res.json(); }).then(function(j){ return !!(j && j.success); }).catch(function(){ return false; });
+    };
+    var btn = $("#rv-submitOnly");
+    (rec || Promise.reject(new Error("no record")))
+      .then(function(j){
+        notify();
+        C.status = { last: { who: (data["Name"] || data["Signer name"] || ""), title: (data["Title"] || ""), at: new Date().toISOString() },
+          signed: j.signed ? { who: data["Signer name"], title: data["Title"], at: new Date().toISOString() } : (C.status && C.status.signed), count: ((C.status && C.status.count) || 0) + 1 };
+        renderStatus(); show(true);
+      }, function(err){
+        if (err && err.server){
+          var e = box.closest(".rv-page").querySelector(".rv-error");
+          if (e){ e.textContent = err.message; e.hidden = false; }
+          if (btn) btn.disabled = false; return;
+        }
+        notify().then(function(ok){ show(ok); });
+      });
+  }
+
+  /* ---------- shared answers (Supabase) ---------- */
+  function coverageData(){
+    var form = $("#rv-covForm"), pick = function(name){ var r = [].filter.call(form.querySelectorAll("input[type=radio]"), function(x){ return x.name === name && x.checked; })[0]; return r ? r.value : ""; };
+    var out = { deductible: pick("Deductible"), choices: {}, note: $("#rv-covNote").value.trim() };
+    C.coverages.forEach(function(c){ out.choices[c.key] = pick(c.name); });
+    return out;
+  }
+  function buildingData(){
+    var out = {}; C.sov.forEach(function(f){ var el = $("#" + fid(f)); if (el && applies(f)) out[f.key] = el.value.trim(); }); return out;
+  }
+  function coverageData(){
+    var form = $("#rv-covForm"), pick = function(name){ var r = [].filter.call(form.querySelectorAll("input[type=radio]"), function(x){ return x.name === name && x.checked; })[0]; return r ? r.value : ""; };
+    var out = { deductible: pick("Deductible"), choices: {}, note: $("#rv-covNote").value.trim() };
+    C.coverages.forEach(function(c){ out.choices[c.key] = pick(c.name); });
+    return out;
+  }
+  function buildingData(){
+    var out = {}; C.sov.forEach(function(f){ var el = $("#" + fid(f)); if (el && applies(f)) out[f.key] = el.value.trim(); }); return out;
+  }
+  /* shared answers: the record already merges every earlier answer (newest non-blank wins) */
+  var when = function(ts){ var d = new Date(ts); return d.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }) + " at " + d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" }); };
+  function renderStatus(){
+    var el = $("#rv-status"), st = C.status;
+    if (!st){ el.hidden = true; return; }
+    var who = function(r){ return "<b>" + esc(r.who) + "</b>" + (r.title ? " (" + esc(r.title) + ")" : ""); };
+    el.innerHTML = "Last updated by " + who(st.last) + " on " + esc(when(st.last.at)) + ". The answers below include their responses." +
+      (st.signed ? " Agreement signed by " + who(st.signed) + " on " + esc(when(st.signed.at)) + "." : "") +
+      (st.count > 1 ? " " + st.count + " submissions so far." : "");
+    el.hidden = false;
+  }
+  function loadShared(){
+    var cov = C.coverageChoices, form = $("#rv-covForm");
+    if (cov && C.mode !== "pm"){
+      var check = function(name, v){ [].forEach.call(form.querySelectorAll("input[type=radio]"), function(x){ if (x.name === name) x.checked = (x.value === v); }); };
+      if (cov.deductible) check("Deductible", cov.deductible);
+      C.coverages.forEach(function(c){ if (cov.choices && cov.choices[c.key]) check(c.name, cov.choices[c.key]); });
+      if (cov.note) $("#rv-covNote").value = cov.note;
+    }
+    applyView(); renderScore(); renderStatus();
+  }
+  function postRecord(extra){
+    var body = { k: RV_KEY, action: "submit", answers: buildingData(), coverage: C.mode === "pm" ? null : coverageData() };
+    for (var x in extra) body[x] = extra[x];
+    return fetch(RV_API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
+      .then(function(r){ return r.json().then(function(j){ if (!r.ok){ var e = new Error(j.error || "Not saved."); e.server = true; throw e; } return j; }); });
+  }
+
+  /* ---------- render ---------- */
+  $("#rv-sample").hidden = !C.demo;
+  document.title = (C.mode === "pm" ? "Building details" : "Insurance Review") + " · " + C.association;
+  $("#rv-property").textContent = C.association + " · " + C.address + " · " + C.units + " Residential Units · Renews " + slashDate(C.renewalDate);
+  $("#rv-prepared").textContent = longDate(C.preparedDate);
+  $("#rv-drivers").innerHTML = C.drivers.map(function(d){ return '<li><span class="rv-tag">' + esc(d.tag) + '</span><span>' + esc(d.text) + '</span></li>'; }).join("");
+  var b = C.benchmark, lo = Math.min(b.low, b.you) * 0.95, hi = Math.max(b.high, b.you) * 1.05;
+  var X = function(v){ return ((v - lo) / (hi - lo) * 100).toFixed(2) + "%"; };
+  $("#rv-track").innerHTML = '<div class="rv-rail"></div><div class="rv-range" style="left:' + X(b.low) + ';width:calc(' + X(b.high) + ' - ' + X(b.low) + ')"></div>' +
+    '<div class="rv-marker med" style="left:' + X(b.median) + '"><em>Median ' + usd(b.median) + '</em></div>' +
+    '<div class="rv-marker you" style="left:' + X(b.you) + '"><em>You ' + usd(b.you) + '</em></div>';
+  $("#rv-track").setAttribute("role", "img");
+  $("#rv-track").setAttribute("aria-label", "Your premium is " + usd(b.you) + " per unit; similar properties range from " + usd(b.low) + " to " + usd(b.high) + ", median " + usd(b.median));
+  $("#rv-ends").innerHTML = "<span>Lowest " + usd(b.low) + "</span><span>Highest " + usd(b.high) + "</span>";
+  buildSovForm(); applyView(); buildCoverage();
+  var needDocs = (C.documents || []).filter(function(d){ return !d.have; });
+  $("#rv-docs").hidden = !needDocs.length;
+  $("#rv-docList").innerHTML = needDocs.map(function(d){
+    var id = "rv-doc-" + d.id;
+    return '<div class="rv-docrow" data-doc="' + d.id + '"><span>' + esc(d.name) + '<span class="rv-docmsg" id="' + id + '-msg"></span></span>' +
+      '<label class="rv-btn rv-ghost" for="' + id + '">Upload the ' + esc(d.name.toLowerCase()) + '</label>' +
+      '<input type="file" id="' + id + '" data-doc="' + d.id + '" accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png" hidden></div>';
+  }).join("");
+  $("#rv-docList").addEventListener("change", function(e){
+    var input = e.target; if (!input.files || !input.files[0]) return;
+    var file = input.files[0], docId = Number(input.dataset.doc), msg = document.getElementById(input.id + "-msg");
+    var lab = root.querySelector('label[for="' + input.id + '"]');
+    var say = function(t, ok){ msg.textContent = " · " + t; msg.className = "rv-docmsg" + (ok ? " ok" : " bad"); };
+    if (file.size > 50 * 1024 * 1024){ say("That file is over 50 MB. Email it to info@renewflo.co instead.", false); return; }
+    say("Uploading " + file.name + "…", true); lab.hidden = true;
+    var post = function(body){ return fetch(RV_API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
+      .then(function(r){ return r.json().then(function(j){ if (!r.ok) throw new Error(j.error || "Upload failed."); return j; }); }); };
+    post({ k: RV_KEY, action: "upload_url", doc_id: docId, filename: file.name })
+      .then(function(u){
+        return fetch(u.url, { method: "PUT", headers: { "Content-Type": file.type || "application/octet-stream", "x-upsert": "false" }, body: file })
+          .then(function(r){ if (!r.ok) throw new Error("The file didn't upload. Try again, or email it to info@renewflo.co."); return post({ k: RV_KEY, action: "uploaded", doc_id: docId, path: u.path }); });
+      })
+      .then(function(){ say("Received " + file.name + ". Thank you.", true); })
+      .catch(function(err){ say(err.message, false); lab.hidden = false; input.value = ""; });
+  });
+  $("#rv-secSign").hidden = !C.showAgreement;
+  $("#rv-secSubmit").hidden = !!C.showAgreement;
+  $("#rv-draftNote").hidden = !C.draftTerms;
+  $("#rv-terms").innerHTML = TERMS.map(function(t){ return '<li><span>' + esc(t[0]) + '</span><span>' + esc(t[1]) + (t[2] ? ' <b>' + esc(t[2]) + '</b>' : '') + '</span></li>'; }).join("");
+  $("#rv-fullAgreement").hidden = !C.agreementUrl;
+  $("#rv-fullAgreement").innerHTML = C.agreementUrl
+    ? '<a href="' + esc(C.agreementUrl) + '" target="_blank" rel="noopener">Read the full agreement</a> before signing.'
+    : "";
+  renderLetter(); renderScore(); loadShared();
+
+  /* ---------- events ---------- */
+  root.addEventListener("click", function(e){
+    var o = e.target.closest("[data-rv-open-loa]");
+    if (o){ e.preventDefault(); var d = $("#rv-loa"); d.open = true; d.scrollIntoView({ block: "start" }); return; }
+    var g = e.target.closest("[data-rv-go]"); if (!g) return;
+    var el = $(g.dataset.rvGo); if (!el) return;
+    var sec = el.closest("details"); if (sec) sec.open = true;
+    var lab = el.closest("label"); if (lab) lab.classList.add("rv-inset");
+    el.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "center" });
+    el.focus({ preventScroll: true });
+  });
+  var t; $("#rv-infoForm").addEventListener("input", function(){ clearTimeout(t); t = setTimeout(renderScore, 150); });
+  $("#rv-infoForm").addEventListener("change", function(e){ if (e.target.id === "rv-onlyMissing") applyView(); else renderScore(); });
+  /* one submission at the end: coverage choices + building details (+ signed agreement) */
+  ["#rv-infoForm", "#rv-covForm"].forEach(function(id){ $(id).addEventListener("submit", function(e){ e.preventDefault(); }); });
+  function reviewData(){
+    var data = {};
+    if (C.mode !== "pm"){
+    data["#Coverage Review"] = "";
+    data["Deductible (now " + C.deductible.current + ")"] = (($("#rv-covForm").querySelector('input[name="Deductible"]:checked') || {}).value) || "No choice";
+    C.coverages.forEach(function(c){
+      var picked = [].filter.call($("#rv-covForm").querySelectorAll('input[type=radio]'), function(r){ return r.name === c.name && r.checked; })[0];
+      data[c.name + " (" + c.current + ")"] = picked ? picked.value : "No choice";
+    });
+    data["Other requests"] = $("#rv-covNote").value.trim();
+    }
+    var st = sovStatus();
+    data["#Building details (" + st.have + " of " + st.total + " on file)"] = "";
+    C.sov.forEach(function(f){ if (applies(f)) data[f.label] = fval(f.key); });
+    return data;
+  }
+  $("#rv-submitOnly").addEventListener("click", function(){
+    var name = $("#rv-subName").value.trim(), err = $("#rv-subError");
+    if (!name){ err.textContent = "Add your name so the other trustees know who submitted."; err.hidden = false; $("#rv-subName").focus(); return; }
+    err.hidden = true;
+    var data = reviewData(); data["#Submitted by"] = ""; data["Name"] = name; data["Title"] = $("#rv-subTitle").value;
+    $("#rv-submitOnly").disabled = true;
+    deliver(C.mode === "pm" ? "Building details" : "Insurance Review", data, $("#rv-submitDone"), null,
+      postRecord({ who: name, title: $("#rv-subTitle").value }));
+  });
+  $("#rv-s_name").addEventListener("input", renderLetter);
+  $("#rv-s_vote").addEventListener("change", renderLetter);
+  $("#rv-signForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    var f = e.target, err = $("#rv-signError");
+    var missing = [].filter.call(f.querySelectorAll("[required]"), function(el){ return el.type === "checkbox" ? !el.checked : !el.value.trim(); });
+    root.querySelector(".rv-sigpad").classList.toggle("error", !sig.drawn);
+    if (missing.length || !sig.drawn){
+      err.textContent = !sig.drawn && !missing.length ? "Draw your signature in the box to sign." : "Fill in every field, draw your signature, and check all three boxes to sign.";
+      err.hidden = false; (missing[0] || $("#rv-sigPad")).focus(); return;
+    }
+    if (C.draftTerms){ err.textContent = "These are draft terms. RenewFlo will send the final version before anyone signs."; err.hidden = false; return; }
+    err.hidden = true;
+    var data = reviewData();
+    data["#Agreement"] = "";
+    var signer = collect(f); Object.keys(signer).forEach(function(k){ data[k] = signer[k]; });
+    data["Association"] = C.association;
+    data["Signed on"] = longDate(new Date().toISOString().slice(0,10));
+    data["Authorized by board"] = "Yes";
+    data["Letter of Authorization signed"] = "Yes";
+    data["Capacity"] = "As trustee, not individually";
+    data["Signature"] = "Drawn on the page (image attached)";
+    deliver("Insurance Review and signed agreement", data, $("#rv-signDone"), sig.dataUrl,
+      postRecord({ who: $("#rv-s_name").value.trim(), title: $("#rv-s_title").value,
+        agreement: { email: $("#rv-s_email").value.trim(), vote_date: $("#rv-s_vote").value }, signature: sig.dataUrl }));
+  });
+
+  /* ---------- signature pad ---------- */
+  (function(){
+    var cv = $("#rv-sigPad"), ctx = cv.getContext("2d"), drawing = false, last = null, w = 0;
+    function size(){
+      var r = cv.getBoundingClientRect(); if (!r.width || Math.round(r.width) === w) return;
+      w = Math.round(r.width);
+      var dpr = window.devicePixelRatio || 1, prev = sig.drawn ? cv.toDataURL() : null;
+      cv.width = r.width * dpr; cv.height = r.height * dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+      ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.lineWidth = 2.4;
+      if (prev){ var img = new Image(); img.onload = function(){ ctx.drawImage(img, 0, 0, r.width, r.height); }; img.src = prev; }
+    }
+    var pt = function(e){ var r = cv.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; };
+    cv.addEventListener("pointerdown", function(e){
+      size(); drawing = true; last = pt(e); cv.setPointerCapture(e.pointerId);
+      ctx.strokeStyle = ctx.fillStyle = "#13235E"; ctx.beginPath(); ctx.arc(last.x, last.y, 1.1, 0, Math.PI*2); ctx.fill();
+      $("#rv-sigPh").hidden = true;
+    });
+    cv.addEventListener("pointermove", function(e){
+      if (!drawing) return;
+      var p = pt(e); ctx.beginPath(); ctx.moveTo(last.x, last.y);
+      ctx.quadraticCurveTo(last.x, last.y, (last.x + p.x)/2, (last.y + p.y)/2); ctx.lineTo(p.x, p.y); ctx.stroke(); last = p;
+    });
+    var end = function(){ if (!drawing) return; drawing = false; sig.drawn = true; sig.dataUrl = cv.toDataURL("image/png"); root.querySelector(".rv-sigpad").classList.remove("error"); renderLetter(); };
+    cv.addEventListener("pointerup", end); cv.addEventListener("pointercancel", end); cv.addEventListener("pointerleave", end);
+    $("#rv-sigClear").addEventListener("click", function(){ ctx.clearRect(0, 0, cv.width, cv.height); sig.drawn = false; sig.dataUrl = ""; $("#rv-sigPh").hidden = false; renderLetter(); });
+    window.addEventListener("resize", size);
+    /* the review may start hidden in the dropdown; size the pad once it is visible */
+    if ("IntersectionObserver" in window){ new IntersectionObserver(function(en){ if (en[0].isIntersecting) size(); }).observe(cv); } else size();
+  })();
+}
+</script>
+<script>
+/* ===== Version dropdown =====
+   Renewal summaries (numbered data-v) newest first; the Insurance Review (data-kind="review") is pinned last.
+   Opens on the newest summary marked data-quotes="yes"; until one exists, opens on the Insurance Review.
+   A link ending in #review or #v2 opens that view directly. */
+(function(){
+  var sel = document.getElementById('verSelect'); if (!sel) return;
+  var all = [].slice.call(document.querySelectorAll('.doc-version'));
+  var review = all.filter(function(d){ return d.dataset.kind === 'review'; })[0] || null;
+  var summaries = all.filter(function(d){ return d !== review; }).sort(function(a,b){ return (+b.dataset.v) - (+a.dataset.v); });
+  var ordered = review ? summaries.concat([review]) : summaries;
+  sel.innerHTML = '';
+  ordered.forEach(function(d, i){
+    var o = document.createElement('option');
+    o.value = d.dataset.v;
+    o.textContent = d.dataset.label + (d !== review && i === 0 ? ' (current)' : '');
+    sel.appendChild(o);
+  });
+  var quoted = summaries.filter(function(d){ return d.dataset.quotes === 'yes'; })[0];
+  var fallback = quoted || review || summaries[0];
+  var fromHash = location.hash.replace('#','');
+  var start = all.filter(function(d){ return fromHash && (d.dataset.v === fromHash || 'v' + d.dataset.v === fromHash); })[0] || fallback;
+  function show(v, scroll){
+    all.forEach(function(d){ d.hidden = (d.dataset.v !== v); });
+    sel.value = v;
+    if (scroll) window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  sel.addEventListener('change', function(){ show(sel.value, true); });
+  if (start) show(start.dataset.v, false);
+})();
+</script>
+
+</body>
+</html>
