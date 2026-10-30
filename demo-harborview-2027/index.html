@@ -589,7 +589,7 @@
   <label for="verSelect">Viewing</label>
   <select id="verSelect"></select>
 </div>
-<div class="doc-version sum" data-v="2" data-quotes="yes" data-label="Version 2 — October 30, 2026">
+<div class="doc-version sum" data-v="1" data-quotes="yes" data-label="Version 1 — October 30, 2026">
 <!-- ==================== PAGE 1 ==================== -->
 <div class="page p1">
   <div class="title-row">
@@ -597,7 +597,7 @@
       <h1 class="doc-title">Insurance Renewal Summary</h1>
       <div class="property-line">Harborview Condominium Trust · Boston, MA 02210 · 40 Residential Units · 03/01/2027 – 03/01/2028</div>
     </div>
-    <div class="ver-badge"><span class="vb-num">Version 2</span><span class="vb-date">October 30, 2026</span></div>
+    <div class="ver-badge"><span class="vb-num">Version 1</span><span class="vb-date">October 30, 2026</span></div>
   </div>
 
   <div class="assessment-box">
@@ -955,29 +955,8 @@
   </div>
 </div>
 </div>
-<div class="doc-version stand" data-v="1" data-quotes="no" data-label="Version 1 — October 29, 2026">
-<div class="page">
-  <div class="title-row">
-    <div><h1 class="doc-title">Insurance Renewal Summary</h1>
-    <div class="property-line">Harborview Condominium Trust · Boston, MA 02210 · 40 Residential Units · 03/01/2027 – 03/01/2028</div></div>
-    <div class="ver-badge"><b>Version 1</b><span>October 29, 2026</span></div>
-  </div>
-  <div class="assessment-box"><p class="overline">Where things stand</p><p>Your current coverage is summarized below. Quotes from other insurers are in progress and will appear in the next version.</p></div>
-  <div class="tbl"><table>
-    <thead><tr><th>Policy</th><th>Current</th><th>Quote A</th><th>Quote B</th></tr></thead>
-    <tbody>
-      <tr><td>Package (property &amp; liability)</td><td>$53,510</td><td class="tbd">TBD</td><td class="tbd">TBD</td></tr>
-      <tr><td>Umbrella</td><td>$7,240</td><td class="tbd">TBD</td><td class="tbd">TBD</td></tr>
-      <tr><td>Directors &amp; Officers</td><td>$2,150</td><td class="tbd">TBD</td><td class="tbd">TBD</td></tr>
-      <tr><td>Crime</td><td>$1,420</td><td class="tbd">TBD</td><td class="tbd">TBD</td></tr>
-      <tr><td>Workers Compensation</td><td>$2,400</td><td class="tbd">TBD</td><td class="tbd">TBD</td></tr>
-      <tr><td><b>Total</b></td><td><b>$66,720</b></td><td class="tbd">TBD</td><td class="tbd">TBD</td></tr>
-    </tbody></table></div>
-  <p class="placeholder">Demo stand-in for Version 1 of the renewal summary. In a real run, the four-page summary built from the record goes here, and each new version is added to the dropdown above.</p>
-</div>
-</div>
 <!-- ==================== INSURANCE REVIEW (pinned in the dropdown) ==================== -->
-<div class="doc-version rv" data-v="review" data-kind="review" data-label="Insurance Review">
+<div class="doc-version rv" data-v="review" data-kind="review" data-label="Insurance Pre-Review">
 
 <div class="rv-page">
   <div class="rv-sample" id="rv-sample" hidden><b>Demo.</b> Fake association and fake data, for testing the RenewFlo workflow. Nothing here is real.</div>
@@ -1267,7 +1246,7 @@ function rvBoot(C){
   }
 
   /* the dropdown reads this label */
-  root.dataset.label = "Insurance Review — " + longDate(C.preparedDate);
+  root.dataset.label = "Insurance Pre-Review — " + longDate(C.preparedDate);
 
   /* ---------- building data ---------- */
   /* Conditional questions: a field with "when" only applies (shows, counts, sends) when every condition holds.
@@ -2013,6 +1992,1376 @@ function rvBoot(C){
 
 </script>
 <script>
+
+(function(){
+  var LABEL={pay:'Payment option'};
+  var records=[];
+
+  function cellName(tr){ var c=tr.cells[0].cloneNode(true); c.querySelectorAll('.sub-note').forEach(function(x){x.remove();}); return c.innerText.trim(); }
+  function rowName(el){ var tr=el.closest('tr'); return tr?cellName(tr):''; }
+
+  function currentPicks(){
+    var out=[], seen={};
+    document.querySelectorAll('.opt.selected').forEach(function(o){
+      if(o.closest('tr') && o.closest('tr').classList.contains('na')) return;
+      var g=o.dataset.g; var key=(g==='renewal')?rowName(o):g; if(seen[key]) return; seen[key]=1;
+      var name=(g==='pay'||g==='renewal')?rowName(o):(LABEL[g]||rowName(o));
+      out.push({name:name, choice:o.innerText.trim()});
+    });
+    var at=document.getElementById('attest');
+    if(at) out.push({name:'Submitted on behalf of all Trustees', choice: at.classList.contains('checked')?'Yes':'No'});
+    return out;
+  }
+  var attestEl=document.getElementById('attest');
+  if(attestEl) attestEl.addEventListener('click',function(){ attestEl.classList.toggle('checked'); renderLive(); });
+
+  function renderLive(){
+    var p=currentPicks(), b=document.getElementById('picksBody');
+    if(p.length){ b.className='';
+      b.innerHTML=p.map(function(x){return x.name+' — <b>'+x.choice+'</b>';}).join(' · '); }
+    else { b.className='none'; b.textContent='nothing selected yet'; }
+  }
+
+  function fmtDate(v){
+    if(!v) return '';
+    var p=v.split('-'); return p.length===3 ? p[1]+'/'+p[2]+'/'+p[0] : v;
+  }
+
+  function renderLedger(){
+    var l=document.getElementById('ledger');
+    if(!records.length){ l.className='none';
+      l.textContent='No selections recorded yet — the first trustee to record will appear here.'; return; }
+    l.className='';
+    l.innerHTML=records.map(function(r){
+      return '<div class="ledger-entry">'+
+        '<span class="le-who">'+r.who+'</span> <span class="le-when">· '+r.when+(r.ver&&DOC_VER&&r.ver!==DOC_VER.label?' · '+r.ver:'')+'</span>'+
+        '<ul>'+r.picks.map(function(x){return '<li>'+x.name+' — <b>'+x.choice+'</b></li>';}).join('')+'</ul>'+
+        (r.note?'<div class="le-note">“'+r.note+'”</div>':'')+
+        (r.sig?'<img src="'+r.sig+'" alt="signature">':'')+
+      '</div>';
+    }).join('');
+  }
+
+  // ---- selection model ----
+  var V=document.querySelector('.doc-version.sum')||document.querySelector('.doc-version:not([hidden])')||document;
+  function money(n){ return '$'+Math.round(n).toLocaleString('en-US'); }
+  function money2(n){ var r=Math.round(n*100)/100; return '$'+r.toLocaleString('en-US',{minimumFractionDigits:(r%1?2:0),maximumFractionDigits:2}); }
+  function programRows(){ return [].slice.call(V.querySelectorAll('tr[data-premium]')); }
+  function planRows(){ return [].slice.call(V.querySelectorAll('tr[data-plan-total], tr[data-opt]:not([data-premium]):not([data-addon-premium]):not([data-quote])')); }
+  function addonRows(){ return [].slice.call(V.querySelectorAll('tr[data-addon-premium], tr[data-quote]')); }
+  function choice(tr){ var o=tr.querySelector('.opt.selected'); return o?o.innerText.trim():''; }
+  function state(){
+    var st={bound:null, undecided:[], plan:null, planMismatch:false, addons:[]};
+    programRows().forEach(function(tr){ var ch=choice(tr); if(!ch) st.undecided.push(tr); else if(ch==='Bind') st.bound=tr; });
+    planRows().forEach(function(tr){ if(choice(tr)) st.plan=tr; });
+    if(st.plan && st.bound && st.plan.dataset.opt && st.plan.dataset.opt!==st.bound.dataset.opt) st.planMismatch=true;
+    addonRows().forEach(function(tr){ if(tr.classList.contains('na')) return; var ch=choice(tr); if(ch==='Add'||ch==='Renew'||ch==='Quote'||ch==='Decline') st.addons.push({tr:tr, ch:ch}); });
+    return st;
+  }
+  function totalInfo(){
+    var st=state(), lines=[], sum=0, total=null, note='', monos=0;
+    if(!st.bound) return null;
+    sum+= +st.bound.dataset.premium; lines.push([cellName(st.bound), money(st.bound.dataset.premium)]);
+    st.addons.forEach(function(a){ var n=cellName(a.tr);
+      if(a.ch==='Add'||a.ch==='Renew'){ sum+= +a.tr.dataset.addonPremium; monos+= +a.tr.dataset.addonPremium; lines.push([n, money(a.tr.dataset.addonPremium)]); }
+      else if(a.ch==='Decline') lines.push([n, 'declined']);
+      else lines.push([n+' — quote requested', 'not included']); });
+    if(st.plan && !st.planMismatch){
+      var pn=cellName(st.plan);
+      if(st.plan.dataset.planTotal){ var ch=+st.plan.dataset.planCharge||0; total=sum+ch;
+        lines.push([pn, ch>0?'+ '+money(ch)+' '+(st.plan.dataset.planNote||'financing charges'):(ch<0?'− '+money(-ch)+' '+(st.plan.dataset.planNote||'discount'):'no financing charges')]);
+        var pk=st.plan.dataset.planKind;
+        if(pk){ var bp=+st.bound.dataset.premium, dn= pk==='full'? bp : +st.bound.dataset.down;
+          lines.push(['Due at binding — package '+(pk==='inst'?'deposit (25%)':'in full'), money2(dn)]);
+          lines.push(['Due at binding — standalone policies, in full', money2(monos)]);
+          lines.push(['<b>Due at binding</b>', money2(dn+monos)]);
+          if(pk==='inst') lines.push(['Then', '8 monthly × '+money2(+st.bound.dataset.monthly)+' + $10 fee']); }
+        else if(st.plan.dataset.planDown){ var dn=+st.plan.dataset.planDown;
+          lines.push(['Due at binding — package '+(st.plan.dataset.planThen?'deposit':'in full'), money2(dn)]);
+          lines.push(['Due at binding — standalone policies, in full', money2(monos)]);
+          lines.push(['<b>Due at binding</b>', money2(dn+monos)]);
+          if(st.plan.dataset.planThen) lines.push(['Then', st.plan.dataset.planThen]); }
+        note= ch>0 ? 'Includes '+money(ch)+' in '+(st.plan.dataset.planNote||'financing charges')+'.' : (ch<0 ? 'Includes the '+(st.plan.dataset.planNote||'discount')+'.' : 'Paid in full — no financing charges.'); }
+      else { total=sum; var pnote=st.plan.dataset.planNote; lines.push([pn, pnote||'terms not confirmed']); note='Excludes financing charges — '+(pnote||pn+' terms are not confirmed')+'.'; }
+    } else { total=sum; note= st.planMismatch ? 'The payment plan selected is not for the bound program.' : 'Select a payment plan to confirm the total. Financing charges not included.'; }
+    return {lines:lines, total:total, note:note, plan:(st.plan&&!st.planMismatch)?cellName(st.plan):''};
+  }
+  function renderTotal(){
+    var box=document.getElementById('totalBox'); if(!box) return;
+    var t=totalInfo();
+    if(!t){ box.classList.add('empty'); document.getElementById('totalLines').textContent='Your total appears here once a program and a payment plan are selected.'; return; }
+    box.classList.remove('empty');
+    document.getElementById('totalLines').innerHTML=t.lines.map(function(l){ return '<div class="tb-line"><span>'+l[0]+'</span><span>'+l[1]+'</span></div>'; }).join('');
+    document.getElementById('totalAmt').textContent=money(t.total);
+    document.getElementById('totalNote').textContent=t.note;
+  }
+  function totalPick(){ var t=totalInfo(); if(!t) return null;
+    return {name:'Total', choice: money(t.total)+(t.plan?' — '+t.plan:'')+(t.note?' ('+t.note.replace(/\.$/,'')+')':'')}; }
+  function syncPlans(){
+    var st=state();
+    planRows().forEach(function(tr){ var na= st.bound && tr.dataset.opt && tr.dataset.opt!==st.bound.dataset.opt;
+      tr.classList.toggle('na', !!na); if(na) tr.querySelectorAll('.opt').forEach(function(x){x.classList.remove('selected');}); });
+    addonRows().forEach(function(tr){ if(!tr.dataset.opt) return; var na= st.bound && (' '+tr.dataset.opt+' ').indexOf(' '+st.bound.dataset.opt+' ')<0;
+      tr.classList.toggle('na', !!na); if(na){ tr.classList.remove('need'); tr.querySelectorAll('.opt').forEach(function(x){x.classList.remove('selected');}); } });
+  }
+  function validate(){
+    var st=state(), errs=[];
+    programRows().forEach(function(tr){ tr.classList.remove('need'); });
+    st.undecided.forEach(function(tr){ tr.classList.add('need'); errs.push(cellName(tr)+' — mark Bind or Decline'); });
+    if(programRows().length && !st.bound) errs.push('Bind one program');
+    if(st.bound && !st.plan) errs.push('Select a payment plan');
+    if(st.planMismatch) errs.push('Select a payment plan for the bound program');
+    addonRows().forEach(function(tr){ if(tr.classList.contains('na')) return;
+      if(!choice(tr)){ tr.classList.add('need'); errs.push(cellName(tr)+' — make a decision'); } });
+    return errs;
+  }
+
+  document.querySelectorAll('.opt').forEach(function(o){
+    o.addEventListener('click',function(){
+      var g=o.dataset.g;
+      if(o.closest('tr') && o.closest('tr').classList.contains('na')) return;
+      if(g==='pay'){
+        document.querySelectorAll('.opt[data-g="pay"]').forEach(function(x){x.classList.remove('selected');});
+        o.classList.add('selected');
+      } else if(g==='renewal'){
+        var tr=o.closest('tr'), was=o.classList.contains('selected');
+        tr.querySelectorAll('.opt[data-g="renewal"]').forEach(function(x){x.classList.remove('selected');});
+        if(!was){ o.classList.add('selected');
+          if(o.innerText.trim()==='Bind'){ programRows().forEach(function(r){ if(r!==tr){ var b=r.querySelector('.opt.selected'); if(b&&b.innerText.trim()==='Bind') b.classList.remove('selected'); } }); } }
+        tr.classList.remove('need');
+      } else {
+        var was=o.classList.contains('selected');
+        var scope=(g==='renewal')?o.closest('tr'):document;
+        scope.querySelectorAll('.opt[data-g="'+g+'"]').forEach(function(x){x.classList.remove('selected');});
+        if(!was) o.classList.add('selected');
+        if(o.closest('tr')) o.closest('tr').classList.remove('need');
+      }
+      syncPlans(); renderTotal(); renderLive();
+    });
+  });
+
+  // ---- signature pad ----
+  var c=document.getElementById('sigPad'), ctx=null, inked=false;
+  if(c){
+    function size(){
+      var r=c.getBoundingClientRect(), d=window.devicePixelRatio||1;
+      var keep=inked?c.toDataURL():null;
+      c.width=r.width*d; c.height=r.height*d; ctx=c.getContext('2d');
+      ctx.scale(d,d); ctx.lineWidth=1.8; ctx.lineCap='round'; ctx.lineJoin='round'; ctx.strokeStyle='#141B2D';
+      if(keep){ var i=new Image(); i.onload=function(){ ctx.drawImage(i,0,0,r.width,r.height); }; i.src=keep; }
+    }
+    size(); window.addEventListener('resize',size);
+    var drawing=false;
+    function pt(e){ var r=c.getBoundingClientRect(); return [e.clientX-r.left, e.clientY-r.top]; }
+    c.addEventListener('pointerdown',function(e){ drawing=true; inked=true; c.setPointerCapture(e.pointerId);
+      var p=pt(e); ctx.beginPath(); ctx.moveTo(p[0],p[1]); });
+    c.addEventListener('pointermove',function(e){ if(!drawing) return; var p=pt(e);
+      ctx.lineTo(p[0],p[1]); ctx.stroke(); });
+    c.addEventListener('pointerup',function(){ drawing=false; var im=document.getElementById('sigPrint'); if(im&&inked) im.src=c.toDataURL(); });
+    document.getElementById('sigClear').addEventListener('click',function(){
+      ctx.clearRect(0,0,c.width,c.height); inked=false; var im=document.getElementById('sigPrint'); if(im) im.removeAttribute('src'); });
+  }
+
+  // ---- today's date by default ----
+  var d=document.getElementById('fDate');
+  if(d && !d.value){ var n=new Date(), m=('0'+(n.getMonth()+1)).slice(-2), day=('0'+n.getDate()).slice(-2);
+    d.value=n.getFullYear()+'-'+m+'-'+day; }
+
+  // ---- record ----
+  document.getElementById('recordBtn').addEventListener('click',function(){
+    var who=(document.getElementById('fName').innerText||'').trim();
+    var picks=currentPicks();
+    var note=document.getElementById('picksNotes');
+    var msg=document.getElementById('recordNote');
+    var errs=validate();
+    if(errs.length){ msg.innerHTML='Before recording:<ul>'+errs.map(function(e){return '<li>'+e+'</li>';}).join('')+'</ul>'; return; }
+    if(!who){ msg.textContent='Add a name and title above before recording.'; return; }
+    var tp=totalPick(); if(tp) picks.push(tp);
+    msg.className='record-note'; msg.textContent='Sending your selections to RenewFlo…';
+    var rec={who:who, when:fmtDate(d?d.value:'')||'no date', picks:picks,
+             note:(note.value||'').trim(), sig: inked?c.toDataURL():null};
+    records.push(rec);
+    renderLedger();
+    sendToRenewFlo(rec);
+    // clear the desk for the next signer
+    document.querySelectorAll('.opt.selected').forEach(function(x){x.classList.remove('selected');});
+    document.getElementById('fName').innerHTML='';
+    if(attestEl) attestEl.classList.remove('checked');
+    note.value='';
+    if(c && ctx){ ctx.clearRect(0,0,c.width,c.height); inked=false; }
+    syncPlans(); renderTotal(); renderLive();
+  });
+
+  // ---- email the selections to RenewFlo ----
+  var DOC_TITLE=(document.querySelector('.property-line')||{}).innerText||document.title;
+  var DOC_VER=(document.querySelector('.doc-version.sum')||{}).dataset;
+  var W3F_KEY='8c2c1639-73ce-43c4-9569-d2f7a1593889';
+  function overview(r){
+    var lines=[
+      'Binding selections — '+DOC_TITLE,
+      'Document: '+(DOC_VER&&DOC_VER.label?DOC_VER.label:'Version 1'),
+      '',
+      'Recorded by: '+r.who,
+      'Date: '+r.when,
+      '',
+      'Selections:'
+    ].concat(r.picks.map(function(x){ return '  • '+x.name+' — '+x.choice; }));
+    if(r.note) lines=lines.concat(['','Comments:',r.note]);
+    lines=lines.concat(['','Signature: '+(r.sig?'signed on screen (image attached below)':'not signed')]);
+    return lines.join('\n');
+  }
+  function sendToRenewFlo(r){
+    var msg=document.getElementById('recordNote');
+    var subj='Binding selections — '+DOC_TITLE.split(' · ')[0]+' — '+r.who;
+    var body=overview(r);
+    var a=document.getElementById('sendLink'), w=document.getElementById('sendLinkWrap');
+    if(a){ a.href='mailto:info@renewflo.co?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body); }
+    function fail(){ msg.className='record-note'; msg.textContent='Your selections are recorded on this page but could not be sent automatically.'; if(w) w.hidden=false; }
+    if(!window.fetch || location.protocol==='file:'){ fail(); return; }
+    var payload={ access_key:W3F_KEY, subject:subj, from_name:'RenewFlo Renewal Summary',
+      name:r.who, property:DOC_TITLE, document:(DOC_VER&&DOC_VER.label)||'Version 1', date:r.when,
+      selections:r.picks.map(function(x){ return x.name+' — '+x.choice; }).join('\n'),
+      comments:r.note||'(none)', message:body, signature_png:(r.sig||'not signed'), botcheck:'' };
+    fetch('https://api.web3forms.com/submit',{ method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'}, body:JSON.stringify(payload) })
+      .then(function(res){ return res.json(); })
+      .then(function(j){ if(j&&j.success){ msg.className='record-note ok'; msg.textContent='Sent — RenewFlo has your selections.'; if(w) w.hidden=true; } else { fail(); } })
+      .catch(fail);
+  }
+  var pdfBtn=document.getElementById('pdfBtn');
+  if(pdfBtn) pdfBtn.addEventListener('click',function(){ window.print(); });
+
+
+  // ---- print-only date text follows the date input ----
+  var dp=document.getElementById('datePrint');
+  function syncDate(){ if(dp&&d){ var v=fmtDate(d.value); dp.textContent=v; if(v) dp.setAttribute('data-v',v); else dp.removeAttribute('data-v'); } }
+  if(d){ d.addEventListener('change',syncDate); d.addEventListener('input',syncDate); } syncDate();
+
+  // ---- persist selections (Supabase, RLS: anon insert + select only) ----
+  var SB_URL='https://rwjmxmoopkrcgtyzithb.supabase.co', SB_KEY='sb_publishable_33Lj7GSQiy3gXsNuiZx3zA_HuZSxw3c', SB_PROP='demo-harborview-2027';
+  var SB_H={ 'apikey':SB_KEY, 'Authorization':'Bearer '+SB_KEY, 'Content-Type':'application/json' };
+  function markLedger(){ var p=document.getElementById('picks'); if(p) p.classList.toggle('has-records', records.length>0); }
+  var _renderLedger=renderLedger; renderLedger=function(){ _renderLedger(); markLedger(); };
+  function loadRecords(){
+    if(!window.fetch || location.protocol==='file:') return;
+    fetch(SB_URL+'/rest/v1/selections?select=who,signed_date,picks,note,signature,version,created_at&property=eq.'+encodeURIComponent(SB_PROP)+'&order=created_at.asc',{headers:SB_H})
+      .then(function(r){ return r.ok ? r.json() : []; })
+      .then(function(rows){
+        if(!rows||!rows.length) return;
+        var have=records.length;
+        rows.forEach(function(x){ records.push({who:x.who, when:x.signed_date||'no date', picks:x.picks||[], note:x.note||'', sig:x.signature||null, ver:x.version||''}); });
+        if(have){ records=records.slice(have).concat(records.slice(0,have)); }
+        renderLedger();
+      }).catch(function(){});
+  }
+  var _send=sendToRenewFlo; sendToRenewFlo=function(r){
+    _send(r);
+    if(!window.fetch || location.protocol==='file:') return;
+    var row={ property:SB_PROP, version:(DOC_VER&&DOC_VER.label)||'Version 1', who:r.who, signed_date:r.when,
+              picks:r.picks, note:r.note||null, signature:r.sig||null };
+    fetch(SB_URL+'/rest/v1/selections',{method:'POST', headers:Object.assign({'Prefer':'return=minimal'},SB_H), body:JSON.stringify(row)}).catch(function(){});
+  };
+
+  renderLive(); renderLedger(); renderTotal(); loadRecords();
+})();
+
+</script>
+<script>
+
+(function(){
+  var LABEL={pay:'Payment option'};
+  var records=[];
+
+  function cellName(tr){ var c=tr.cells[0].cloneNode(true); c.querySelectorAll('.sub-note').forEach(function(x){x.remove();}); return c.innerText.trim(); }
+  function rowName(el){ var tr=el.closest('tr'); return tr?cellName(tr):''; }
+
+  function currentPicks(){
+    var out=[], seen={};
+    document.querySelectorAll('.opt.selected').forEach(function(o){
+      if(o.closest('tr') && o.closest('tr').classList.contains('na')) return;
+      var g=o.dataset.g; var key=(g==='renewal')?rowName(o):g; if(seen[key]) return; seen[key]=1;
+      var name=(g==='pay'||g==='renewal')?rowName(o):(LABEL[g]||rowName(o));
+      out.push({name:name, choice:o.innerText.trim()});
+    });
+    var at=document.getElementById('attest');
+    if(at) out.push({name:'Submitted on behalf of all Trustees', choice: at.classList.contains('checked')?'Yes':'No'});
+    return out;
+  }
+  var attestEl=document.getElementById('attest');
+  if(attestEl) attestEl.addEventListener('click',function(){ attestEl.classList.toggle('checked'); renderLive(); });
+
+  function renderLive(){
+    var p=currentPicks(), b=document.getElementById('picksBody');
+    if(p.length){ b.className='';
+      b.innerHTML=p.map(function(x){return x.name+' — <b>'+x.choice+'</b>';}).join(' · '); }
+    else { b.className='none'; b.textContent='nothing selected yet'; }
+  }
+
+  function fmtDate(v){
+    if(!v) return '';
+    var p=v.split('-'); return p.length===3 ? p[1]+'/'+p[2]+'/'+p[0] : v;
+  }
+
+  function renderLedger(){
+    var l=document.getElementById('ledger');
+    if(!records.length){ l.className='none';
+      l.textContent='No selections recorded yet — the first trustee to record will appear here.'; return; }
+    l.className='';
+    l.innerHTML=records.map(function(r){
+      return '<div class="ledger-entry">'+
+        '<span class="le-who">'+r.who+'</span> <span class="le-when">· '+r.when+(r.ver&&DOC_VER&&r.ver!==DOC_VER.label?' · '+r.ver:'')+'</span>'+
+        '<ul>'+r.picks.map(function(x){return '<li>'+x.name+' — <b>'+x.choice+'</b></li>';}).join('')+'</ul>'+
+        (r.note?'<div class="le-note">“'+r.note+'”</div>':'')+
+        (r.sig?'<img src="'+r.sig+'" alt="signature">':'')+
+      '</div>';
+    }).join('');
+  }
+
+  // ---- selection model ----
+  var V=document.querySelector('.doc-version.sum')||document.querySelector('.doc-version:not([hidden])')||document;
+  function money(n){ return '$'+Math.round(n).toLocaleString('en-US'); }
+  function money2(n){ var r=Math.round(n*100)/100; return '$'+r.toLocaleString('en-US',{minimumFractionDigits:(r%1?2:0),maximumFractionDigits:2}); }
+  function programRows(){ return [].slice.call(V.querySelectorAll('tr[data-premium]')); }
+  function planRows(){ return [].slice.call(V.querySelectorAll('tr[data-plan-total], tr[data-opt]:not([data-premium]):not([data-addon-premium]):not([data-quote])')); }
+  function addonRows(){ return [].slice.call(V.querySelectorAll('tr[data-addon-premium], tr[data-quote]')); }
+  function choice(tr){ var o=tr.querySelector('.opt.selected'); return o?o.innerText.trim():''; }
+  function state(){
+    var st={bound:null, undecided:[], plan:null, planMismatch:false, addons:[]};
+    programRows().forEach(function(tr){ var ch=choice(tr); if(!ch) st.undecided.push(tr); else if(ch==='Bind') st.bound=tr; });
+    planRows().forEach(function(tr){ if(choice(tr)) st.plan=tr; });
+    if(st.plan && st.bound && st.plan.dataset.opt && st.plan.dataset.opt!==st.bound.dataset.opt) st.planMismatch=true;
+    addonRows().forEach(function(tr){ if(tr.classList.contains('na')) return; var ch=choice(tr); if(ch==='Add'||ch==='Renew'||ch==='Quote'||ch==='Decline') st.addons.push({tr:tr, ch:ch}); });
+    return st;
+  }
+  function totalInfo(){
+    var st=state(), lines=[], sum=0, total=null, note='', monos=0;
+    if(!st.bound) return null;
+    sum+= +st.bound.dataset.premium; lines.push([cellName(st.bound), money(st.bound.dataset.premium)]);
+    st.addons.forEach(function(a){ var n=cellName(a.tr);
+      if(a.ch==='Add'||a.ch==='Renew'){ sum+= +a.tr.dataset.addonPremium; monos+= +a.tr.dataset.addonPremium; lines.push([n, money(a.tr.dataset.addonPremium)]); }
+      else if(a.ch==='Decline') lines.push([n, 'declined']);
+      else lines.push([n+' — quote requested', 'not included']); });
+    if(st.plan && !st.planMismatch){
+      var pn=cellName(st.plan);
+      if(st.plan.dataset.planTotal){ var ch=+st.plan.dataset.planCharge||0; total=sum+ch;
+        lines.push([pn, ch>0?'+ '+money(ch)+' '+(st.plan.dataset.planNote||'financing charges'):(ch<0?'− '+money(-ch)+' '+(st.plan.dataset.planNote||'discount'):'no financing charges')]);
+        var pk=st.plan.dataset.planKind;
+        if(pk){ var bp=+st.bound.dataset.premium, dn= pk==='full'? bp : +st.bound.dataset.down;
+          lines.push(['Due at binding — package '+(pk==='inst'?'deposit (25%)':'in full'), money2(dn)]);
+          lines.push(['Due at binding — standalone policies, in full', money2(monos)]);
+          lines.push(['<b>Due at binding</b>', money2(dn+monos)]);
+          if(pk==='inst') lines.push(['Then', '8 monthly × '+money2(+st.bound.dataset.monthly)+' + $10 fee']); }
+        else if(st.plan.dataset.planDown){ var dn=+st.plan.dataset.planDown;
+          lines.push(['Due at binding — package '+(st.plan.dataset.planThen?'deposit':'in full'), money2(dn)]);
+          lines.push(['Due at binding — standalone policies, in full', money2(monos)]);
+          lines.push(['<b>Due at binding</b>', money2(dn+monos)]);
+          if(st.plan.dataset.planThen) lines.push(['Then', st.plan.dataset.planThen]); }
+        note= ch>0 ? 'Includes '+money(ch)+' in '+(st.plan.dataset.planNote||'financing charges')+'.' : (ch<0 ? 'Includes the '+(st.plan.dataset.planNote||'discount')+'.' : 'Paid in full — no financing charges.'); }
+      else { total=sum; var pnote=st.plan.dataset.planNote; lines.push([pn, pnote||'terms not confirmed']); note='Excludes financing charges — '+(pnote||pn+' terms are not confirmed')+'.'; }
+    } else { total=sum; note= st.planMismatch ? 'The payment plan selected is not for the bound program.' : 'Select a payment plan to confirm the total. Financing charges not included.'; }
+    return {lines:lines, total:total, note:note, plan:(st.plan&&!st.planMismatch)?cellName(st.plan):''};
+  }
+  function renderTotal(){
+    var box=document.getElementById('totalBox'); if(!box) return;
+    var t=totalInfo();
+    if(!t){ box.classList.add('empty'); document.getElementById('totalLines').textContent='Your total appears here once a program and a payment plan are selected.'; return; }
+    box.classList.remove('empty');
+    document.getElementById('totalLines').innerHTML=t.lines.map(function(l){ return '<div class="tb-line"><span>'+l[0]+'</span><span>'+l[1]+'</span></div>'; }).join('');
+    document.getElementById('totalAmt').textContent=money(t.total);
+    document.getElementById('totalNote').textContent=t.note;
+  }
+  function totalPick(){ var t=totalInfo(); if(!t) return null;
+    return {name:'Total', choice: money(t.total)+(t.plan?' — '+t.plan:'')+(t.note?' ('+t.note.replace(/\.$/,'')+')':'')}; }
+  function syncPlans(){
+    var st=state();
+    planRows().forEach(function(tr){ var na= st.bound && tr.dataset.opt && tr.dataset.opt!==st.bound.dataset.opt;
+      tr.classList.toggle('na', !!na); if(na) tr.querySelectorAll('.opt').forEach(function(x){x.classList.remove('selected');}); });
+    addonRows().forEach(function(tr){ if(!tr.dataset.opt) return; var na= st.bound && (' '+tr.dataset.opt+' ').indexOf(' '+st.bound.dataset.opt+' ')<0;
+      tr.classList.toggle('na', !!na); if(na){ tr.classList.remove('need'); tr.querySelectorAll('.opt').forEach(function(x){x.classList.remove('selected');}); } });
+  }
+  function validate(){
+    var st=state(), errs=[];
+    programRows().forEach(function(tr){ tr.classList.remove('need'); });
+    st.undecided.forEach(function(tr){ tr.classList.add('need'); errs.push(cellName(tr)+' — mark Bind or Decline'); });
+    if(programRows().length && !st.bound) errs.push('Bind one program');
+    if(st.bound && !st.plan) errs.push('Select a payment plan');
+    if(st.planMismatch) errs.push('Select a payment plan for the bound program');
+    addonRows().forEach(function(tr){ if(tr.classList.contains('na')) return;
+      if(!choice(tr)){ tr.classList.add('need'); errs.push(cellName(tr)+' — make a decision'); } });
+    return errs;
+  }
+
+  document.querySelectorAll('.opt').forEach(function(o){
+    o.addEventListener('click',function(){
+      var g=o.dataset.g;
+      if(o.closest('tr') && o.closest('tr').classList.contains('na')) return;
+      if(g==='pay'){
+        document.querySelectorAll('.opt[data-g="pay"]').forEach(function(x){x.classList.remove('selected');});
+        o.classList.add('selected');
+      } else if(g==='renewal'){
+        var tr=o.closest('tr'), was=o.classList.contains('selected');
+        tr.querySelectorAll('.opt[data-g="renewal"]').forEach(function(x){x.classList.remove('selected');});
+        if(!was){ o.classList.add('selected');
+          if(o.innerText.trim()==='Bind'){ programRows().forEach(function(r){ if(r!==tr){ var b=r.querySelector('.opt.selected'); if(b&&b.innerText.trim()==='Bind') b.classList.remove('selected'); } }); } }
+        tr.classList.remove('need');
+      } else {
+        var was=o.classList.contains('selected');
+        var scope=(g==='renewal')?o.closest('tr'):document;
+        scope.querySelectorAll('.opt[data-g="'+g+'"]').forEach(function(x){x.classList.remove('selected');});
+        if(!was) o.classList.add('selected');
+        if(o.closest('tr')) o.closest('tr').classList.remove('need');
+      }
+      syncPlans(); renderTotal(); renderLive();
+    });
+  });
+
+  // ---- signature pad ----
+  var c=document.getElementById('sigPad'), ctx=null, inked=false;
+  if(c){
+    function size(){
+      var r=c.getBoundingClientRect(), d=window.devicePixelRatio||1;
+      var keep=inked?c.toDataURL():null;
+      c.width=r.width*d; c.height=r.height*d; ctx=c.getContext('2d');
+      ctx.scale(d,d); ctx.lineWidth=1.8; ctx.lineCap='round'; ctx.lineJoin='round'; ctx.strokeStyle='#141B2D';
+      if(keep){ var i=new Image(); i.onload=function(){ ctx.drawImage(i,0,0,r.width,r.height); }; i.src=keep; }
+    }
+    size(); window.addEventListener('resize',size);
+    var drawing=false;
+    function pt(e){ var r=c.getBoundingClientRect(); return [e.clientX-r.left, e.clientY-r.top]; }
+    c.addEventListener('pointerdown',function(e){ drawing=true; inked=true; c.setPointerCapture(e.pointerId);
+      var p=pt(e); ctx.beginPath(); ctx.moveTo(p[0],p[1]); });
+    c.addEventListener('pointermove',function(e){ if(!drawing) return; var p=pt(e);
+      ctx.lineTo(p[0],p[1]); ctx.stroke(); });
+    c.addEventListener('pointerup',function(){ drawing=false; var im=document.getElementById('sigPrint'); if(im&&inked) im.src=c.toDataURL(); });
+    document.getElementById('sigClear').addEventListener('click',function(){
+      ctx.clearRect(0,0,c.width,c.height); inked=false; var im=document.getElementById('sigPrint'); if(im) im.removeAttribute('src'); });
+  }
+
+  // ---- today's date by default ----
+  var d=document.getElementById('fDate');
+  if(d && !d.value){ var n=new Date(), m=('0'+(n.getMonth()+1)).slice(-2), day=('0'+n.getDate()).slice(-2);
+    d.value=n.getFullYear()+'-'+m+'-'+day; }
+
+  // ---- record ----
+  document.getElementById('recordBtn').addEventListener('click',function(){
+    var who=(document.getElementById('fName').innerText||'').trim();
+    var picks=currentPicks();
+    var note=document.getElementById('picksNotes');
+    var msg=document.getElementById('recordNote');
+    var errs=validate();
+    if(errs.length){ msg.innerHTML='Before recording:<ul>'+errs.map(function(e){return '<li>'+e+'</li>';}).join('')+'</ul>'; return; }
+    if(!who){ msg.textContent='Add a name and title above before recording.'; return; }
+    var tp=totalPick(); if(tp) picks.push(tp);
+    msg.className='record-note'; msg.textContent='Sending your selections to RenewFlo…';
+    var rec={who:who, when:fmtDate(d?d.value:'')||'no date', picks:picks,
+             note:(note.value||'').trim(), sig: inked?c.toDataURL():null};
+    records.push(rec);
+    renderLedger();
+    sendToRenewFlo(rec);
+    // clear the desk for the next signer
+    document.querySelectorAll('.opt.selected').forEach(function(x){x.classList.remove('selected');});
+    document.getElementById('fName').innerHTML='';
+    if(attestEl) attestEl.classList.remove('checked');
+    note.value='';
+    if(c && ctx){ ctx.clearRect(0,0,c.width,c.height); inked=false; }
+    syncPlans(); renderTotal(); renderLive();
+  });
+
+  // ---- email the selections to RenewFlo ----
+  var DOC_TITLE=(document.querySelector('.property-line')||{}).innerText||document.title;
+  var DOC_VER=(document.querySelector('.doc-version.sum')||{}).dataset;
+  var W3F_KEY='8c2c1639-73ce-43c4-9569-d2f7a1593889';
+  function overview(r){
+    var lines=[
+      'Binding selections — '+DOC_TITLE,
+      'Document: '+(DOC_VER&&DOC_VER.label?DOC_VER.label:'Version 1'),
+      '',
+      'Recorded by: '+r.who,
+      'Date: '+r.when,
+      '',
+      'Selections:'
+    ].concat(r.picks.map(function(x){ return '  • '+x.name+' — '+x.choice; }));
+    if(r.note) lines=lines.concat(['','Comments:',r.note]);
+    lines=lines.concat(['','Signature: '+(r.sig?'signed on screen (image attached below)':'not signed')]);
+    return lines.join('\n');
+  }
+  function sendToRenewFlo(r){
+    var msg=document.getElementById('recordNote');
+    var subj='Binding selections — '+DOC_TITLE.split(' · ')[0]+' — '+r.who;
+    var body=overview(r);
+    var a=document.getElementById('sendLink'), w=document.getElementById('sendLinkWrap');
+    if(a){ a.href='mailto:info@renewflo.co?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body); }
+    function fail(){ msg.className='record-note'; msg.textContent='Your selections are recorded on this page but could not be sent automatically.'; if(w) w.hidden=false; }
+    if(!window.fetch || location.protocol==='file:'){ fail(); return; }
+    var payload={ access_key:W3F_KEY, subject:subj, from_name:'RenewFlo Renewal Summary',
+      name:r.who, property:DOC_TITLE, document:(DOC_VER&&DOC_VER.label)||'Version 1', date:r.when,
+      selections:r.picks.map(function(x){ return x.name+' — '+x.choice; }).join('\n'),
+      comments:r.note||'(none)', message:body, signature_png:(r.sig||'not signed'), botcheck:'' };
+    fetch('https://api.web3forms.com/submit',{ method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'}, body:JSON.stringify(payload) })
+      .then(function(res){ return res.json(); })
+      .then(function(j){ if(j&&j.success){ msg.className='record-note ok'; msg.textContent='Sent — RenewFlo has your selections.'; if(w) w.hidden=true; } else { fail(); } })
+      .catch(fail);
+  }
+  var pdfBtn=document.getElementById('pdfBtn');
+  if(pdfBtn) pdfBtn.addEventListener('click',function(){ window.print(); });
+
+
+  // ---- print-only date text follows the date input ----
+  var dp=document.getElementById('datePrint');
+  function syncDate(){ if(dp&&d){ var v=fmtDate(d.value); dp.textContent=v; if(v) dp.setAttribute('data-v',v); else dp.removeAttribute('data-v'); } }
+  if(d){ d.addEventListener('change',syncDate); d.addEventListener('input',syncDate); } syncDate();
+
+  // ---- persist selections (Supabase, RLS: anon insert + select only) ----
+  var SB_URL='https://rwjmxmoopkrcgtyzithb.supabase.co', SB_KEY='sb_publishable_33Lj7GSQiy3gXsNuiZx3zA_HuZSxw3c', SB_PROP='demo-harborview-2027';
+  var SB_H={ 'apikey':SB_KEY, 'Authorization':'Bearer '+SB_KEY, 'Content-Type':'application/json' };
+  function markLedger(){ var p=document.getElementById('picks'); if(p) p.classList.toggle('has-records', records.length>0); }
+  var _renderLedger=renderLedger; renderLedger=function(){ _renderLedger(); markLedger(); };
+  function loadRecords(){
+    if(!window.fetch || location.protocol==='file:') return;
+    fetch(SB_URL+'/rest/v1/selections?select=who,signed_date,picks,note,signature,version,created_at&property=eq.'+encodeURIComponent(SB_PROP)+'&order=created_at.asc',{headers:SB_H})
+      .then(function(r){ return r.ok ? r.json() : []; })
+      .then(function(rows){
+        if(!rows||!rows.length) return;
+        var have=records.length;
+        rows.forEach(function(x){ records.push({who:x.who, when:x.signed_date||'no date', picks:x.picks||[], note:x.note||'', sig:x.signature||null, ver:x.version||''}); });
+        if(have){ records=records.slice(have).concat(records.slice(0,have)); }
+        renderLedger();
+      }).catch(function(){});
+  }
+  var _send=sendToRenewFlo; sendToRenewFlo=function(r){
+    _send(r);
+    if(!window.fetch || location.protocol==='file:') return;
+    var row={ property:SB_PROP, version:(DOC_VER&&DOC_VER.label)||'Version 1', who:r.who, signed_date:r.when,
+              picks:r.picks, note:r.note||null, signature:r.sig||null };
+    fetch(SB_URL+'/rest/v1/selections',{method:'POST', headers:Object.assign({'Prefer':'return=minimal'},SB_H), body:JSON.stringify(row)}).catch(function(){});
+  };
+
+  renderLive(); renderLedger(); renderTotal(); loadRecords();
+})();
+
+</script>
+<script>
+
+(function(){
+  var LABEL={pay:'Payment option'};
+  var records=[];
+
+  function cellName(tr){ var c=tr.cells[0].cloneNode(true); c.querySelectorAll('.sub-note').forEach(function(x){x.remove();}); return c.innerText.trim(); }
+  function rowName(el){ var tr=el.closest('tr'); return tr?cellName(tr):''; }
+
+  function currentPicks(){
+    var out=[], seen={};
+    document.querySelectorAll('.opt.selected').forEach(function(o){
+      if(o.closest('tr') && o.closest('tr').classList.contains('na')) return;
+      var g=o.dataset.g; var key=(g==='renewal')?rowName(o):g; if(seen[key]) return; seen[key]=1;
+      var name=(g==='pay'||g==='renewal')?rowName(o):(LABEL[g]||rowName(o));
+      out.push({name:name, choice:o.innerText.trim()});
+    });
+    var at=document.getElementById('attest');
+    if(at) out.push({name:'Submitted on behalf of all Trustees', choice: at.classList.contains('checked')?'Yes':'No'});
+    return out;
+  }
+  var attestEl=document.getElementById('attest');
+  if(attestEl) attestEl.addEventListener('click',function(){ attestEl.classList.toggle('checked'); renderLive(); });
+
+  function renderLive(){
+    var p=currentPicks(), b=document.getElementById('picksBody');
+    if(p.length){ b.className='';
+      b.innerHTML=p.map(function(x){return x.name+' — <b>'+x.choice+'</b>';}).join(' · '); }
+    else { b.className='none'; b.textContent='nothing selected yet'; }
+  }
+
+  function fmtDate(v){
+    if(!v) return '';
+    var p=v.split('-'); return p.length===3 ? p[1]+'/'+p[2]+'/'+p[0] : v;
+  }
+
+  function renderLedger(){
+    var l=document.getElementById('ledger');
+    if(!records.length){ l.className='none';
+      l.textContent='No selections recorded yet — the first trustee to record will appear here.'; return; }
+    l.className='';
+    l.innerHTML=records.map(function(r){
+      return '<div class="ledger-entry">'+
+        '<span class="le-who">'+r.who+'</span> <span class="le-when">· '+r.when+(r.ver&&DOC_VER&&r.ver!==DOC_VER.label?' · '+r.ver:'')+'</span>'+
+        '<ul>'+r.picks.map(function(x){return '<li>'+x.name+' — <b>'+x.choice+'</b></li>';}).join('')+'</ul>'+
+        (r.note?'<div class="le-note">“'+r.note+'”</div>':'')+
+        (r.sig?'<img src="'+r.sig+'" alt="signature">':'')+
+      '</div>';
+    }).join('');
+  }
+
+  // ---- selection model ----
+  var V=document.querySelector('.doc-version.sum')||document.querySelector('.doc-version:not([hidden])')||document;
+  function money(n){ return '$'+Math.round(n).toLocaleString('en-US'); }
+  function money2(n){ var r=Math.round(n*100)/100; return '$'+r.toLocaleString('en-US',{minimumFractionDigits:(r%1?2:0),maximumFractionDigits:2}); }
+  function programRows(){ return [].slice.call(V.querySelectorAll('tr[data-premium]')); }
+  function planRows(){ return [].slice.call(V.querySelectorAll('tr[data-plan-total], tr[data-opt]:not([data-premium]):not([data-addon-premium]):not([data-quote])')); }
+  function addonRows(){ return [].slice.call(V.querySelectorAll('tr[data-addon-premium], tr[data-quote]')); }
+  function choice(tr){ var o=tr.querySelector('.opt.selected'); return o?o.innerText.trim():''; }
+  function state(){
+    var st={bound:null, undecided:[], plan:null, planMismatch:false, addons:[]};
+    programRows().forEach(function(tr){ var ch=choice(tr); if(!ch) st.undecided.push(tr); else if(ch==='Bind') st.bound=tr; });
+    planRows().forEach(function(tr){ if(choice(tr)) st.plan=tr; });
+    if(st.plan && st.bound && st.plan.dataset.opt && st.plan.dataset.opt!==st.bound.dataset.opt) st.planMismatch=true;
+    addonRows().forEach(function(tr){ if(tr.classList.contains('na')) return; var ch=choice(tr); if(ch==='Add'||ch==='Renew'||ch==='Quote'||ch==='Decline') st.addons.push({tr:tr, ch:ch}); });
+    return st;
+  }
+  function totalInfo(){
+    var st=state(), lines=[], sum=0, total=null, note='', monos=0;
+    if(!st.bound) return null;
+    sum+= +st.bound.dataset.premium; lines.push([cellName(st.bound), money(st.bound.dataset.premium)]);
+    st.addons.forEach(function(a){ var n=cellName(a.tr);
+      if(a.ch==='Add'||a.ch==='Renew'){ sum+= +a.tr.dataset.addonPremium; monos+= +a.tr.dataset.addonPremium; lines.push([n, money(a.tr.dataset.addonPremium)]); }
+      else if(a.ch==='Decline') lines.push([n, 'declined']);
+      else lines.push([n+' — quote requested', 'not included']); });
+    if(st.plan && !st.planMismatch){
+      var pn=cellName(st.plan);
+      if(st.plan.dataset.planTotal){ var ch=+st.plan.dataset.planCharge||0; total=sum+ch;
+        lines.push([pn, ch>0?'+ '+money(ch)+' '+(st.plan.dataset.planNote||'financing charges'):(ch<0?'− '+money(-ch)+' '+(st.plan.dataset.planNote||'discount'):'no financing charges')]);
+        var pk=st.plan.dataset.planKind;
+        if(pk){ var bp=+st.bound.dataset.premium, dn= pk==='full'? bp : +st.bound.dataset.down;
+          lines.push(['Due at binding — package '+(pk==='inst'?'deposit (25%)':'in full'), money2(dn)]);
+          lines.push(['Due at binding — standalone policies, in full', money2(monos)]);
+          lines.push(['<b>Due at binding</b>', money2(dn+monos)]);
+          if(pk==='inst') lines.push(['Then', '8 monthly × '+money2(+st.bound.dataset.monthly)+' + $10 fee']); }
+        else if(st.plan.dataset.planDown){ var dn=+st.plan.dataset.planDown;
+          lines.push(['Due at binding — package '+(st.plan.dataset.planThen?'deposit':'in full'), money2(dn)]);
+          lines.push(['Due at binding — standalone policies, in full', money2(monos)]);
+          lines.push(['<b>Due at binding</b>', money2(dn+monos)]);
+          if(st.plan.dataset.planThen) lines.push(['Then', st.plan.dataset.planThen]); }
+        note= ch>0 ? 'Includes '+money(ch)+' in '+(st.plan.dataset.planNote||'financing charges')+'.' : (ch<0 ? 'Includes the '+(st.plan.dataset.planNote||'discount')+'.' : 'Paid in full — no financing charges.'); }
+      else { total=sum; var pnote=st.plan.dataset.planNote; lines.push([pn, pnote||'terms not confirmed']); note='Excludes financing charges — '+(pnote||pn+' terms are not confirmed')+'.'; }
+    } else { total=sum; note= st.planMismatch ? 'The payment plan selected is not for the bound program.' : 'Select a payment plan to confirm the total. Financing charges not included.'; }
+    return {lines:lines, total:total, note:note, plan:(st.plan&&!st.planMismatch)?cellName(st.plan):''};
+  }
+  function renderTotal(){
+    var box=document.getElementById('totalBox'); if(!box) return;
+    var t=totalInfo();
+    if(!t){ box.classList.add('empty'); document.getElementById('totalLines').textContent='Your total appears here once a program and a payment plan are selected.'; return; }
+    box.classList.remove('empty');
+    document.getElementById('totalLines').innerHTML=t.lines.map(function(l){ return '<div class="tb-line"><span>'+l[0]+'</span><span>'+l[1]+'</span></div>'; }).join('');
+    document.getElementById('totalAmt').textContent=money(t.total);
+    document.getElementById('totalNote').textContent=t.note;
+  }
+  function totalPick(){ var t=totalInfo(); if(!t) return null;
+    return {name:'Total', choice: money(t.total)+(t.plan?' — '+t.plan:'')+(t.note?' ('+t.note.replace(/\.$/,'')+')':'')}; }
+  function syncPlans(){
+    var st=state();
+    planRows().forEach(function(tr){ var na= st.bound && tr.dataset.opt && tr.dataset.opt!==st.bound.dataset.opt;
+      tr.classList.toggle('na', !!na); if(na) tr.querySelectorAll('.opt').forEach(function(x){x.classList.remove('selected');}); });
+    addonRows().forEach(function(tr){ if(!tr.dataset.opt) return; var na= st.bound && (' '+tr.dataset.opt+' ').indexOf(' '+st.bound.dataset.opt+' ')<0;
+      tr.classList.toggle('na', !!na); if(na){ tr.classList.remove('need'); tr.querySelectorAll('.opt').forEach(function(x){x.classList.remove('selected');}); } });
+  }
+  function validate(){
+    var st=state(), errs=[];
+    programRows().forEach(function(tr){ tr.classList.remove('need'); });
+    st.undecided.forEach(function(tr){ tr.classList.add('need'); errs.push(cellName(tr)+' — mark Bind or Decline'); });
+    if(programRows().length && !st.bound) errs.push('Bind one program');
+    if(st.bound && !st.plan) errs.push('Select a payment plan');
+    if(st.planMismatch) errs.push('Select a payment plan for the bound program');
+    addonRows().forEach(function(tr){ if(tr.classList.contains('na')) return;
+      if(!choice(tr)){ tr.classList.add('need'); errs.push(cellName(tr)+' — make a decision'); } });
+    return errs;
+  }
+
+  document.querySelectorAll('.opt').forEach(function(o){
+    o.addEventListener('click',function(){
+      var g=o.dataset.g;
+      if(o.closest('tr') && o.closest('tr').classList.contains('na')) return;
+      if(g==='pay'){
+        document.querySelectorAll('.opt[data-g="pay"]').forEach(function(x){x.classList.remove('selected');});
+        o.classList.add('selected');
+      } else if(g==='renewal'){
+        var tr=o.closest('tr'), was=o.classList.contains('selected');
+        tr.querySelectorAll('.opt[data-g="renewal"]').forEach(function(x){x.classList.remove('selected');});
+        if(!was){ o.classList.add('selected');
+          if(o.innerText.trim()==='Bind'){ programRows().forEach(function(r){ if(r!==tr){ var b=r.querySelector('.opt.selected'); if(b&&b.innerText.trim()==='Bind') b.classList.remove('selected'); } }); } }
+        tr.classList.remove('need');
+      } else {
+        var was=o.classList.contains('selected');
+        var scope=(g==='renewal')?o.closest('tr'):document;
+        scope.querySelectorAll('.opt[data-g="'+g+'"]').forEach(function(x){x.classList.remove('selected');});
+        if(!was) o.classList.add('selected');
+        if(o.closest('tr')) o.closest('tr').classList.remove('need');
+      }
+      syncPlans(); renderTotal(); renderLive();
+    });
+  });
+
+  // ---- signature pad ----
+  var c=document.getElementById('sigPad'), ctx=null, inked=false;
+  if(c){
+    function size(){
+      var r=c.getBoundingClientRect(), d=window.devicePixelRatio||1;
+      var keep=inked?c.toDataURL():null;
+      c.width=r.width*d; c.height=r.height*d; ctx=c.getContext('2d');
+      ctx.scale(d,d); ctx.lineWidth=1.8; ctx.lineCap='round'; ctx.lineJoin='round'; ctx.strokeStyle='#141B2D';
+      if(keep){ var i=new Image(); i.onload=function(){ ctx.drawImage(i,0,0,r.width,r.height); }; i.src=keep; }
+    }
+    size(); window.addEventListener('resize',size);
+    var drawing=false;
+    function pt(e){ var r=c.getBoundingClientRect(); return [e.clientX-r.left, e.clientY-r.top]; }
+    c.addEventListener('pointerdown',function(e){ drawing=true; inked=true; c.setPointerCapture(e.pointerId);
+      var p=pt(e); ctx.beginPath(); ctx.moveTo(p[0],p[1]); });
+    c.addEventListener('pointermove',function(e){ if(!drawing) return; var p=pt(e);
+      ctx.lineTo(p[0],p[1]); ctx.stroke(); });
+    c.addEventListener('pointerup',function(){ drawing=false; var im=document.getElementById('sigPrint'); if(im&&inked) im.src=c.toDataURL(); });
+    document.getElementById('sigClear').addEventListener('click',function(){
+      ctx.clearRect(0,0,c.width,c.height); inked=false; var im=document.getElementById('sigPrint'); if(im) im.removeAttribute('src'); });
+  }
+
+  // ---- today's date by default ----
+  var d=document.getElementById('fDate');
+  if(d && !d.value){ var n=new Date(), m=('0'+(n.getMonth()+1)).slice(-2), day=('0'+n.getDate()).slice(-2);
+    d.value=n.getFullYear()+'-'+m+'-'+day; }
+
+  // ---- record ----
+  document.getElementById('recordBtn').addEventListener('click',function(){
+    var who=(document.getElementById('fName').innerText||'').trim();
+    var picks=currentPicks();
+    var note=document.getElementById('picksNotes');
+    var msg=document.getElementById('recordNote');
+    var errs=validate();
+    if(errs.length){ msg.innerHTML='Before recording:<ul>'+errs.map(function(e){return '<li>'+e+'</li>';}).join('')+'</ul>'; return; }
+    if(!who){ msg.textContent='Add a name and title above before recording.'; return; }
+    var tp=totalPick(); if(tp) picks.push(tp);
+    msg.className='record-note'; msg.textContent='Sending your selections to RenewFlo…';
+    var rec={who:who, when:fmtDate(d?d.value:'')||'no date', picks:picks,
+             note:(note.value||'').trim(), sig: inked?c.toDataURL():null};
+    records.push(rec);
+    renderLedger();
+    sendToRenewFlo(rec);
+    // clear the desk for the next signer
+    document.querySelectorAll('.opt.selected').forEach(function(x){x.classList.remove('selected');});
+    document.getElementById('fName').innerHTML='';
+    if(attestEl) attestEl.classList.remove('checked');
+    note.value='';
+    if(c && ctx){ ctx.clearRect(0,0,c.width,c.height); inked=false; }
+    syncPlans(); renderTotal(); renderLive();
+  });
+
+  // ---- email the selections to RenewFlo ----
+  var DOC_TITLE=(document.querySelector('.property-line')||{}).innerText||document.title;
+  var DOC_VER=(document.querySelector('.doc-version.sum')||{}).dataset;
+  var W3F_KEY='8c2c1639-73ce-43c4-9569-d2f7a1593889';
+  function overview(r){
+    var lines=[
+      'Binding selections — '+DOC_TITLE,
+      'Document: '+(DOC_VER&&DOC_VER.label?DOC_VER.label:'Version 1'),
+      '',
+      'Recorded by: '+r.who,
+      'Date: '+r.when,
+      '',
+      'Selections:'
+    ].concat(r.picks.map(function(x){ return '  • '+x.name+' — '+x.choice; }));
+    if(r.note) lines=lines.concat(['','Comments:',r.note]);
+    lines=lines.concat(['','Signature: '+(r.sig?'signed on screen (image attached below)':'not signed')]);
+    return lines.join('\n');
+  }
+  function sendToRenewFlo(r){
+    var msg=document.getElementById('recordNote');
+    var subj='Binding selections — '+DOC_TITLE.split(' · ')[0]+' — '+r.who;
+    var body=overview(r);
+    var a=document.getElementById('sendLink'), w=document.getElementById('sendLinkWrap');
+    if(a){ a.href='mailto:info@renewflo.co?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body); }
+    function fail(){ msg.className='record-note'; msg.textContent='Your selections are recorded on this page but could not be sent automatically.'; if(w) w.hidden=false; }
+    if(!window.fetch || location.protocol==='file:'){ fail(); return; }
+    var payload={ access_key:W3F_KEY, subject:subj, from_name:'RenewFlo Renewal Summary',
+      name:r.who, property:DOC_TITLE, document:(DOC_VER&&DOC_VER.label)||'Version 1', date:r.when,
+      selections:r.picks.map(function(x){ return x.name+' — '+x.choice; }).join('\n'),
+      comments:r.note||'(none)', message:body, signature_png:(r.sig||'not signed'), botcheck:'' };
+    fetch('https://api.web3forms.com/submit',{ method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'}, body:JSON.stringify(payload) })
+      .then(function(res){ return res.json(); })
+      .then(function(j){ if(j&&j.success){ msg.className='record-note ok'; msg.textContent='Sent — RenewFlo has your selections.'; if(w) w.hidden=true; } else { fail(); } })
+      .catch(fail);
+  }
+  var pdfBtn=document.getElementById('pdfBtn');
+  if(pdfBtn) pdfBtn.addEventListener('click',function(){ window.print(); });
+
+
+  // ---- print-only date text follows the date input ----
+  var dp=document.getElementById('datePrint');
+  function syncDate(){ if(dp&&d){ var v=fmtDate(d.value); dp.textContent=v; if(v) dp.setAttribute('data-v',v); else dp.removeAttribute('data-v'); } }
+  if(d){ d.addEventListener('change',syncDate); d.addEventListener('input',syncDate); } syncDate();
+
+  // ---- persist selections (Supabase, RLS: anon insert + select only) ----
+  var SB_URL='https://rwjmxmoopkrcgtyzithb.supabase.co', SB_KEY='sb_publishable_33Lj7GSQiy3gXsNuiZx3zA_HuZSxw3c', SB_PROP='demo-harborview-2027';
+  var SB_H={ 'apikey':SB_KEY, 'Authorization':'Bearer '+SB_KEY, 'Content-Type':'application/json' };
+  function markLedger(){ var p=document.getElementById('picks'); if(p) p.classList.toggle('has-records', records.length>0); }
+  var _renderLedger=renderLedger; renderLedger=function(){ _renderLedger(); markLedger(); };
+  function loadRecords(){
+    if(!window.fetch || location.protocol==='file:') return;
+    fetch(SB_URL+'/rest/v1/selections?select=who,signed_date,picks,note,signature,version,created_at&property=eq.'+encodeURIComponent(SB_PROP)+'&order=created_at.asc',{headers:SB_H})
+      .then(function(r){ return r.ok ? r.json() : []; })
+      .then(function(rows){
+        if(!rows||!rows.length) return;
+        var have=records.length;
+        rows.forEach(function(x){ records.push({who:x.who, when:x.signed_date||'no date', picks:x.picks||[], note:x.note||'', sig:x.signature||null, ver:x.version||''}); });
+        if(have){ records=records.slice(have).concat(records.slice(0,have)); }
+        renderLedger();
+      }).catch(function(){});
+  }
+  var _send=sendToRenewFlo; sendToRenewFlo=function(r){
+    _send(r);
+    if(!window.fetch || location.protocol==='file:') return;
+    var row={ property:SB_PROP, version:(DOC_VER&&DOC_VER.label)||'Version 1', who:r.who, signed_date:r.when,
+              picks:r.picks, note:r.note||null, signature:r.sig||null };
+    fetch(SB_URL+'/rest/v1/selections',{method:'POST', headers:Object.assign({'Prefer':'return=minimal'},SB_H), body:JSON.stringify(row)}).catch(function(){});
+  };
+
+  renderLive(); renderLedger(); renderTotal(); loadRecords();
+})();
+
+</script>
+<script>
+
+(function(){
+  var LABEL={pay:'Payment option'};
+  var records=[];
+
+  function cellName(tr){ var c=tr.cells[0].cloneNode(true); c.querySelectorAll('.sub-note').forEach(function(x){x.remove();}); return c.innerText.trim(); }
+  function rowName(el){ var tr=el.closest('tr'); return tr?cellName(tr):''; }
+
+  function currentPicks(){
+    var out=[], seen={};
+    document.querySelectorAll('.opt.selected').forEach(function(o){
+      if(o.closest('tr') && o.closest('tr').classList.contains('na')) return;
+      var g=o.dataset.g; var key=(g==='renewal')?rowName(o):g; if(seen[key]) return; seen[key]=1;
+      var name=(g==='pay'||g==='renewal')?rowName(o):(LABEL[g]||rowName(o));
+      out.push({name:name, choice:o.innerText.trim()});
+    });
+    var at=document.getElementById('attest');
+    if(at) out.push({name:'Submitted on behalf of all Trustees', choice: at.classList.contains('checked')?'Yes':'No'});
+    return out;
+  }
+  var attestEl=document.getElementById('attest');
+  if(attestEl) attestEl.addEventListener('click',function(){ attestEl.classList.toggle('checked'); renderLive(); });
+
+  function renderLive(){
+    var p=currentPicks(), b=document.getElementById('picksBody');
+    if(p.length){ b.className='';
+      b.innerHTML=p.map(function(x){return x.name+' — <b>'+x.choice+'</b>';}).join(' · '); }
+    else { b.className='none'; b.textContent='nothing selected yet'; }
+  }
+
+  function fmtDate(v){
+    if(!v) return '';
+    var p=v.split('-'); return p.length===3 ? p[1]+'/'+p[2]+'/'+p[0] : v;
+  }
+
+  function renderLedger(){
+    var l=document.getElementById('ledger');
+    if(!records.length){ l.className='none';
+      l.textContent='No selections recorded yet — the first trustee to record will appear here.'; return; }
+    l.className='';
+    l.innerHTML=records.map(function(r){
+      return '<div class="ledger-entry">'+
+        '<span class="le-who">'+r.who+'</span> <span class="le-when">· '+r.when+(r.ver&&DOC_VER&&r.ver!==DOC_VER.label?' · '+r.ver:'')+'</span>'+
+        '<ul>'+r.picks.map(function(x){return '<li>'+x.name+' — <b>'+x.choice+'</b></li>';}).join('')+'</ul>'+
+        (r.note?'<div class="le-note">“'+r.note+'”</div>':'')+
+        (r.sig?'<img src="'+r.sig+'" alt="signature">':'')+
+      '</div>';
+    }).join('');
+  }
+
+  // ---- selection model ----
+  var V=document.querySelector('.doc-version.sum')||document.querySelector('.doc-version:not([hidden])')||document;
+  function money(n){ return '$'+Math.round(n).toLocaleString('en-US'); }
+  function money2(n){ var r=Math.round(n*100)/100; return '$'+r.toLocaleString('en-US',{minimumFractionDigits:(r%1?2:0),maximumFractionDigits:2}); }
+  function programRows(){ return [].slice.call(V.querySelectorAll('tr[data-premium]')); }
+  function planRows(){ return [].slice.call(V.querySelectorAll('tr[data-plan-total], tr[data-opt]:not([data-premium]):not([data-addon-premium]):not([data-quote])')); }
+  function addonRows(){ return [].slice.call(V.querySelectorAll('tr[data-addon-premium], tr[data-quote]')); }
+  function choice(tr){ var o=tr.querySelector('.opt.selected'); return o?o.innerText.trim():''; }
+  function state(){
+    var st={bound:null, undecided:[], plan:null, planMismatch:false, addons:[]};
+    programRows().forEach(function(tr){ var ch=choice(tr); if(!ch) st.undecided.push(tr); else if(ch==='Bind') st.bound=tr; });
+    planRows().forEach(function(tr){ if(choice(tr)) st.plan=tr; });
+    if(st.plan && st.bound && st.plan.dataset.opt && st.plan.dataset.opt!==st.bound.dataset.opt) st.planMismatch=true;
+    addonRows().forEach(function(tr){ if(tr.classList.contains('na')) return; var ch=choice(tr); if(ch==='Add'||ch==='Renew'||ch==='Quote'||ch==='Decline') st.addons.push({tr:tr, ch:ch}); });
+    return st;
+  }
+  function totalInfo(){
+    var st=state(), lines=[], sum=0, total=null, note='', monos=0;
+    if(!st.bound) return null;
+    sum+= +st.bound.dataset.premium; lines.push([cellName(st.bound), money(st.bound.dataset.premium)]);
+    st.addons.forEach(function(a){ var n=cellName(a.tr);
+      if(a.ch==='Add'||a.ch==='Renew'){ sum+= +a.tr.dataset.addonPremium; monos+= +a.tr.dataset.addonPremium; lines.push([n, money(a.tr.dataset.addonPremium)]); }
+      else if(a.ch==='Decline') lines.push([n, 'declined']);
+      else lines.push([n+' — quote requested', 'not included']); });
+    if(st.plan && !st.planMismatch){
+      var pn=cellName(st.plan);
+      if(st.plan.dataset.planTotal){ var ch=+st.plan.dataset.planCharge||0; total=sum+ch;
+        lines.push([pn, ch>0?'+ '+money(ch)+' '+(st.plan.dataset.planNote||'financing charges'):(ch<0?'− '+money(-ch)+' '+(st.plan.dataset.planNote||'discount'):'no financing charges')]);
+        var pk=st.plan.dataset.planKind;
+        if(pk){ var bp=+st.bound.dataset.premium, dn= pk==='full'? bp : +st.bound.dataset.down;
+          lines.push(['Due at binding — package '+(pk==='inst'?'deposit (25%)':'in full'), money2(dn)]);
+          lines.push(['Due at binding — standalone policies, in full', money2(monos)]);
+          lines.push(['<b>Due at binding</b>', money2(dn+monos)]);
+          if(pk==='inst') lines.push(['Then', '8 monthly × '+money2(+st.bound.dataset.monthly)+' + $10 fee']); }
+        else if(st.plan.dataset.planDown){ var dn=+st.plan.dataset.planDown;
+          lines.push(['Due at binding — package '+(st.plan.dataset.planThen?'deposit':'in full'), money2(dn)]);
+          lines.push(['Due at binding — standalone policies, in full', money2(monos)]);
+          lines.push(['<b>Due at binding</b>', money2(dn+monos)]);
+          if(st.plan.dataset.planThen) lines.push(['Then', st.plan.dataset.planThen]); }
+        note= ch>0 ? 'Includes '+money(ch)+' in '+(st.plan.dataset.planNote||'financing charges')+'.' : (ch<0 ? 'Includes the '+(st.plan.dataset.planNote||'discount')+'.' : 'Paid in full — no financing charges.'); }
+      else { total=sum; var pnote=st.plan.dataset.planNote; lines.push([pn, pnote||'terms not confirmed']); note='Excludes financing charges — '+(pnote||pn+' terms are not confirmed')+'.'; }
+    } else { total=sum; note= st.planMismatch ? 'The payment plan selected is not for the bound program.' : 'Select a payment plan to confirm the total. Financing charges not included.'; }
+    return {lines:lines, total:total, note:note, plan:(st.plan&&!st.planMismatch)?cellName(st.plan):''};
+  }
+  function renderTotal(){
+    var box=document.getElementById('totalBox'); if(!box) return;
+    var t=totalInfo();
+    if(!t){ box.classList.add('empty'); document.getElementById('totalLines').textContent='Your total appears here once a program and a payment plan are selected.'; return; }
+    box.classList.remove('empty');
+    document.getElementById('totalLines').innerHTML=t.lines.map(function(l){ return '<div class="tb-line"><span>'+l[0]+'</span><span>'+l[1]+'</span></div>'; }).join('');
+    document.getElementById('totalAmt').textContent=money(t.total);
+    document.getElementById('totalNote').textContent=t.note;
+  }
+  function totalPick(){ var t=totalInfo(); if(!t) return null;
+    return {name:'Total', choice: money(t.total)+(t.plan?' — '+t.plan:'')+(t.note?' ('+t.note.replace(/\.$/,'')+')':'')}; }
+  function syncPlans(){
+    var st=state();
+    planRows().forEach(function(tr){ var na= st.bound && tr.dataset.opt && tr.dataset.opt!==st.bound.dataset.opt;
+      tr.classList.toggle('na', !!na); if(na) tr.querySelectorAll('.opt').forEach(function(x){x.classList.remove('selected');}); });
+    addonRows().forEach(function(tr){ if(!tr.dataset.opt) return; var na= st.bound && (' '+tr.dataset.opt+' ').indexOf(' '+st.bound.dataset.opt+' ')<0;
+      tr.classList.toggle('na', !!na); if(na){ tr.classList.remove('need'); tr.querySelectorAll('.opt').forEach(function(x){x.classList.remove('selected');}); } });
+  }
+  function validate(){
+    var st=state(), errs=[];
+    programRows().forEach(function(tr){ tr.classList.remove('need'); });
+    st.undecided.forEach(function(tr){ tr.classList.add('need'); errs.push(cellName(tr)+' — mark Bind or Decline'); });
+    if(programRows().length && !st.bound) errs.push('Bind one program');
+    if(st.bound && !st.plan) errs.push('Select a payment plan');
+    if(st.planMismatch) errs.push('Select a payment plan for the bound program');
+    addonRows().forEach(function(tr){ if(tr.classList.contains('na')) return;
+      if(!choice(tr)){ tr.classList.add('need'); errs.push(cellName(tr)+' — make a decision'); } });
+    return errs;
+  }
+
+  document.querySelectorAll('.opt').forEach(function(o){
+    o.addEventListener('click',function(){
+      var g=o.dataset.g;
+      if(o.closest('tr') && o.closest('tr').classList.contains('na')) return;
+      if(g==='pay'){
+        document.querySelectorAll('.opt[data-g="pay"]').forEach(function(x){x.classList.remove('selected');});
+        o.classList.add('selected');
+      } else if(g==='renewal'){
+        var tr=o.closest('tr'), was=o.classList.contains('selected');
+        tr.querySelectorAll('.opt[data-g="renewal"]').forEach(function(x){x.classList.remove('selected');});
+        if(!was){ o.classList.add('selected');
+          if(o.innerText.trim()==='Bind'){ programRows().forEach(function(r){ if(r!==tr){ var b=r.querySelector('.opt.selected'); if(b&&b.innerText.trim()==='Bind') b.classList.remove('selected'); } }); } }
+        tr.classList.remove('need');
+      } else {
+        var was=o.classList.contains('selected');
+        var scope=(g==='renewal')?o.closest('tr'):document;
+        scope.querySelectorAll('.opt[data-g="'+g+'"]').forEach(function(x){x.classList.remove('selected');});
+        if(!was) o.classList.add('selected');
+        if(o.closest('tr')) o.closest('tr').classList.remove('need');
+      }
+      syncPlans(); renderTotal(); renderLive();
+    });
+  });
+
+  // ---- signature pad ----
+  var c=document.getElementById('sigPad'), ctx=null, inked=false;
+  if(c){
+    function size(){
+      var r=c.getBoundingClientRect(), d=window.devicePixelRatio||1;
+      var keep=inked?c.toDataURL():null;
+      c.width=r.width*d; c.height=r.height*d; ctx=c.getContext('2d');
+      ctx.scale(d,d); ctx.lineWidth=1.8; ctx.lineCap='round'; ctx.lineJoin='round'; ctx.strokeStyle='#141B2D';
+      if(keep){ var i=new Image(); i.onload=function(){ ctx.drawImage(i,0,0,r.width,r.height); }; i.src=keep; }
+    }
+    size(); window.addEventListener('resize',size);
+    var drawing=false;
+    function pt(e){ var r=c.getBoundingClientRect(); return [e.clientX-r.left, e.clientY-r.top]; }
+    c.addEventListener('pointerdown',function(e){ drawing=true; inked=true; c.setPointerCapture(e.pointerId);
+      var p=pt(e); ctx.beginPath(); ctx.moveTo(p[0],p[1]); });
+    c.addEventListener('pointermove',function(e){ if(!drawing) return; var p=pt(e);
+      ctx.lineTo(p[0],p[1]); ctx.stroke(); });
+    c.addEventListener('pointerup',function(){ drawing=false; var im=document.getElementById('sigPrint'); if(im&&inked) im.src=c.toDataURL(); });
+    document.getElementById('sigClear').addEventListener('click',function(){
+      ctx.clearRect(0,0,c.width,c.height); inked=false; var im=document.getElementById('sigPrint'); if(im) im.removeAttribute('src'); });
+  }
+
+  // ---- today's date by default ----
+  var d=document.getElementById('fDate');
+  if(d && !d.value){ var n=new Date(), m=('0'+(n.getMonth()+1)).slice(-2), day=('0'+n.getDate()).slice(-2);
+    d.value=n.getFullYear()+'-'+m+'-'+day; }
+
+  // ---- record ----
+  document.getElementById('recordBtn').addEventListener('click',function(){
+    var who=(document.getElementById('fName').innerText||'').trim();
+    var picks=currentPicks();
+    var note=document.getElementById('picksNotes');
+    var msg=document.getElementById('recordNote');
+    var errs=validate();
+    if(errs.length){ msg.innerHTML='Before recording:<ul>'+errs.map(function(e){return '<li>'+e+'</li>';}).join('')+'</ul>'; return; }
+    if(!who){ msg.textContent='Add a name and title above before recording.'; return; }
+    var tp=totalPick(); if(tp) picks.push(tp);
+    msg.className='record-note'; msg.textContent='Sending your selections to RenewFlo…';
+    var rec={who:who, when:fmtDate(d?d.value:'')||'no date', picks:picks,
+             note:(note.value||'').trim(), sig: inked?c.toDataURL():null};
+    records.push(rec);
+    renderLedger();
+    sendToRenewFlo(rec);
+    // clear the desk for the next signer
+    document.querySelectorAll('.opt.selected').forEach(function(x){x.classList.remove('selected');});
+    document.getElementById('fName').innerHTML='';
+    if(attestEl) attestEl.classList.remove('checked');
+    note.value='';
+    if(c && ctx){ ctx.clearRect(0,0,c.width,c.height); inked=false; }
+    syncPlans(); renderTotal(); renderLive();
+  });
+
+  // ---- email the selections to RenewFlo ----
+  var DOC_TITLE=(document.querySelector('.property-line')||{}).innerText||document.title;
+  var DOC_VER=(document.querySelector('.doc-version.sum')||{}).dataset;
+  var W3F_KEY='8c2c1639-73ce-43c4-9569-d2f7a1593889';
+  function overview(r){
+    var lines=[
+      'Binding selections — '+DOC_TITLE,
+      'Document: '+(DOC_VER&&DOC_VER.label?DOC_VER.label:'Version 1'),
+      '',
+      'Recorded by: '+r.who,
+      'Date: '+r.when,
+      '',
+      'Selections:'
+    ].concat(r.picks.map(function(x){ return '  • '+x.name+' — '+x.choice; }));
+    if(r.note) lines=lines.concat(['','Comments:',r.note]);
+    lines=lines.concat(['','Signature: '+(r.sig?'signed on screen (image attached below)':'not signed')]);
+    return lines.join('\n');
+  }
+  function sendToRenewFlo(r){
+    var msg=document.getElementById('recordNote');
+    var subj='Binding selections — '+DOC_TITLE.split(' · ')[0]+' — '+r.who;
+    var body=overview(r);
+    var a=document.getElementById('sendLink'), w=document.getElementById('sendLinkWrap');
+    if(a){ a.href='mailto:info@renewflo.co?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body); }
+    function fail(){ msg.className='record-note'; msg.textContent='Your selections are recorded on this page but could not be sent automatically.'; if(w) w.hidden=false; }
+    if(!window.fetch || location.protocol==='file:'){ fail(); return; }
+    var payload={ access_key:W3F_KEY, subject:subj, from_name:'RenewFlo Renewal Summary',
+      name:r.who, property:DOC_TITLE, document:(DOC_VER&&DOC_VER.label)||'Version 1', date:r.when,
+      selections:r.picks.map(function(x){ return x.name+' — '+x.choice; }).join('\n'),
+      comments:r.note||'(none)', message:body, signature_png:(r.sig||'not signed'), botcheck:'' };
+    fetch('https://api.web3forms.com/submit',{ method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'}, body:JSON.stringify(payload) })
+      .then(function(res){ return res.json(); })
+      .then(function(j){ if(j&&j.success){ msg.className='record-note ok'; msg.textContent='Sent — RenewFlo has your selections.'; if(w) w.hidden=true; } else { fail(); } })
+      .catch(fail);
+  }
+  var pdfBtn=document.getElementById('pdfBtn');
+  if(pdfBtn) pdfBtn.addEventListener('click',function(){ window.print(); });
+
+
+  // ---- print-only date text follows the date input ----
+  var dp=document.getElementById('datePrint');
+  function syncDate(){ if(dp&&d){ var v=fmtDate(d.value); dp.textContent=v; if(v) dp.setAttribute('data-v',v); else dp.removeAttribute('data-v'); } }
+  if(d){ d.addEventListener('change',syncDate); d.addEventListener('input',syncDate); } syncDate();
+
+  // ---- persist selections (Supabase, RLS: anon insert + select only) ----
+  var SB_URL='https://rwjmxmoopkrcgtyzithb.supabase.co', SB_KEY='sb_publishable_33Lj7GSQiy3gXsNuiZx3zA_HuZSxw3c', SB_PROP='demo-harborview-2027';
+  var SB_H={ 'apikey':SB_KEY, 'Authorization':'Bearer '+SB_KEY, 'Content-Type':'application/json' };
+  function markLedger(){ var p=document.getElementById('picks'); if(p) p.classList.toggle('has-records', records.length>0); }
+  var _renderLedger=renderLedger; renderLedger=function(){ _renderLedger(); markLedger(); };
+  function loadRecords(){
+    if(!window.fetch || location.protocol==='file:') return;
+    fetch(SB_URL+'/rest/v1/selections?select=who,signed_date,picks,note,signature,version,created_at&property=eq.'+encodeURIComponent(SB_PROP)+'&order=created_at.asc',{headers:SB_H})
+      .then(function(r){ return r.ok ? r.json() : []; })
+      .then(function(rows){
+        if(!rows||!rows.length) return;
+        var have=records.length;
+        rows.forEach(function(x){ records.push({who:x.who, when:x.signed_date||'no date', picks:x.picks||[], note:x.note||'', sig:x.signature||null, ver:x.version||''}); });
+        if(have){ records=records.slice(have).concat(records.slice(0,have)); }
+        renderLedger();
+      }).catch(function(){});
+  }
+  var _send=sendToRenewFlo; sendToRenewFlo=function(r){
+    _send(r);
+    if(!window.fetch || location.protocol==='file:') return;
+    var row={ property:SB_PROP, version:(DOC_VER&&DOC_VER.label)||'Version 1', who:r.who, signed_date:r.when,
+              picks:r.picks, note:r.note||null, signature:r.sig||null };
+    fetch(SB_URL+'/rest/v1/selections',{method:'POST', headers:Object.assign({'Prefer':'return=minimal'},SB_H), body:JSON.stringify(row)}).catch(function(){});
+  };
+
+  renderLive(); renderLedger(); renderTotal(); loadRecords();
+})();
+
+</script>
+<script>
+
+(function(){
+  var LABEL={pay:'Payment option'};
+  var records=[];
+
+  function cellName(tr){ var c=tr.cells[0].cloneNode(true); c.querySelectorAll('.sub-note').forEach(function(x){x.remove();}); return c.innerText.trim(); }
+  function rowName(el){ var tr=el.closest('tr'); return tr?cellName(tr):''; }
+
+  function currentPicks(){
+    var out=[], seen={};
+    document.querySelectorAll('.opt.selected').forEach(function(o){
+      if(o.closest('tr') && o.closest('tr').classList.contains('na')) return;
+      var g=o.dataset.g; var key=(g==='renewal')?rowName(o):g; if(seen[key]) return; seen[key]=1;
+      var name=(g==='pay'||g==='renewal')?rowName(o):(LABEL[g]||rowName(o));
+      out.push({name:name, choice:o.innerText.trim()});
+    });
+    var at=document.getElementById('attest');
+    if(at) out.push({name:'Submitted on behalf of all Trustees', choice: at.classList.contains('checked')?'Yes':'No'});
+    return out;
+  }
+  var attestEl=document.getElementById('attest');
+  if(attestEl) attestEl.addEventListener('click',function(){ attestEl.classList.toggle('checked'); renderLive(); });
+
+  function renderLive(){
+    var p=currentPicks(), b=document.getElementById('picksBody');
+    if(p.length){ b.className='';
+      b.innerHTML=p.map(function(x){return x.name+' — <b>'+x.choice+'</b>';}).join(' · '); }
+    else { b.className='none'; b.textContent='nothing selected yet'; }
+  }
+
+  function fmtDate(v){
+    if(!v) return '';
+    var p=v.split('-'); return p.length===3 ? p[1]+'/'+p[2]+'/'+p[0] : v;
+  }
+
+  function renderLedger(){
+    var l=document.getElementById('ledger');
+    if(!records.length){ l.className='none';
+      l.textContent='No selections recorded yet — the first trustee to record will appear here.'; return; }
+    l.className='';
+    l.innerHTML=records.map(function(r){
+      return '<div class="ledger-entry">'+
+        '<span class="le-who">'+r.who+'</span> <span class="le-when">· '+r.when+(r.ver&&DOC_VER&&r.ver!==DOC_VER.label?' · '+r.ver:'')+'</span>'+
+        '<ul>'+r.picks.map(function(x){return '<li>'+x.name+' — <b>'+x.choice+'</b></li>';}).join('')+'</ul>'+
+        (r.note?'<div class="le-note">“'+r.note+'”</div>':'')+
+        (r.sig?'<img src="'+r.sig+'" alt="signature">':'')+
+      '</div>';
+    }).join('');
+  }
+
+  // ---- selection model ----
+  var V=document.querySelector('.doc-version.sum')||document.querySelector('.doc-version:not([hidden])')||document;
+  function money(n){ return '$'+Math.round(n).toLocaleString('en-US'); }
+  function money2(n){ var r=Math.round(n*100)/100; return '$'+r.toLocaleString('en-US',{minimumFractionDigits:(r%1?2:0),maximumFractionDigits:2}); }
+  function programRows(){ return [].slice.call(V.querySelectorAll('tr[data-premium]')); }
+  function planRows(){ return [].slice.call(V.querySelectorAll('tr[data-plan-total], tr[data-opt]:not([data-premium]):not([data-addon-premium]):not([data-quote])')); }
+  function addonRows(){ return [].slice.call(V.querySelectorAll('tr[data-addon-premium], tr[data-quote]')); }
+  function choice(tr){ var o=tr.querySelector('.opt.selected'); return o?o.innerText.trim():''; }
+  function state(){
+    var st={bound:null, undecided:[], plan:null, planMismatch:false, addons:[]};
+    programRows().forEach(function(tr){ var ch=choice(tr); if(!ch) st.undecided.push(tr); else if(ch==='Bind') st.bound=tr; });
+    planRows().forEach(function(tr){ if(choice(tr)) st.plan=tr; });
+    if(st.plan && st.bound && st.plan.dataset.opt && st.plan.dataset.opt!==st.bound.dataset.opt) st.planMismatch=true;
+    addonRows().forEach(function(tr){ if(tr.classList.contains('na')) return; var ch=choice(tr); if(ch==='Add'||ch==='Renew'||ch==='Quote'||ch==='Decline') st.addons.push({tr:tr, ch:ch}); });
+    return st;
+  }
+  function totalInfo(){
+    var st=state(), lines=[], sum=0, total=null, note='', monos=0;
+    if(!st.bound) return null;
+    sum+= +st.bound.dataset.premium; lines.push([cellName(st.bound), money(st.bound.dataset.premium)]);
+    st.addons.forEach(function(a){ var n=cellName(a.tr);
+      if(a.ch==='Add'||a.ch==='Renew'){ sum+= +a.tr.dataset.addonPremium; monos+= +a.tr.dataset.addonPremium; lines.push([n, money(a.tr.dataset.addonPremium)]); }
+      else if(a.ch==='Decline') lines.push([n, 'declined']);
+      else lines.push([n+' — quote requested', 'not included']); });
+    if(st.plan && !st.planMismatch){
+      var pn=cellName(st.plan);
+      if(st.plan.dataset.planTotal){ var ch=+st.plan.dataset.planCharge||0; total=sum+ch;
+        lines.push([pn, ch>0?'+ '+money(ch)+' '+(st.plan.dataset.planNote||'financing charges'):(ch<0?'− '+money(-ch)+' '+(st.plan.dataset.planNote||'discount'):'no financing charges')]);
+        var pk=st.plan.dataset.planKind;
+        if(pk){ var bp=+st.bound.dataset.premium, dn= pk==='full'? bp : +st.bound.dataset.down;
+          lines.push(['Due at binding — package '+(pk==='inst'?'deposit (25%)':'in full'), money2(dn)]);
+          lines.push(['Due at binding — standalone policies, in full', money2(monos)]);
+          lines.push(['<b>Due at binding</b>', money2(dn+monos)]);
+          if(pk==='inst') lines.push(['Then', '8 monthly × '+money2(+st.bound.dataset.monthly)+' + $10 fee']); }
+        else if(st.plan.dataset.planDown){ var dn=+st.plan.dataset.planDown;
+          lines.push(['Due at binding — package '+(st.plan.dataset.planThen?'deposit':'in full'), money2(dn)]);
+          lines.push(['Due at binding — standalone policies, in full', money2(monos)]);
+          lines.push(['<b>Due at binding</b>', money2(dn+monos)]);
+          if(st.plan.dataset.planThen) lines.push(['Then', st.plan.dataset.planThen]); }
+        note= ch>0 ? 'Includes '+money(ch)+' in '+(st.plan.dataset.planNote||'financing charges')+'.' : (ch<0 ? 'Includes the '+(st.plan.dataset.planNote||'discount')+'.' : 'Paid in full — no financing charges.'); }
+      else { total=sum; var pnote=st.plan.dataset.planNote; lines.push([pn, pnote||'terms not confirmed']); note='Excludes financing charges — '+(pnote||pn+' terms are not confirmed')+'.'; }
+    } else { total=sum; note= st.planMismatch ? 'The payment plan selected is not for the bound program.' : 'Select a payment plan to confirm the total. Financing charges not included.'; }
+    return {lines:lines, total:total, note:note, plan:(st.plan&&!st.planMismatch)?cellName(st.plan):''};
+  }
+  function renderTotal(){
+    var box=document.getElementById('totalBox'); if(!box) return;
+    var t=totalInfo();
+    if(!t){ box.classList.add('empty'); document.getElementById('totalLines').textContent='Your total appears here once a program and a payment plan are selected.'; return; }
+    box.classList.remove('empty');
+    document.getElementById('totalLines').innerHTML=t.lines.map(function(l){ return '<div class="tb-line"><span>'+l[0]+'</span><span>'+l[1]+'</span></div>'; }).join('');
+    document.getElementById('totalAmt').textContent=money(t.total);
+    document.getElementById('totalNote').textContent=t.note;
+  }
+  function totalPick(){ var t=totalInfo(); if(!t) return null;
+    return {name:'Total', choice: money(t.total)+(t.plan?' — '+t.plan:'')+(t.note?' ('+t.note.replace(/\.$/,'')+')':'')}; }
+  function syncPlans(){
+    var st=state();
+    planRows().forEach(function(tr){ var na= st.bound && tr.dataset.opt && tr.dataset.opt!==st.bound.dataset.opt;
+      tr.classList.toggle('na', !!na); if(na) tr.querySelectorAll('.opt').forEach(function(x){x.classList.remove('selected');}); });
+    addonRows().forEach(function(tr){ if(!tr.dataset.opt) return; var na= st.bound && (' '+tr.dataset.opt+' ').indexOf(' '+st.bound.dataset.opt+' ')<0;
+      tr.classList.toggle('na', !!na); if(na){ tr.classList.remove('need'); tr.querySelectorAll('.opt').forEach(function(x){x.classList.remove('selected');}); } });
+  }
+  function validate(){
+    var st=state(), errs=[];
+    programRows().forEach(function(tr){ tr.classList.remove('need'); });
+    st.undecided.forEach(function(tr){ tr.classList.add('need'); errs.push(cellName(tr)+' — mark Bind or Decline'); });
+    if(programRows().length && !st.bound) errs.push('Bind one program');
+    if(st.bound && !st.plan) errs.push('Select a payment plan');
+    if(st.planMismatch) errs.push('Select a payment plan for the bound program');
+    addonRows().forEach(function(tr){ if(tr.classList.contains('na')) return;
+      if(!choice(tr)){ tr.classList.add('need'); errs.push(cellName(tr)+' — make a decision'); } });
+    return errs;
+  }
+
+  document.querySelectorAll('.opt').forEach(function(o){
+    o.addEventListener('click',function(){
+      var g=o.dataset.g;
+      if(o.closest('tr') && o.closest('tr').classList.contains('na')) return;
+      if(g==='pay'){
+        document.querySelectorAll('.opt[data-g="pay"]').forEach(function(x){x.classList.remove('selected');});
+        o.classList.add('selected');
+      } else if(g==='renewal'){
+        var tr=o.closest('tr'), was=o.classList.contains('selected');
+        tr.querySelectorAll('.opt[data-g="renewal"]').forEach(function(x){x.classList.remove('selected');});
+        if(!was){ o.classList.add('selected');
+          if(o.innerText.trim()==='Bind'){ programRows().forEach(function(r){ if(r!==tr){ var b=r.querySelector('.opt.selected'); if(b&&b.innerText.trim()==='Bind') b.classList.remove('selected'); } }); } }
+        tr.classList.remove('need');
+      } else {
+        var was=o.classList.contains('selected');
+        var scope=(g==='renewal')?o.closest('tr'):document;
+        scope.querySelectorAll('.opt[data-g="'+g+'"]').forEach(function(x){x.classList.remove('selected');});
+        if(!was) o.classList.add('selected');
+        if(o.closest('tr')) o.closest('tr').classList.remove('need');
+      }
+      syncPlans(); renderTotal(); renderLive();
+    });
+  });
+
+  // ---- signature pad ----
+  var c=document.getElementById('sigPad'), ctx=null, inked=false;
+  if(c){
+    function size(){
+      var r=c.getBoundingClientRect(), d=window.devicePixelRatio||1;
+      var keep=inked?c.toDataURL():null;
+      c.width=r.width*d; c.height=r.height*d; ctx=c.getContext('2d');
+      ctx.scale(d,d); ctx.lineWidth=1.8; ctx.lineCap='round'; ctx.lineJoin='round'; ctx.strokeStyle='#141B2D';
+      if(keep){ var i=new Image(); i.onload=function(){ ctx.drawImage(i,0,0,r.width,r.height); }; i.src=keep; }
+    }
+    size(); window.addEventListener('resize',size);
+    var drawing=false;
+    function pt(e){ var r=c.getBoundingClientRect(); return [e.clientX-r.left, e.clientY-r.top]; }
+    c.addEventListener('pointerdown',function(e){ drawing=true; inked=true; c.setPointerCapture(e.pointerId);
+      var p=pt(e); ctx.beginPath(); ctx.moveTo(p[0],p[1]); });
+    c.addEventListener('pointermove',function(e){ if(!drawing) return; var p=pt(e);
+      ctx.lineTo(p[0],p[1]); ctx.stroke(); });
+    c.addEventListener('pointerup',function(){ drawing=false; var im=document.getElementById('sigPrint'); if(im&&inked) im.src=c.toDataURL(); });
+    document.getElementById('sigClear').addEventListener('click',function(){
+      ctx.clearRect(0,0,c.width,c.height); inked=false; var im=document.getElementById('sigPrint'); if(im) im.removeAttribute('src'); });
+  }
+
+  // ---- today's date by default ----
+  var d=document.getElementById('fDate');
+  if(d && !d.value){ var n=new Date(), m=('0'+(n.getMonth()+1)).slice(-2), day=('0'+n.getDate()).slice(-2);
+    d.value=n.getFullYear()+'-'+m+'-'+day; }
+
+  // ---- record ----
+  document.getElementById('recordBtn').addEventListener('click',function(){
+    var who=(document.getElementById('fName').innerText||'').trim();
+    var picks=currentPicks();
+    var note=document.getElementById('picksNotes');
+    var msg=document.getElementById('recordNote');
+    var errs=validate();
+    if(errs.length){ msg.innerHTML='Before recording:<ul>'+errs.map(function(e){return '<li>'+e+'</li>';}).join('')+'</ul>'; return; }
+    if(!who){ msg.textContent='Add a name and title above before recording.'; return; }
+    var tp=totalPick(); if(tp) picks.push(tp);
+    msg.className='record-note'; msg.textContent='Sending your selections to RenewFlo…';
+    var rec={who:who, when:fmtDate(d?d.value:'')||'no date', picks:picks,
+             note:(note.value||'').trim(), sig: inked?c.toDataURL():null};
+    records.push(rec);
+    renderLedger();
+    sendToRenewFlo(rec);
+    // clear the desk for the next signer
+    document.querySelectorAll('.opt.selected').forEach(function(x){x.classList.remove('selected');});
+    document.getElementById('fName').innerHTML='';
+    if(attestEl) attestEl.classList.remove('checked');
+    note.value='';
+    if(c && ctx){ ctx.clearRect(0,0,c.width,c.height); inked=false; }
+    syncPlans(); renderTotal(); renderLive();
+  });
+
+  // ---- email the selections to RenewFlo ----
+  var DOC_TITLE=(document.querySelector('.property-line')||{}).innerText||document.title;
+  var DOC_VER=(document.querySelector('.doc-version.sum')||{}).dataset;
+  var W3F_KEY='8c2c1639-73ce-43c4-9569-d2f7a1593889';
+  function overview(r){
+    var lines=[
+      'Binding selections — '+DOC_TITLE,
+      'Document: '+(DOC_VER&&DOC_VER.label?DOC_VER.label:'Version 1'),
+      '',
+      'Recorded by: '+r.who,
+      'Date: '+r.when,
+      '',
+      'Selections:'
+    ].concat(r.picks.map(function(x){ return '  • '+x.name+' — '+x.choice; }));
+    if(r.note) lines=lines.concat(['','Comments:',r.note]);
+    lines=lines.concat(['','Signature: '+(r.sig?'signed on screen (image attached below)':'not signed')]);
+    return lines.join('\n');
+  }
+  function sendToRenewFlo(r){
+    var msg=document.getElementById('recordNote');
+    var subj='Binding selections — '+DOC_TITLE.split(' · ')[0]+' — '+r.who;
+    var body=overview(r);
+    var a=document.getElementById('sendLink'), w=document.getElementById('sendLinkWrap');
+    if(a){ a.href='mailto:info@renewflo.co?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body); }
+    function fail(){ msg.className='record-note'; msg.textContent='Your selections are recorded on this page but could not be sent automatically.'; if(w) w.hidden=false; }
+    if(!window.fetch || location.protocol==='file:'){ fail(); return; }
+    var payload={ access_key:W3F_KEY, subject:subj, from_name:'RenewFlo Renewal Summary',
+      name:r.who, property:DOC_TITLE, document:(DOC_VER&&DOC_VER.label)||'Version 1', date:r.when,
+      selections:r.picks.map(function(x){ return x.name+' — '+x.choice; }).join('\n'),
+      comments:r.note||'(none)', message:body, signature_png:(r.sig||'not signed'), botcheck:'' };
+    fetch('https://api.web3forms.com/submit',{ method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'}, body:JSON.stringify(payload) })
+      .then(function(res){ return res.json(); })
+      .then(function(j){ if(j&&j.success){ msg.className='record-note ok'; msg.textContent='Sent — RenewFlo has your selections.'; if(w) w.hidden=true; } else { fail(); } })
+      .catch(fail);
+  }
+  var pdfBtn=document.getElementById('pdfBtn');
+  if(pdfBtn) pdfBtn.addEventListener('click',function(){ window.print(); });
+
+
+  // ---- print-only date text follows the date input ----
+  var dp=document.getElementById('datePrint');
+  function syncDate(){ if(dp&&d){ var v=fmtDate(d.value); dp.textContent=v; if(v) dp.setAttribute('data-v',v); else dp.removeAttribute('data-v'); } }
+  if(d){ d.addEventListener('change',syncDate); d.addEventListener('input',syncDate); } syncDate();
+
+  // ---- persist selections (Supabase, RLS: anon insert + select only) ----
+  var SB_URL='https://rwjmxmoopkrcgtyzithb.supabase.co', SB_KEY='sb_publishable_33Lj7GSQiy3gXsNuiZx3zA_HuZSxw3c', SB_PROP='demo-harborview-2027';
+  var SB_H={ 'apikey':SB_KEY, 'Authorization':'Bearer '+SB_KEY, 'Content-Type':'application/json' };
+  function markLedger(){ var p=document.getElementById('picks'); if(p) p.classList.toggle('has-records', records.length>0); }
+  var _renderLedger=renderLedger; renderLedger=function(){ _renderLedger(); markLedger(); };
+  function loadRecords(){
+    if(!window.fetch || location.protocol==='file:') return;
+    fetch(SB_URL+'/rest/v1/selections?select=who,signed_date,picks,note,signature,version,created_at&property=eq.'+encodeURIComponent(SB_PROP)+'&order=created_at.asc',{headers:SB_H})
+      .then(function(r){ return r.ok ? r.json() : []; })
+      .then(function(rows){
+        if(!rows||!rows.length) return;
+        var have=records.length;
+        rows.forEach(function(x){ records.push({who:x.who, when:x.signed_date||'no date', picks:x.picks||[], note:x.note||'', sig:x.signature||null, ver:x.version||''}); });
+        if(have){ records=records.slice(have).concat(records.slice(0,have)); }
+        renderLedger();
+      }).catch(function(){});
+  }
+  var _send=sendToRenewFlo; sendToRenewFlo=function(r){
+    _send(r);
+    if(!window.fetch || location.protocol==='file:') return;
+    var row={ property:SB_PROP, version:(DOC_VER&&DOC_VER.label)||'Version 1', who:r.who, signed_date:r.when,
+              picks:r.picks, note:r.note||null, signature:r.sig||null };
+    fetch(SB_URL+'/rest/v1/selections',{method:'POST', headers:Object.assign({'Prefer':'return=minimal'},SB_H), body:JSON.stringify(row)}).catch(function(){});
+  };
+
+  renderLive(); renderLedger(); renderTotal(); loadRecords();
+})();
+
+</script>
+<script>
 /* ===== Version dropdown =====
    Renewal summaries (numbered data-v) newest first; the Insurance Review (data-kind="review") is pinned last.
    Opens on the newest summary marked data-quotes="yes"; until one exists, opens on the Insurance Review.
@@ -2021,16 +3370,16 @@ function rvBoot(C){
   var sel = document.getElementById('verSelect'); if (!sel) return;
   var all = [].slice.call(document.querySelectorAll('.doc-version'));
   var review = all.filter(function(d){ return d.dataset.kind === 'review'; })[0] || null;
-  var summaries = all.filter(function(d){ return d !== review; }).sort(function(a,b){ return (+b.dataset.v) - (+a.dataset.v); });
-  var ordered = review ? summaries.concat([review]) : summaries;
+  var summaries = all.filter(function(d){ return d !== review; }).sort(function(a,b){ return (+a.dataset.v) - (+b.dataset.v); });
+  var ordered = review ? [review].concat(summaries) : summaries;
   sel.innerHTML = '';
   ordered.forEach(function(d, i){
     var o = document.createElement('option');
     o.value = d.dataset.v;
-    o.textContent = d.dataset.label + (d !== review && i === 0 ? ' (current)' : '');
+    o.textContent = d.dataset.label + (d !== review && d === summaries[summaries.length - 1] ? ' (current)' : '');
     sel.appendChild(o);
   });
-  var quoted = summaries.filter(function(d){ return d.dataset.quotes === 'yes'; })[0];
+  var quoted = summaries.filter(function(d){ return d.dataset.quotes === 'yes'; }).slice(-1)[0];
   var fallback = quoted || review || summaries[0];
   var fromHash = location.hash.replace('#','');
   var start = all.filter(function(d){ return fromHash && (d.dataset.v === fromHash || 'v' + d.dataset.v === fromHash); })[0] || fallback;
