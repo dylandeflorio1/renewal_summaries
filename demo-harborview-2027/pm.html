@@ -402,7 +402,8 @@ function rvLinkError(msg){
 function rvToConfig(j){
   var a = j.association || {}, rv = j.review || {}, isPm = j.role === "pm", carried = j.carried || {};
   var TYPE = { yesno: "yesno", picklist: "select" };
-  var WIDE = { mailing_address: 1, pm_mailing_address: 1, loss_description_large_loss: 1, amenities_present_describe: 1, pet_size_breed_restrictions: 1, list_of_commercial_occupants: 1 };
+  var LONG = { planned_maintenance_improvements: 1, loss_description_large_loss: 1 };
+  var WIDE = { planned_maintenance_improvements: 1, mailing_address: 1, pm_mailing_address: 1, loss_description_large_loss: 1, amenities_present_describe: 1, pet_size_breed_restrictions: 1, list_of_commercial_occupants: 1 };
   var covs = isPm
     ? Object.keys(carried).map(function(k){ return { key: k, carried: carried[k] }; })
     : (rv.coverages || []).map(function(c){ var o = {}; for (var x in c) o[x] = c[x]; if (c.key in carried) o.carried = carried[c.key]; if (!o.carried) o.current = "Not carried"; return o; });
@@ -419,7 +420,7 @@ function rvToConfig(j){
     coverages: covs,
     sov: (j.fields || []).map(function(f){
       var ask = (j.confirm || []).indexOf(f.key) >= 0;
-      return { section: f.section, key: f.key, label: f.label, req: !!f.required, help: f.help || "", type: TYPE[f.type],
+      return { section: f.section, key: f.key, label: f.label, req: !!f.required, help: f.help || "", type: LONG[f.key] ? "textarea" : TYPE[f.type],
         options: f.options || [], when: f.show_when || [], wide: !!WIDE[f.key], value: (j.values || {})[f.key] || "",
         hint: ask ? "Please confirm" : "" };
     }),
