@@ -240,6 +240,14 @@
 .rv label.rv-needed .rv-ynb[aria-pressed="false"]{border-color:var(--rv-warn);background:#FFFCF6}
 .rv .rv-pmnote{display:flex;flex-direction:column;gap:6px}
 .rv .rv-pmnote textarea{min-height:110px}
+.rv .rv-callouts{display:flex;flex-direction:column;gap:10px}
+.rv .rv-colist{display:flex;flex-direction:column;gap:10px}
+.rv .rv-co{border-radius:12px;padding:14px 18px;border-left:4px solid #9DA8BC;background:#F4F6FA}
+.rv .rv-co h3{margin:0;font-size:15px}
+.rv .rv-co p{margin:4px 0 0;color:var(--rv-muted);line-height:1.5}
+.rv .rv-co-red{border-left-color:#C2412D;background:#FCEFEC}
+.rv .rv-co-yellow{border-left-color:#C98A12;background:#FDF5E3}
+.rv .rv-co-blue{border-left-color:#2D6BD4;background:#EAF1FD}
 .rv .rv-signedbox{display:flex;flex-direction:column;gap:8px}
 .rv .rv-signedbox .rv-exhibit{margin-top:6px}
 .rv .rv-signedbox .rv-exhibit > .rv-terms, .rv .rv-signedbox .rv-exhibit > .rv-note{padding:0 16px}
@@ -299,15 +307,14 @@
     </div>
   </div>
 
+  <div class="rv-callouts" id="rv-callouts" hidden>
+    <p class="rv-overline">What we found</p>
+    <div class="rv-colist" id="rv-colist"></div>
+  </div>
+
   <div>
     <p class="rv-overline">What's driving your premium</p>
     <ul class="rv-drivers" id="rv-drivers"></ul>
-  </div>
-  <div class="rv-bench">
-    <h3>Premium per unit vs. similar properties</h3>
-    <div class="rv-track" id="rv-track"></div>
-    <div class="rv-ends rv-tnum" id="rv-ends"></div>
-    <p class="rv-benchnote">Based on similar properties RenewFlo works with in your area.</p>
   </div>
 </div>
 
@@ -443,6 +450,7 @@ function rvToConfig(j){
     preparedDate: rv.prepared_date || today,
     showAgreement: !isPm && !!a.agreement_required,
     drivers: rv.drivers || [],
+    callouts: isPm ? [] : (j.callouts || []),
     benchmark: rv.benchmark || { you: 1, median: 1, low: 1, high: 1 },
     checks: (rv.checks && rv.checks.length) ? rv.checks : [{ name: "Building data", type: "sov" }],
     deductible: rv.deductible || { current: "" },
@@ -844,6 +852,11 @@ function rvBoot(C){
   $("#rv-property").textContent = C.association + " · " + C.address + " · " + C.units + " Residential Units · Renews " + slashDate(C.renewalDate);
   $("#rv-prepared").textContent = longDate(C.preparedDate);
   $("#rv-drivers").innerHTML = C.drivers.map(function(d){ return '<li><span class="rv-tag">' + esc(d.tag) + '</span><span>' + esc(d.text) + '</span></li>'; }).join("");
+  if ((C.callouts || []).length){
+    $("#rv-colist").innerHTML = C.callouts.map(function(c){ return '<div class="rv-co rv-co-' + esc(c.color || "grey") + '"><h3>' + esc(c.title) + '</h3>' + (c.body ? '<p>' + esc(c.body) + '</p>' : "") + '</div>'; }).join("");
+    $("#rv-callouts").hidden = false;
+  }
+  if ($("#rv-track")){
   var b = C.benchmark, lo = Math.min(b.low, b.you) * 0.95, hi = Math.max(b.high, b.you) * 1.05;
   var X = function(v){ return ((v - lo) / (hi - lo) * 100).toFixed(2) + "%"; };
   $("#rv-track").innerHTML = '<div class="rv-rail"></div><div class="rv-range" style="left:' + X(b.low) + ';width:calc(' + X(b.high) + ' - ' + X(b.low) + ')"></div>' +
@@ -852,6 +865,7 @@ function rvBoot(C){
   $("#rv-track").setAttribute("role", "img");
   $("#rv-track").setAttribute("aria-label", "Your premium is " + usd(b.you) + " per unit; similar properties range from " + usd(b.low) + " to " + usd(b.high) + ", median " + usd(b.median));
   $("#rv-ends").innerHTML = "<span>Lowest " + usd(b.low) + "</span><span>Highest " + usd(b.high) + "</span>";
+  }
   buildSovForm(); applyView(); buildCoverage();
   var needDocs = (C.documents || []).filter(function(d){ return !d.have; });
   $("#rv-docs").hidden = !needDocs.length;
