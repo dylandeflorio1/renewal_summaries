@@ -129,14 +129,17 @@
       }).join("") + '</dl>';
     });
     var overview = sectionHtml["Account Overview"] || "";
-    var detail = secs.filter(function(sec){ return sec !== "Account Overview" && sectionHtml[sec]; }).map(function(sec){ return '<div class="sheet">' + sectionHtml[sec] + '</div>'; }).join("");
+    /* the coverage section's own questions (number of losses, large-loss description) sit with the loss history, not in a second section */
+    var covSec = secs.filter(function(sec){ return /^Insurance Coverage/.test(sec); })[0];
+    var lossFields = covSec && sectionHtml[covSec] ? sectionHtml[covSec].replace(/^<h2>[\s\S]*?<\/h2>/, "") : "";
+    var detail = secs.filter(function(sec){ return sec !== "Account Overview" && sec !== covSec && sectionHtml[sec]; }).map(function(sec){ return '<div class="sheet">' + sectionHtml[sec] + '</div>'; }).join("");
 
     var claims = (j.claims || []);
     var loss = '<div class="sheet"><h2>Loss history</h2>' + (claims.length
       ? '<div class="tbl"><table><thead><tr><th>Date of loss</th><th style="text-align:left">What happened</th><th>Amount</th><th>Status</th></tr></thead><tbody>' + claims.map(function(c){
           return '<tr><td>' + esc(dt(c.date_of_loss)) + '</td><td style="text-align:left;font-weight:400;white-space:normal">' + esc(c.description) + (c.resolution ? '<br><span class="sub">' + esc(c.resolution) + '</span>' : "") + '</td><td>' + (c.amount != null ? "$" + Number(c.amount).toLocaleString("en-US") : "—") + '</td><td>' + esc(c.status === "closed" ? "Closed" : c.status === "denied" ? "Denied" : "Open") + '</td></tr>';
         }).join("") + '</tbody></table></div>'
-      : '<p class="sub">No claims on file.</p>') + '</div>';
+      : '<p class="sub">No claims on file.</p>') + lossFields + '</div>';
 
     var docs = (j.documents || []);
     var docHtml = '<div class="sheet"><h2>Documents</h2>' + (docs.length
