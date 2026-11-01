@@ -52,6 +52,12 @@
   .err{background:var(--bad-soft);border-radius:10px;padding:14px 16px;color:var(--ink)}
   @media print{ body{background:#fff;padding:0} .sheet{box-shadow:none;margin:0 0 12px;padding:0;width:auto} .noprint{display:none !important} }
   .btns{display:flex;gap:8px;flex-wrap:wrap}
+  .findbar{position:sticky;top:0;z-index:5;width:8.5in;max-width:100%;margin:0 auto 14px;display:flex;align-items:center;gap:12px;background:#EDF0F5;padding:8px 0}
+  .findbar input{flex:1;min-width:0;font:inherit;font-size:14px;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:100px;padding:10px 18px;outline:none;box-shadow:0 1px 4px rgba(15,27,45,.07)}
+  .findbar input:focus{border-color:var(--blue)}
+  .findbar span{font-size:12.5px;color:var(--faint);white-space:nowrap}
+  .findhide{display:none !important}
+  mark.findhit{background:#FFF1B8;color:inherit;padding:0 1px;border-radius:2px}
   .btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
@@ -153,6 +159,7 @@
       : '<p class="sub">No documents have been shared on this link yet.</p>') + '</div>';
 
     app.innerHTML =
+      '<div class="findbar noprint"><input type="search" id="findIn" placeholder="Search for a field, e.g. roof, sprinkler, reserve, loss" aria-label="Search the statement of values"><span id="findCount"></span></div>' +
       '<div class="sheet">' + (a.is_demo ? '<div class="demo"><b>Demo.</b> Fake association and fake data, for testing the RenewFlo workflow. Nothing here is real.</div>' : "") +
       '<div class="titlerow"><div><p class="over">Statement of Values</p><h1>' + esc(a.name) + '</h1>' +
       '<p class="sub">' + esc(a.address) + ' · ' + esc(a.units) + ' Residential Units · Renews ' + esc(dt(a.renewal_date)) + '</p></div>' +
@@ -163,6 +170,36 @@
       '<h2>Current coverage</h2><div class="tbl"><table><thead><tr><th>Coverage</th><th>Carrier</th><th>Policy #</th><th>Premium</th><th>Deductible</th><th>Amount of coverage</th></tr></thead><tbody>' + sched + '</tbody></table></div></div>' +
       loss + detail + docHtml +
       '<p class="foot">Prepared by RenewFlo LLC · info@renewflo.co · renewflo.co</p>';
+    /* search: show only the fields, coverage lines, losses and documents that match */
+    (function(){
+      var input = document.getElementById("findIn"), count = document.getElementById("findCount"); if (!input) return;
+      var sheets = [].slice.call(app.querySelectorAll(".sheet"));
+      var items = [].slice.call(app.querySelectorAll(".kv > div, .sheet tbody tr, .docs a, .doccat"));
+      function clearMarks(){ [].forEach.call(app.querySelectorAll("mark.findhit"), function(m){ m.replaceWith(document.createTextNode(m.textContent)); }); app.normalize(); }
+      function mark(el, q){
+        var w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT), nodes = [], n; while ((n = w.nextNode())) nodes.push(n);
+        nodes.forEach(function(t){ var i = t.data.toLowerCase().indexOf(q); if (i < 0) return;
+          var r = document.createRange(); r.setStart(t, i); r.setEnd(t, i + q.length); var m = document.createElement("mark"); m.className = "findhit"; r.surroundContents(m); });
+      }
+      function run(){
+        var q = input.value.trim().toLowerCase(); clearMarks();
+        if (!q){ [].forEach.call(app.querySelectorAll(".findhide"), function(el){ el.classList.remove("findhide"); }); count.textContent = ""; return; }
+        var hits = 0;
+        items.forEach(function(el){ if (el.classList.contains("doccat")) return; var ok = el.textContent.toLowerCase().indexOf(q) >= 0; el.classList.toggle("findhide", !ok); if (ok){ hits++; mark(el, q); } });
+        [].forEach.call(app.querySelectorAll(".doccat"), function(h){ var box = h.nextElementSibling; h.classList.toggle("findhide", !(box && box.querySelector("a:not(.findhide)"))); });
+        sheets.forEach(function(sh, i){
+          var any = sh.querySelector(".kv > div:not(.findhide), tbody tr:not(.findhide), .docs a:not(.findhide)");
+          [].forEach.call(sh.querySelectorAll("table"), function(t){ t.closest(".tbl").classList.toggle("findhide", !t.querySelector("tbody tr:not(.findhide)")); });
+          [].forEach.call(sh.querySelectorAll(".kv"), function(k){ k.classList.toggle("findhide", !k.querySelector("div:not(.findhide)")); });
+          [].forEach.call(sh.querySelectorAll("p.sub:not(.keep), .top"), function(el){ if (i > 0) el.classList.toggle("findhide", true); });
+          if (i === 0){ var h = sh.querySelector("h2"); if (h) h.classList.toggle("findhide", !sh.querySelector(".kv > div:not(.findhide)")); return; }
+          sh.classList.toggle("findhide", !any);
+        });
+        count.textContent = hits ? hits + (hits === 1 ? " match" : " matches") : "No matches";
+      }
+      var t = null; input.addEventListener("input", function(){ clearTimeout(t); t = setTimeout(run, 120); });
+      input.addEventListener("keydown", function(e){ if (e.key === "Escape"){ input.value = ""; run(); } });
+    })();
     var pb = document.getElementById("printBtn"); if (pb) pb.addEventListener("click", function(){ window.print(); });
     var xb = document.getElementById("xlsxBtn");
     if (xb) xb.addEventListener("click", function(){
