@@ -1246,7 +1246,7 @@ function rvBoot(C){
   }
 
   /* the dropdown reads this label */
-  root.dataset.label = "Insurance Pre-Review — " + longDate(C.preparedDate);
+  root.dataset.label = "Insurance Pre-Review — " + longDate(C.preparedDate); var rvOpt = document.querySelector('#verSelect option[value="review"]'); if (rvOpt) rvOpt.textContent = root.dataset.label;
 
   /* ---------- building data ---------- */
   /* Conditional questions: a field with "when" only applies (shows, counts, sends) when every condition holds.
